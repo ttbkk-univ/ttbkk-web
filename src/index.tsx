@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import TTBKKMap from './TTBKKMap';
+import TTBKKMap from './components/TTBKKMap';
 
 ReactDOM.render(
   <React.StrictMode>
