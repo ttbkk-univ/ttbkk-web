@@ -18,7 +18,7 @@ const rectangle: [[number, number], [number, number]] = [
 
 function LayerController(): React.ReactElement {
   return (
-    <LayersControl position={'topright'}>
+    <LayersControl position={'topright'} autoZIndex={true}>
       <LayersControl.BaseLayer checked name={'OpenStreetMap.Mapnik'}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
