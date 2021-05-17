@@ -1,5 +1,6 @@
 import React from 'react';
 import { CircleMarker, Popup } from 'react-leaflet';
+import { v4 as uuidv4 } from 'uuid';
 
 interface PlaceListProps {
   places: PlaceProps[];
@@ -25,7 +26,14 @@ function PlaceList(props: PlaceListProps): React.ReactElement {
   return (
     <div>
       {places.map((place: PlaceProps) => {
-        return <Place longitude={place.longitude} latitude={place.latitude} name={place.name} />;
+        return (
+          <Place
+            longitude={place.longitude}
+            latitude={place.latitude}
+            name={place.name}
+            key={uuidv4()}
+          />
+        );
       })}
     </div>
   );
