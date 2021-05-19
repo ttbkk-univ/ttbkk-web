@@ -10,13 +10,14 @@ import {
 } from 'react-leaflet';
 import React from 'react';
 import ReactLeafletGoogleLayer from 'react-leaflet-google-layer';
+import { env } from '../env';
 
 const center: [number, number] = [37.505, 127.09];
 const rectangle: [[number, number], [number, number]] = [
   [37.49, 127.08],
   [37.5, 127.06],
 ];
-const googleMapApiKey: string | undefined = process.env.GOOGLE_MAP_API_KEY;
+const googleMapApiKey: string | undefined = env.google.mapApiKey;
 
 function LayerController(): React.ReactElement {
   return (
