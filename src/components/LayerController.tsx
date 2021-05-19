@@ -9,27 +9,34 @@ import {
   TileLayer,
 } from 'react-leaflet';
 import React from 'react';
+import ReactLeafletGoogleLayer from 'react-leaflet-google-layer';
 
 const center: [number, number] = [37.505, 127.09];
 const rectangle: [[number, number], [number, number]] = [
   [37.49, 127.08],
   [37.5, 127.06],
 ];
+const googleMapApiKey: string | undefined = process.env.GOOGLE_MAP_API_KEY;
 
 function LayerController(): React.ReactElement {
   return (
-    <LayersControl position={'topright'} autoZIndex={true}>
-      <LayersControl.BaseLayer checked name={'OpenStreetMap.Mapnik'}>
+    <LayersControl position="topright" autoZIndex={true}>
+      <LayersControl.BaseLayer checked name="Google Roadmap">
+        <ReactLeafletGoogleLayer type="roadmap" maxZoom={19} apiKey={googleMapApiKey} />
+      </LayersControl.BaseLayer>
+      <LayersControl.BaseLayer name="Google Satellite">
+        <ReactLeafletGoogleLayer type="satellite" maxZoom={19} apiKey={googleMapApiKey} />
+      </LayersControl.BaseLayer>
+      <LayersControl.BaseLayer name="Google Hybrid">
+        <ReactLeafletGoogleLayer type="hybrid" maxZoom={19} apiKey={googleMapApiKey} />
+      </LayersControl.BaseLayer>
+      <LayersControl.BaseLayer name="Google Terrain">
+        <ReactLeafletGoogleLayer type="terrain" maxZoom={19} apiKey={googleMapApiKey} />
+      </LayersControl.BaseLayer>
+      <LayersControl.BaseLayer name="OpenStreetMap">
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          maxZoom={19}
-        />
-      </LayersControl.BaseLayer>
-      <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
-        <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
           maxZoom={19}
         />
       </LayersControl.BaseLayer>
