@@ -1,11 +1,11 @@
 import React from 'react';
 import { LatLng, Map } from 'leaflet';
 
-interface SidebarProps {
+interface SidebarDetailProps {
   map?: Map;
 }
 
-function SidebarDetail(props: SidebarProps): React.ReactElement {
+function SidebarDetail(props: SidebarDetailProps): React.ReactElement {
   const { map } = props;
   const center: LatLng | undefined = map?.getCenter();
   const zoom: number | undefined = map?.getZoom();
