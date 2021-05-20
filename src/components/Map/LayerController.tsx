@@ -10,7 +10,7 @@ import {
 } from 'react-leaflet';
 import React from 'react';
 import ReactLeafletGoogleLayer from 'react-leaflet-google-layer';
-import { env } from '../env';
+import { env } from '../../env';
 
 const center: [number, number] = [37.505, 127.09];
 const rectangle: [[number, number], [number, number]] = [

@@ -1,3 +1,4 @@
+// mock
 export const places: { latitude: number; longitude: number; name: string }[] = [
   {
     latitude: 37.529299992432584,
