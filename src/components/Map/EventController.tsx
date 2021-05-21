@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { MapConsumer } from 'react-leaflet';
-import L, { LeafletMouseEvent, Map } from 'leaflet';
+import { Map } from 'leaflet';
 
-function EventController(): React.ReactElement {
+interface EventControllerProps {
+  setZoom: Dispatch<SetStateAction<number>>;
+}
+
+function EventController(props: EventControllerProps): React.ReactElement {
+  const { setZoom } = props;
   return (
     <MapConsumer>
       {(map: Map): null => {
-        map.on('click', (e: LeafletMouseEvent) => {
-          L.popup().setLatLng(e.latlng).setContent('만들기').openOn(map);
-        });
+        map.on('zoomend', () => setZoom(map.getZoom()));
         return null;
       }}
     </MapConsumer>

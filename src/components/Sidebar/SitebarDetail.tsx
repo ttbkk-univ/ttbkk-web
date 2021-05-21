@@ -3,19 +3,20 @@ import { LatLng, Map } from 'leaflet';
 
 interface SidebarDetailProps {
   map?: Map;
+  clickedPlace: LatLng | undefined;
+  zoom: number;
 }
 
 function SidebarDetail(props: SidebarDetailProps): React.ReactElement {
-  const { map } = props;
-  const center: LatLng | undefined = map?.getCenter();
-  const zoom: number | undefined = map?.getZoom();
+  const { clickedPlace, zoom } = props;
   return (
     <div>
-      <div>
-        lat: {center?.lat}
-        lng: {center?.lng}
-        alt: {center?.alt}
-      </div>
+      {clickedPlace && (
+        <div>
+          lat: {clickedPlace.lat}
+          lng: {clickedPlace.lng}
+        </div>
+      )}
       <div>zoom: {zoom}</div>
     </div>
   );

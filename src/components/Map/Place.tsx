@@ -1,9 +1,11 @@
-import React from 'react';
-import { CircleMarker, Popup } from 'react-leaflet';
+import React, { Dispatch, SetStateAction } from 'react';
+import { CircleMarker, FeatureGroup, Popup } from 'react-leaflet';
 import { v4 as uuidv4 } from 'uuid';
+import { LatLng, LeafletMouseEvent } from 'leaflet';
 
 interface PlaceListProps {
   places: PlaceProps[];
+  setClickedPlace: Dispatch<SetStateAction<LatLng | undefined>>;
 }
 
 interface PlaceProps {
@@ -22,10 +24,10 @@ function Place(props: PlaceProps): React.ReactElement {
 }
 
 function PlaceList(props: PlaceListProps): React.ReactElement {
-  const { places }: PlaceListProps = props;
+  const { places, setClickedPlace }: PlaceListProps = props;
   return (
-    <div>
-      {places.map((place: PlaceProps) => {
+    <FeatureGroup
+      children={places.map((place: PlaceProps) => {
         return (
           <Place
             longitude={place.longitude}
@@ -35,7 +37,12 @@ function PlaceList(props: PlaceListProps): React.ReactElement {
           />
         );
       })}
-    </div>
+      eventHandlers={{
+        click: (e: LeafletMouseEvent): void => {
+          setClickedPlace(e.latlng);
+        },
+      }}
+    />
   );
 }
 
