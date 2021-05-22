@@ -1,14 +1,11 @@
 import React from 'react';
-import { LatLng, Map } from 'leaflet';
+import { useRecoilValue } from 'recoil';
+import { clickedPlaceState } from '../../states/places/clickedPlace';
+import { zoomState } from '../../states/maps/zoom';
 
-interface SidebarDetailProps {
-  map?: Map;
-  clickedPlace: LatLng | undefined;
-  zoom: number;
-}
-
-function SidebarDetail(props: SidebarDetailProps): React.ReactElement {
-  const { clickedPlace, zoom } = props;
+function SidebarDetail(): React.ReactElement {
+  const clickedPlace = useRecoilValue(clickedPlaceState);
+  const zoom = useRecoilValue(zoomState);
   return (
     <div>
       {clickedPlace && (

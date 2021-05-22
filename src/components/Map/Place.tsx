@@ -1,49 +1,35 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { CircleMarker, FeatureGroup, Popup } from 'react-leaflet';
-import { v4 as uuidv4 } from 'uuid';
-import { LatLng, LeafletMouseEvent } from 'leaflet';
+import { useEffect } from 'react';
+import { IPlace } from '../../places.mock';
+import { useRef } from 'react';
+import L, { Path } from 'leaflet';
+import { useLeafletContext } from '@react-leaflet/core';
+import { useRecoilValue } from 'recoil';
+import { clickedPlaceState } from '../../states/places/clickedPlace';
 
-interface PlaceListProps {
-  places: PlaceProps[];
-  setClickedPlace: Dispatch<SetStateAction<LatLng | undefined>>;
+function Place(props: IPlace): null {
+  const context = useLeafletContext();
+  const clickedPlace = useRecoilValue(clickedPlaceState);
+  const placeRef = useRef<Path | undefined>();
+  const { latitude, longitude } = props;
+
+  useEffect(() => {
+    placeRef.current = new L.CircleMarker([latitude, longitude], { color: 'blue' });
+    const container = context.layerContainer || context.map;
+    container.addLayer(placeRef.current);
+    return (): void => {
+      placeRef.current && container.removeLayer(placeRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (clickedPlace?.lat === props.latitude && clickedPlace.lng === props.longitude) {
+      placeRef.current?.setStyle({ color: 'red' });
+    } else if (placeRef.current?.options.color === 'red') {
+      placeRef.current?.setStyle({ color: 'blue' });
+    }
+  }, [clickedPlace]);
+
+  return null;
 }
 
-interface PlaceProps {
-  longitude: number;
-  latitude: number;
-  name: string;
-}
-
-function Place(props: PlaceProps): React.ReactElement {
-  const { latitude, longitude, name } = props;
-  return (
-    <CircleMarker center={[latitude, longitude]}>
-      <Popup>{name}</Popup>
-    </CircleMarker>
-  );
-}
-
-function PlaceList(props: PlaceListProps): React.ReactElement {
-  const { places, setClickedPlace }: PlaceListProps = props;
-  return (
-    <FeatureGroup
-      children={places.map((place: PlaceProps) => {
-        return (
-          <Place
-            longitude={place.longitude}
-            latitude={place.latitude}
-            name={place.name}
-            key={uuidv4()}
-          />
-        );
-      })}
-      eventHandlers={{
-        click: (e: LeafletMouseEvent): void => {
-          setClickedPlace(e.latlng);
-        },
-      }}
-    />
-  );
-}
-
-export default PlaceList;
+export default Place;

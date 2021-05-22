@@ -1,13 +1,11 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { MapConsumer } from 'react-leaflet';
 import { Map } from 'leaflet';
+import { SetterOrUpdater, useSetRecoilState } from 'recoil';
+import { zoomState } from '../../states/maps/zoom';
 
-interface EventControllerProps {
-  setZoom: Dispatch<SetStateAction<number>>;
-}
-
-function EventController(props: EventControllerProps): React.ReactElement {
-  const { setZoom } = props;
+function EventController(): React.ReactElement {
+  const setZoom: SetterOrUpdater<number> = useSetRecoilState<number>(zoomState);
   return (
     <MapConsumer>
       {(map: Map): null => {

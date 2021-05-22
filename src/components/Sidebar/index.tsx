@@ -1,20 +1,15 @@
-import React, { useState } from 'react';
-import { LatLng } from 'leaflet';
+import React from 'react';
 import SidebarToggleButton from './SitebarToggleButton';
 import SidebarDetail from './SitebarDetail';
+import { useRecoilValue } from 'recoil';
+import { sidebarDisplayState } from '../../states/maps/sidebar/displayToggleButton';
 
-interface SidebarProps {
-  zoom: number;
-  clickedPlace: LatLng | undefined;
-}
-
-function Sidebar(props: SidebarProps): React.ReactElement {
-  const { clickedPlace, zoom } = props;
-  const [display, setDisplay] = useState(false);
+function Sidebar(): React.ReactElement {
+  const display = useRecoilValue(sidebarDisplayState);
   return (
     <div>
-      <SidebarToggleButton display={display} setDisplay={setDisplay} />
-      {display ? <SidebarDetail zoom={zoom} clickedPlace={clickedPlace} /> : undefined}
+      <SidebarToggleButton />
+      {display ? <SidebarDetail /> : undefined}
     </div>
   );
 }

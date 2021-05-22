@@ -1,17 +1,16 @@
-import React, { ReactElement, useMemo, useState } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 import { MapContainer } from 'react-leaflet';
-import { LatLng, Map } from 'leaflet';
-import { places } from '../places.mock';
 import LayerController from './Map/LayerController';
-import PlaceList from './Map/Place';
 import EventController from './Map/EventController';
 import Sidebar from './Sidebar';
+import { useRecoilValue } from 'recoil';
+import { centerState } from '../states/maps/center';
+import { zoomState } from '../states/maps/zoom';
+import PlaceList from './Map/PlaceList';
 
 function TTBKKMap(): ReactElement {
-  const center: [number, number] = [37.53026789291489, 127.12380358542175];
-  const [map, setMap] = useState<Map | undefined>(undefined);
-  const [zoom, setZoom] = useState<number>(13);
-  const [clickedPlace, setClickedPlace] = useState<LatLng | undefined>(undefined);
+  const center = useRecoilValue<[number, number]>(centerState);
+  const zoom = useRecoilValue<number>(zoomState);
 
   const mapContainer = useMemo(
     () => (
@@ -21,15 +20,14 @@ function TTBKKMap(): ReactElement {
         zoom={zoom}
         scrollWheelZoom={true}
         style={{ height: '100%', width: '100%' }}
-        whenCreated={(createdMap: Map): void => setMap(createdMap)}
         maxBounds={[
           [90, 360],
           [-90, -360],
         ]}
       >
-        <EventController setZoom={setZoom} />
+        <EventController />
         <LayerController />
-        <PlaceList places={places} setClickedPlace={setClickedPlace} />
+        <PlaceList />
       </MapContainer>
     ),
     [],
@@ -37,7 +35,7 @@ function TTBKKMap(): ReactElement {
 
   return (
     <div style={{ height: '100%', width: '100%' }}>
-      {map ? <Sidebar zoom={zoom} clickedPlace={clickedPlace} /> : undefined}
+      <Sidebar />
       {mapContainer}
     </div>
   );

@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import TTBKKMap from './components/TTBKKMap';
+import { RecoilRoot } from 'recoil';
 
 ReactDOM.render(
   <React.StrictMode>
-    <TTBKKMap />
+    <RecoilRoot>
+      <TTBKKMap />
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root'),
 );

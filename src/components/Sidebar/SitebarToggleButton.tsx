@@ -1,12 +1,9 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
+import { useRecoilState } from 'recoil';
+import { sidebarDisplayState } from '../../states/maps/sidebar/displayToggleButton';
 
-interface SidebarToggleButtonProps {
-  display: boolean;
-  setDisplay: Dispatch<SetStateAction<boolean>>;
-}
-
-function SidebarToggleButton(props: SidebarToggleButtonProps): React.ReactElement {
-  const { display, setDisplay } = props;
+function SidebarToggleButton(): React.ReactElement {
+  const [display, setDisplay] = useRecoilState(sidebarDisplayState);
   return (
     <div>
       <button onClick={(): void => setDisplay(!display)}>{display ? '닫기' : '열기'}</button>
