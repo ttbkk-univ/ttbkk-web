@@ -1,20 +1,49 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { clickedPlaceState } from '../../states/places/clickedPlace';
 import { zoomState } from '../../states/maps/zoom';
+import { placeMapState } from '../../states/places/placeMap';
 
 function SidebarDetail(): React.ReactElement {
-  const clickedPlace = useRecoilValue(clickedPlaceState);
+  const [clickedPlace, setClickedPlace] = useRecoilState(clickedPlaceState);
   const zoom = useRecoilValue(zoomState);
+  const placeMap = useRecoilValue(placeMapState);
   return (
-    <div>
-      {clickedPlace && (
-        <div>
-          lat: {clickedPlace.lat}
-          lng: {clickedPlace.lng}
-        </div>
-      )}
+    <div
+      style={{
+        position: 'fixed',
+        top: 80,
+        right: 70,
+        width: 200,
+        height: clickedPlace ? 100 : 20,
+        zIndex: 400,
+        backgroundColor: 'rgba(30, 60,80,0.8)',
+        fontWeight: 'bold',
+        color: 'white',
+        padding: 6,
+      }}
+    >
       <div>zoom: {zoom}</div>
+      {clickedPlace && (
+        <>
+          <hr />
+          <div>
+            <span>name: {placeMap[clickedPlace].name}</span>
+            <br />
+            <span>lat: {placeMap[clickedPlace].latitude}</span>
+            <br />
+            <span>lng: {placeMap[clickedPlace].longitude}</span>
+          </div>
+          <div>
+            <button
+              style={{ position: 'absolute', right: 6, bottom: 10 }}
+              onClick={(): void => setClickedPlace(undefined)}
+            >
+              선택취소
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

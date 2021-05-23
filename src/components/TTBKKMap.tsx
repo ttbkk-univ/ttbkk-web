@@ -1,14 +1,15 @@
-import React, { ReactElement, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { MapContainer } from 'react-leaflet';
-import LayerController from './Map/LayerController';
 import EventController from './Map/EventController';
 import Sidebar from './Sidebar';
 import { useRecoilValue } from 'recoil';
 import { centerState } from '../states/maps/center';
 import { zoomState } from '../states/maps/zoom';
-import PlaceList from './Map/PlaceList';
+import PlaceList from './Place/PlaceList';
+import LayerController from './Map/LayerController';
+import ToolbarControl from './Map/Toolbar/DrawToolbar';
 
-function TTBKKMap(): ReactElement {
+function TTBKKMap(): React.ReactElement {
   const center = useRecoilValue<[number, number]>(centerState);
   const zoom = useRecoilValue<number>(zoomState);
 
@@ -35,8 +36,9 @@ function TTBKKMap(): ReactElement {
 
   return (
     <div style={{ height: '100%', width: '100%' }}>
-      <Sidebar />
       {mapContainer}
+      <Sidebar />
+      <ToolbarControl />
     </div>
   );
 }

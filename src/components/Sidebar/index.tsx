@@ -7,7 +7,7 @@ import { sidebarDisplayState } from '../../states/maps/sidebar/displayToggleButt
 function Sidebar(): React.ReactElement {
   const display = useRecoilValue(sidebarDisplayState);
   return (
-    <div>
+    <div style={{ position: 'fixed', top: 80, right: 10, zIndex: 400 }}>
       <SidebarToggleButton />
       {display ? <SidebarDetail /> : undefined}
     </div>

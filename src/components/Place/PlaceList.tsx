@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { placeListState } from '../../states/places/places';
+import { placeMapState } from '../../states/places/placeMap';
 import { clickedPlaceState } from '../../states/places/clickedPlace';
 import { FeatureGroup } from 'react-leaflet';
 import { IPlace } from '../../places.mock';
@@ -8,22 +8,23 @@ import { LeafletMouseEvent } from 'leaflet';
 import Place from './Place';
 
 function PlaceList(): React.ReactElement {
-  const places = useRecoilValue(placeListState);
+  const placeMap = useRecoilValue(placeMapState);
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
-
+  console.log(placeMap);
   return (
     <FeatureGroup
       interactive={true}
       bubblingMouseEvents={true}
-      children={places.map((place: IPlace) => (
-        <Place {...place} key={place.id} />
-      ))}
       eventHandlers={{
         click: (e: LeafletMouseEvent): void => {
-          setClickedPlace(e.latlng);
+          setClickedPlace(e.propagatedFrom.id);
         },
       }}
-    />
+    >
+      {Object.values(placeMap).map((place: IPlace) => (
+        <Place {...place} key={place.id} />
+      ))}
+    </FeatureGroup>
   );
 }
 

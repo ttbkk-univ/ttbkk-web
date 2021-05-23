@@ -1,7 +1,6 @@
 import { atom } from 'recoil';
-import { LatLng } from 'leaflet';
 
-export const clickedPlaceState = atom<LatLng | undefined>({
+export const clickedPlaceState = atom<string | undefined>({
   key: 'clickedPlace',
   default: undefined,
 });
