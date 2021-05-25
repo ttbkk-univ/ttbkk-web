@@ -18,7 +18,6 @@ function Place(props: IPlace): null {
   useEffect(() => {
     placeRef.current = new PlaceMarker(props.id, [latitude, longitude], {
       color: 'blue',
-      attribution: props.id,
     });
     const container = context.layerContainer || context.map;
     container.addLayer(placeRef.current);

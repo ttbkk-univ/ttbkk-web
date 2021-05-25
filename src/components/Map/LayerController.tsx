@@ -18,7 +18,7 @@ function LayerController(): React.ReactElement {
         <ReactLeafletGoogleLayer type="hybrid" maxZoom={19} apiKey={googleMapApiKey} />
       </LayersControl.BaseLayer>
       <LayersControl.BaseLayer name="Google Terrain">
-        <ReactLeafletGoogleLayer type="terrain" maxZoom={19} apiKey={googleMapApiKey} />
+        <ReactLeafletGoogleLayer type="terrain" maxZoom={15} apiKey={googleMapApiKey} />
       </LayersControl.BaseLayer>
       <LayersControl.BaseLayer name="OpenStreetMap">
         <TileLayer

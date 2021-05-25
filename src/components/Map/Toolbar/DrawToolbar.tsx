@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react';
-import { useLeafletContext } from '@react-leaflet/core';
-import L, { Control } from 'leaflet';
+import React from 'react';
+import { FaMapMarkerAlt } from 'react-icons/fa';
+import { useSetRecoilState } from 'recoil';
+import { cursorState } from '../../../states/maps/cursor';
 
 function ToolbarControl(): React.ReactElement {
+  const setCursor = useSetRecoilState(cursorState);
   return (
-    <div style={{ position: 'fixed', top: 0, left: 50, zIndex: 400 }}>
-      <button>create place</button>
+    <div style={{ position: 'fixed', top: 100, left: 12, zIndex: 400 }}>
+      <button style={{ height: 30, width: 30 }} onClick={(): void => setCursor('crosshair')}>
+        <FaMapMarkerAlt />
+      </button>
     </div>
   );
 }
