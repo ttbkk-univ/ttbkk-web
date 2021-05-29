@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import SidebarToggleButton from './SitebarToggleButton';
 import SidebarDetail from './SitebarDetail';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { sidebarDisplayState } from '../../states/sidebar/displayToggleButton';
 import useWindowDimensions from '../../hooks/window';
 

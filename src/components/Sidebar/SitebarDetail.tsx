@@ -18,7 +18,7 @@ function SidebarDetail(): React.ReactElement {
     <div
       style={{
         position: 'fixed',
-        height: clickedPlace ? (isMobile ? '50%' : '10%') : 90,
+        height: clickedPlace ? (isMobile ? '50%' : '30%') : 90,
         zIndex: 400,
         backgroundColor: 'rgba(30, 60,80,0.8)',
         fontWeight: 'bold',
@@ -34,9 +34,10 @@ function SidebarDetail(): React.ReactElement {
           <div>
             <span>name: {placeMap[clickedPlace].name}</span>
             <br />
-            <span>lat: {placeMap[clickedPlace].latitude}</span>
-            <br />
+            <span>lat: {placeMap[clickedPlace].latitude}</span> /{' '}
             <span>lng: {placeMap[clickedPlace].longitude}</span>
+            <br />
+            <span>설명: {placeMap[clickedPlace].description}</span>
           </div>
           <div>
             <button

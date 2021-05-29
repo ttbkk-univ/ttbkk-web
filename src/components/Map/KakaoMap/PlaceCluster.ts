@@ -1,5 +1,5 @@
-import { IPlace } from '../../../places.mock';
 import { SetterOrUpdater } from 'recoil';
+import { IPlace } from '../../../states/places/placeMap';
 
 export function setMarkerCluster(
   placeMap: { [p: string]: IPlace },
@@ -22,7 +22,6 @@ export function setMarkerCluster(
       id: place.id,
     });
     window.kakao.maps.event.addListener(marker, 'click', () => {
-      console.log(marker.id);
       setClickedPlace(marker.id);
     });
     return marker;

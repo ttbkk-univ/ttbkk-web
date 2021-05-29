@@ -10,9 +10,11 @@ import LocationFoundControl from './components/Map/Toolbar/LocationFound';
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <MapContent />
-      <Sidebar />
-      <LocationFoundControl />
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <MapContent />
+        <Sidebar />
+        <LocationFoundControl />
+      </React.Suspense>
     </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root'),
