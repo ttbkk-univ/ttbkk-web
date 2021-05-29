@@ -1,19 +1,42 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { BsFillCaretLeftFill, BsFillCaretRightFill } from 'react-icons/bs';
+import {
+  BsFillCaretLeftFill,
+  BsFillCaretRightFill,
+  BsFillCaretUpFill,
+  BsFillCaretDownFill,
+} from 'react-icons/bs';
 import { sidebarDisplayState } from '../../states/sidebar/displayToggleButton';
+import { Button } from '@material-ui/core';
+import useWindowDimensions from '../../hooks/window';
 
 function SidebarToggleButton(): React.ReactElement {
   const [display, setDisplay] = useRecoilState(sidebarDisplayState);
-  const size: number = 20;
+  const { width } = useWindowDimensions();
+  const size: number = 30;
+
+  const isMobile: boolean = width < 600;
+  const buttonPosition = isMobile ? { bottom: 20, right: 50 } : { top: 100, right: 10 };
   return (
-    <div>
-      <button
-        style={{ height: 100, width: 32, padding: 0 }}
+    <div style={{ position: 'fixed', zIndex: 400, ...buttonPosition }}>
+      <Button
+        variant={'contained'}
+        color={'primary'}
+        style={{ height: isMobile ? 50 : 70 }}
         onClick={(): void => setDisplay(!display)}
       >
-        {display ? <BsFillCaretRightFill size={size} /> : <BsFillCaretLeftFill size={size} />}
-      </button>
+        {isMobile ? (
+          display ? (
+            <BsFillCaretDownFill size={size} />
+          ) : (
+            <BsFillCaretUpFill size={size} />
+          )
+        ) : display ? (
+          <BsFillCaretRightFill size={size} />
+        ) : (
+          <BsFillCaretLeftFill size={size} />
+        )}
+      </Button>
     </div>
   );
 }

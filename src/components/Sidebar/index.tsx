@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SidebarToggleButton from './SitebarToggleButton';
 import SidebarDetail from './SitebarDetail';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { sidebarDisplayState } from '../../states/sidebar/displayToggleButton';
+import useWindowDimensions from '../../hooks/window';
 
 function Sidebar(): React.ReactElement {
-  const display = useRecoilValue(sidebarDisplayState);
+  const [display, setDisplay] = useRecoilState(sidebarDisplayState);
+  const { width } = useWindowDimensions();
+  useEffect(() => {
+    setDisplay(width > 600);
+  }, []);
   return (
-    <div style={{ position: 'fixed', top: 50, right: 10, zIndex: 400 }}>
+    <div>
       <SidebarToggleButton />
       {display ? <SidebarDetail /> : undefined}
     </div>

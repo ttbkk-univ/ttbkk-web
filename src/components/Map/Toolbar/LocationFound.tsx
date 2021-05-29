@@ -1,11 +1,14 @@
 import React from 'react';
 import { MdMyLocation } from 'react-icons/md';
+import { Button } from '@material-ui/core';
 
 function LocationFoundControl(): React.ReactElement {
   return (
-    <div style={{ position: 'fixed', bottom: 220, right: 3, zIndex: 400 }}>
-      <button
-        style={{ height: 32, width: 32, padding: 0, backgroundColor: 'white' }}
+    <div style={{ position: 'fixed', top: 50, right: 10, zIndex: 400 }}>
+      <Button
+        variant={'contained'}
+        color={'primary'}
+        style={{ height: 32, width: 32, padding: 0 }}
         onClick={(): void =>
           navigator?.geolocation?.getCurrentPosition(
             (position: Position) => {
@@ -23,7 +26,7 @@ function LocationFoundControl(): React.ReactElement {
         }
       >
         <MdMyLocation size={20} />
-      </button>
+      </Button>
     </div>
   );
 }

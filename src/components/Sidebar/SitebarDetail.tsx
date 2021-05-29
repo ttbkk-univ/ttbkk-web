@@ -3,24 +3,28 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { clickedPlaceState } from '../../states/places/clickedPlace';
 import { zoomState } from '../../states/maps/zoom';
 import { placeMapState } from '../../states/places/placeMap';
+import useWindowDimensions from '../../hooks/window';
 
 function SidebarDetail(): React.ReactElement {
   const [clickedPlace, setClickedPlace] = useRecoilState(clickedPlaceState);
   const zoom = useRecoilValue(zoomState);
   const placeMap = useRecoilValue(placeMapState);
+  const { width } = useWindowDimensions();
+  const isMobile: boolean = width < 600;
+  const position = isMobile
+    ? { bottom: '15%', right: '14%', width: '75%' }
+    : { top: 50, right: 90, width: 400 };
   return (
     <div
       style={{
         position: 'fixed',
-        top: 50,
-        right: 55,
-        width: 350,
-        height: clickedPlace ? '10%' : 90,
+        height: clickedPlace ? (isMobile ? '50%' : '10%') : 90,
         zIndex: 400,
         backgroundColor: 'rgba(30, 60,80,0.8)',
         fontWeight: 'bold',
         color: 'white',
         padding: 6,
+        ...position,
       }}
     >
       <div>zoom: {zoom}</div>
