@@ -7,7 +7,7 @@ import { sidebarDisplayState } from '../../states/sidebar/displayToggleButton';
 function Sidebar(): React.ReactElement {
   const display = useRecoilValue(sidebarDisplayState);
   return (
-    <div style={{ position: 'fixed', top: 80, right: 10, zIndex: 400 }}>
+    <div style={{ position: 'fixed', top: 50, right: 10, zIndex: 400 }}>
       <SidebarToggleButton />
       {display ? <SidebarDetail /> : undefined}
     </div>

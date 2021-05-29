@@ -12,10 +12,10 @@ function SidebarDetail(): React.ReactElement {
     <div
       style={{
         position: 'fixed',
-        top: 80,
-        right: 70,
-        width: 200,
-        height: clickedPlace ? 100 : 20,
+        top: 50,
+        right: 55,
+        width: 350,
+        height: clickedPlace ? '10%' : 90,
         zIndex: 400,
         backgroundColor: 'rgba(30, 60,80,0.8)',
         fontWeight: 'bold',
@@ -24,9 +24,9 @@ function SidebarDetail(): React.ReactElement {
       }}
     >
       <div>zoom: {zoom}</div>
-      {clickedPlace && (
+      <hr />
+      {clickedPlace ? (
         <>
-          <hr />
           <div>
             <span>name: {placeMap[clickedPlace].name}</span>
             <br />
@@ -43,6 +43,10 @@ function SidebarDetail(): React.ReactElement {
             </button>
           </div>
         </>
+      ) : (
+        <div>
+          <p>장소 클릭시 정보가 표시됩니다.</p>
+        </div>
       )}
     </div>
   );
