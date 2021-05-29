@@ -2,13 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import TTBKKMap from './components/TTBKKMap';
 import { RecoilRoot } from 'recoil';
+import MapContent from './components/Map/KakaoMap/MapContent';
+import Sidebar from './components/Sidebar';
+import LocationFoundControl from './components/Map/Toolbar/LocationFound';
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <TTBKKMap />
+      <MapContent />
+      <Sidebar />
+      <LocationFoundControl />
     </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root'),

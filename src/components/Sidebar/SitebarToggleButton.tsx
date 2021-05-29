@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { sidebarDisplayState } from '../../states/maps/sidebar/displayToggleButton';
+import { sidebarDisplayState } from '../../states/sidebar/displayToggleButton';
 
 function SidebarToggleButton(): React.ReactElement {
   const [display, setDisplay] = useRecoilState(sidebarDisplayState);

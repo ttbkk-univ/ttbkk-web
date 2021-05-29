@@ -1,13 +1,13 @@
-interface Google {
+interface Kakao {
   mapApiKey: string | undefined;
 }
 
 interface Env {
-  google: Google;
+  kakao: Kakao;
 }
 
 export const env: Env = {
-  google: {
-    mapApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+  kakao: {
+    mapApiKey: process.env.REACT_APP_KAKAO_MAP_API_KEY,
   },
 };
