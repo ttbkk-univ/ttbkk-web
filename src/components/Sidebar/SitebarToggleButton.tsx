@@ -27,14 +27,14 @@ function SidebarToggleButton(): React.ReactElement {
       >
         {isMobile ? (
           display ? (
-            <BsFillCaretDownFill size={size} />
-          ) : (
             <BsFillCaretUpFill size={size} />
+          ) : (
+            <BsFillCaretDownFill size={size} />
           )
         ) : display ? (
-          <BsFillCaretRightFill size={size} />
-        ) : (
           <BsFillCaretLeftFill size={size} />
+        ) : (
+          <BsFillCaretRightFill size={size} />
         )}
       </Button>
     </div>

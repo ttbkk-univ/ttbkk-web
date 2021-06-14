@@ -38,6 +38,7 @@ function MapContent(): React.ReactElement {
         window.kakao.maps.event.addListener(window.map, 'zoom_changed', () => {
           setZoom(window.map.getLevel());
         });
+        window.map.setDraggable(true);
         setMapControl();
         setMarkerCluster(placeMap, setClickedPlace);
       });
