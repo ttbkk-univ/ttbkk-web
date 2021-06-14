@@ -1,5 +1,5 @@
 import { SetterOrUpdater } from 'recoil';
-import { IPlace } from '../../../states/places/placeMap';
+import { IPlace } from '../../states/places/placeMap';
 
 export function setMarkerCluster(
   placeMap: { [p: string]: IPlace },

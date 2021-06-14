@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
-import MapContent from './components/Map/KakaoMap/MapContent';
+import MapContent from './components/Map';
 import Sidebar from './components/Sidebar';
-import LocationFoundControl from './components/Map/Toolbar/LocationFound';
+import LocationFoundControl from './components/Toolbar/LocationFoundButton';
+import CreatePlaceButton from './components/Toolbar/CreatePlaceButton';
+import { CreatePlaceModal } from './components/Toolbar/CreatePlaceModal';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,6 +16,8 @@ ReactDOM.render(
         <MapContent />
         <Sidebar />
         <LocationFoundControl />
+        <CreatePlaceButton />
+        <CreatePlaceModal />
       </React.Suspense>
     </RecoilRoot>
   </React.StrictMode>,

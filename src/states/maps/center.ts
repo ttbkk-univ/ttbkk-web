@@ -1,6 +1,11 @@
 import { atom } from 'recoil';
 
-export const centerState = atom<{ latitude: number; longitude: number }>({
+export interface LatLng {
+  latitude: number;
+  longitude: number;
+}
+
+export const centerState = atom<LatLng>({
   key: 'center',
   default: {
     latitude: 37.53026789291489,

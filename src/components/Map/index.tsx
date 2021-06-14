@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { zoomState } from '../../../states/maps/zoom';
-import { centerState } from '../../../states/maps/center';
-import { placeMapState } from '../../../states/places/placeMap';
+import { zoomState } from '../../states/maps/zoom';
+import { centerState } from '../../states/maps/center';
+import { placeMapState } from '../../states/places/placeMap';
 import { setMarkerCluster } from './PlaceCluster';
 import { setMapControl } from './MapControl';
 import { loadKakaoMap } from './MapLoader';
-import { clickedPlaceState } from '../../../states/places/clickedPlace';
+import { clickedPlaceState } from '../../states/places/clickedPlace';
 
 declare global {
   interface Window {

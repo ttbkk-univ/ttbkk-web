@@ -16,7 +16,7 @@ function SidebarToggleButton(): React.ReactElement {
   const size: number = 30;
 
   const isMobile: boolean = width < 600;
-  const buttonPosition = isMobile ? { bottom: 20, right: 50 } : { top: 100, right: 10 };
+  const buttonPosition = isMobile ? { bottom: 20, right: 50 } : { top: 150, right: 10 };
   return (
     <div style={{ position: 'fixed', zIndex: 400, ...buttonPosition }}>
       <Button

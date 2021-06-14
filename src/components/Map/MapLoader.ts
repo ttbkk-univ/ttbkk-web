@@ -1,4 +1,4 @@
-import { env } from '../../../env';
+import { env } from '../../env';
 
 function addScript(type: string, src: string, id: string): HTMLScriptElement {
   const script = document.createElement('script');
