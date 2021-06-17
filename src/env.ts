@@ -15,5 +15,3 @@ export const env: Env = {
     host: process.env.REACT_APP_API_HOST?.toString(),
   },
 };
-
-console.log(env);

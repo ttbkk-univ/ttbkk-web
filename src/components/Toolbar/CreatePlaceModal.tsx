@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { createPlaceButtonClickedState } from '../../states/buttons/createPlaceButtonState';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { createPlaceLatLngState } from '../../states/buttons/createPlaceLatLngState';
 import { Button } from '@material-ui/core';
 import { MdCancel } from 'react-icons/all';
 import { isMobile } from '../utils/is-mobile';
+import { createPlaceButtonClickedState } from '../../states/buttons/createPlaceButtonClickedState';
 
 export function CreatePlaceModal(): React.ReactElement {
-  const [latLng, setCreatePlaceButtonClicked] = useRecoilState(createPlaceButtonClickedState);
+  const [latLng, setCreatePlaceButtonClicked] = useRecoilState(createPlaceLatLngState);
+  const createPlaceButtonClicked = useRecoilValue(createPlaceButtonClickedState);
 
   useEffect(() => {
-    console.log(latLng);
+    latLng && console.log(latLng);
   }, [latLng]);
 
   useEffect(() => {
@@ -76,7 +78,7 @@ export function CreatePlaceModal(): React.ReactElement {
         ...style,
         position: 'fixed',
         zIndex: 400,
-        visibility: latLng ? 'visible' : 'hidden',
+        visibility: createPlaceButtonClicked ? 'visible' : 'hidden',
       }}
     >
       <div
