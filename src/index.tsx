@@ -4,20 +4,14 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
 import MapContent from './components/Map';
-import Sidebar from './components/Sidebar';
-import LocationFoundControl from './components/Toolbar/LocationFoundButton';
-import CreatePlaceButton from './components/Toolbar/CreatePlaceButton';
-import { CreatePlaceModal } from './components/Toolbar/CreatePlaceModal';
+import FeatureList from './components/Features';
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
       <React.Suspense fallback={<div>Loading...</div>}>
         <MapContent />
-        <Sidebar />
-        <LocationFoundControl />
-        <CreatePlaceButton />
-        <CreatePlaceModal />
+        <FeatureList />
       </React.Suspense>
     </RecoilRoot>
   </React.StrictMode>,

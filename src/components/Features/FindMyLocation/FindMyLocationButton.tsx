@@ -2,7 +2,7 @@ import React from 'react';
 import { MdMyLocation } from 'react-icons/md';
 import { Button } from '@material-ui/core';
 
-function LocationFoundControl(): React.ReactElement {
+function FindMyLocationButton(): React.ReactElement {
   return (
     <div style={{ position: 'fixed', top: 50, right: 10, zIndex: 400 }}>
       <Button
@@ -31,4 +31,4 @@ function LocationFoundControl(): React.ReactElement {
   );
 }
 
-export default LocationFoundControl;
+export default FindMyLocationButton;

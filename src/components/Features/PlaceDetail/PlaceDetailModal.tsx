@@ -1,12 +1,12 @@
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { clickedPlaceState } from '../../states/places/clickedPlace';
-import { zoomState } from '../../states/maps/zoom';
-import { placeMapState } from '../../states/places/placeMap';
-import useWindowDimensions from '../../hooks/window';
+import { clickedPlaceState } from '../../../states/places/clickedPlace';
+import { zoomState } from '../../../states/maps/zoom';
+import { placeMapState } from '../../../states/places/placeMap';
+import useWindowDimensions from '../../../hooks/window';
 import { Button } from '@material-ui/core';
 
-function SidebarDetail(): React.ReactElement {
+function PlaceDetailModal(): React.ReactElement {
   const [clickedPlace, setClickedPlace] = useRecoilState(clickedPlaceState);
   const zoom = useRecoilValue(zoomState);
   const placeMap = useRecoilValue(placeMapState);
@@ -60,4 +60,4 @@ function SidebarDetail(): React.ReactElement {
   );
 }
 
-export default SidebarDetail;
+export default PlaceDetailModal;

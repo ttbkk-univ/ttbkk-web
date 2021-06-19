@@ -6,12 +6,12 @@ import {
   BsFillCaretUpFill,
   BsFillCaretDownFill,
 } from 'react-icons/bs';
-import { sidebarDisplayState } from '../../states/sidebar/displayToggleButton';
+import { placeDetailDisplayState } from '../../../states/sidebar/displayToggleButton';
 import { Button } from '@material-ui/core';
-import useWindowDimensions from '../../hooks/window';
+import useWindowDimensions from '../../../hooks/window';
 
-function SidebarToggleButton(): React.ReactElement {
-  const [display, setDisplay] = useRecoilState(sidebarDisplayState);
+function PlaceDetailDisplayButton(): React.ReactElement {
+  const [display, setDisplay] = useRecoilState(placeDetailDisplayState);
   const { width } = useWindowDimensions();
   const size: number = 30;
 
@@ -41,4 +41,4 @@ function SidebarToggleButton(): React.ReactElement {
   );
 }
 
-export default SidebarToggleButton;
+export default PlaceDetailDisplayButton;

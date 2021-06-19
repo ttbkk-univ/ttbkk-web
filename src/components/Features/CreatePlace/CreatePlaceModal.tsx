@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { createPlaceLatLngState } from '../../states/buttons/createPlaceLatLngState';
-import { Button, Input, TextField } from '@material-ui/core';
+import { createPlaceLatLngState } from '../../../states/buttons/createPlaceLatLngState';
+import { Button, Input } from '@material-ui/core';
 import { MdCancel, MdHelp, MdSend } from 'react-icons/all';
-import { isMobile } from '../utils/is-mobile';
-import { createPlaceModalDisplayState } from '../../states/buttons/createPlaceModalDisplayState';
+import { isMobile } from '../../../utils/is-mobile';
+import { createPlaceModalDisplayState } from '../../../states/buttons/createPlaceModalDisplayState';
 
-export function CreatePlaceModal(): React.ReactElement {
+function CreatePlaceModal(): React.ReactElement {
   const latLng = useRecoilValue(createPlaceLatLngState);
   const [createPlaceModalDisplay, setCreatePlaceModalDisplay] = useRecoilState(
     createPlaceModalDisplayState,
@@ -252,3 +252,5 @@ export function CreatePlaceModal(): React.ReactElement {
     </div>
   );
 }
+
+export default CreatePlaceModal;

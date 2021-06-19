@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-export const sidebarDisplayState = atom<boolean>({
-  key: 'sidebarDisplay',
+export const placeDetailDisplayState = atom<boolean>({
+  key: 'placeDetailDisplayState',
   default: false,
 });
