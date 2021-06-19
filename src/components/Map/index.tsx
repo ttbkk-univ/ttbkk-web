@@ -13,6 +13,7 @@ declare global {
     kakao: any;
     map: any;
     clusterer: any;
+    newPlace: any;
   }
 }
 
