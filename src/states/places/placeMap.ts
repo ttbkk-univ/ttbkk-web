@@ -8,7 +8,7 @@ export interface IPlace {
   longitude: number;
   description?: string;
   name: string;
-  phone?: string;
+  hashtags: any[];
 }
 
 export const placeMapState = atom<{ [key: string]: IPlace }>({

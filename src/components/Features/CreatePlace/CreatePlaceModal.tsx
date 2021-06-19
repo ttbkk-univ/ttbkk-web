@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../states/buttons/createPlaceLatLngState';
 import { Button, Input } from '@material-ui/core';
 import { MdCancel, MdHelp, MdSend } from 'react-icons/all';
@@ -13,7 +13,7 @@ import { clickedPlaceState } from '../../../states/places/clickedPlace';
 
 function CreatePlaceModal(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
-  const latLng = useRecoilValue(createPlaceLatLngState);
+  const [latLng, setCreatePlaceLatLng] = useRecoilState(createPlaceLatLngState);
   const [createPlaceModalDisplay, setCreatePlaceModalDisplay] = useRecoilState(
     createPlaceModalDisplayState,
   );
@@ -27,6 +27,11 @@ function CreatePlaceModal(): React.ReactElement {
   useEffect(() => {
     latLng && console.log(latLng);
   }, [latLng]);
+
+  useEffect(() => {
+    const tagContainer: HTMLElement | null = document.getElementById('tag-container');
+    if (tagContainer) tagContainer.scrollTop = tagContainer.scrollHeight;
+  }, [newPlaceHashtagList]);
 
   useEffect(() => {
     function dragElement(element: any): void {
@@ -84,7 +89,7 @@ function CreatePlaceModal(): React.ReactElement {
     : {
         top: '30%',
         right: '10%',
-        width: 300,
+        width: 400,
       };
 
   const inputStyle = { paddingLeft: 8, paddingRight: 8, backgroundColor: 'white' };
@@ -116,7 +121,9 @@ function CreatePlaceModal(): React.ReactElement {
     setNewPlaceHashtag('');
     setNewPlaceHashtagList([]);
     setNewPlaceDescription('');
+    setCreatePlaceLatLng(undefined);
     window.newPlace.setMap(null);
+    window.newPlace = null;
   };
 
   const placeToMarker = (place: IPlace): any => {
@@ -247,7 +254,10 @@ function CreatePlaceModal(): React.ReactElement {
               태그 <MdHelp title={'메뉴 등 검색에 필요한 해시태그'} />
             </span>
             {newPlaceHashtagList.length ? (
-              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              <div
+                id={'tag-container'}
+                style={{ display: 'flex', flexWrap: 'wrap', overflow: 'auto', maxHeight: 150 }}
+              >
                 {newPlaceHashtagList.map((hashtag) => (
                   <div
                     key={hashtag}

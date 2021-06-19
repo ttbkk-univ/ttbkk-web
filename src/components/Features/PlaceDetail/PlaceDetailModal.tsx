@@ -1,14 +1,12 @@
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { clickedPlaceState } from '../../../states/places/clickedPlace';
-import { zoomState } from '../../../states/maps/zoom';
 import { placeMapState } from '../../../states/places/placeMap';
 import useWindowDimensions from '../../../hooks/window';
 import { Button } from '@material-ui/core';
 
 function PlaceDetailModal(): React.ReactElement {
   const [clickedPlace, setClickedPlace] = useRecoilState(clickedPlaceState);
-  const zoom = useRecoilValue(zoomState);
   const placeMap = useRecoilValue(placeMapState);
   const { width } = useWindowDimensions();
   const isMobile: boolean = width < 600;
@@ -28,17 +26,25 @@ function PlaceDetailModal(): React.ReactElement {
         ...position,
       }}
     >
-      <div>zoom: {zoom}</div>
-      <hr />
       {clickedPlace ? (
         <>
           <div>
-            <span>name: {placeMap[clickedPlace].name}</span>
-            <br />
-            <span>lat: {placeMap[clickedPlace].latitude}</span> /{' '}
-            <span>lng: {placeMap[clickedPlace].longitude}</span>
-            <br />
-            <span>설명: {placeMap[clickedPlace].description}</span>
+            <div style={{ fontSize: '32px', color: 'rgb(255, 68, 85)' }}>
+              {placeMap[clickedPlace].name}
+            </div>
+            <hr />
+            <div style={{ whiteSpace: 'pre-line' }}>{placeMap[clickedPlace].description}</div>
+            <hr />
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              {placeMap[clickedPlace].hashtags.map((hashtag) => (
+                <span
+                  style={{ margin: 3, backgroundColor: 'rgba(150, 202, 140, 0.5)' }}
+                  key={hashtag.name}
+                >
+                  {hashtag.name}
+                </span>
+              ))}
+            </div>
           </div>
           <div>
             <Button
