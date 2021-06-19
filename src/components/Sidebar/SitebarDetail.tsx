@@ -4,6 +4,7 @@ import { clickedPlaceState } from '../../states/places/clickedPlace';
 import { zoomState } from '../../states/maps/zoom';
 import { placeMapState } from '../../states/places/placeMap';
 import useWindowDimensions from '../../hooks/window';
+import { Button } from '@material-ui/core';
 
 function SidebarDetail(): React.ReactElement {
   const [clickedPlace, setClickedPlace] = useRecoilState(clickedPlaceState);
@@ -40,12 +41,14 @@ function SidebarDetail(): React.ReactElement {
             <span>설명: {placeMap[clickedPlace].description}</span>
           </div>
           <div>
-            <button
+            <Button
+              variant={'contained'}
+              color={'secondary'}
               style={{ position: 'absolute', right: 6, bottom: 10 }}
               onClick={(): void => setClickedPlace(undefined)}
             >
               선택취소
-            </button>
+            </Button>
           </div>
         </>
       ) : (
