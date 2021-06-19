@@ -11,13 +11,13 @@ function PlaceDetailModal(): React.ReactElement {
   const { width } = useWindowDimensions();
   const isMobile: boolean = width < 600;
   const position = isMobile
-    ? { bottom: '15%', right: '14%', width: '75%' }
-    : { top: 50, right: 90, width: 400 };
+    ? { bottom: '15%', right: '14%', width: '75%', height: clickedPlace ? '50%' : 90 }
+    : { top: 50, right: 90, width: 400, paddingBottom: 50 };
   return (
     <div
       style={{
+        overflow: 'auto',
         position: 'fixed',
-        height: clickedPlace ? (isMobile ? '50%' : '30%') : 90,
         zIndex: 400,
         backgroundColor: 'rgba(30, 60,80,0.8)',
         fontWeight: 'bold',
