@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../states/buttons/createPlaceLatLngState';
 import { Button, Input } from '@material-ui/core';
 import { MdCancel, MdHelp, MdSend } from 'react-icons/all';
 import { isMobile } from '../../../utils/is-mobile';
 import { createPlaceModalDisplayState } from '../../../states/buttons/createPlaceModalDisplayState';
+import axios, { AxiosResponse } from 'axios';
+import { env } from '../../../env';
+import { IPlace, placeMapState } from '../../../states/places/placeMap';
+import _ from 'lodash';
+import { clickedPlaceState } from '../../../states/places/clickedPlace';
 
 function CreatePlaceModal(): React.ReactElement {
+  const setClickedPlace = useSetRecoilState(clickedPlaceState);
   const latLng = useRecoilValue(createPlaceLatLngState);
   const [createPlaceModalDisplay, setCreatePlaceModalDisplay] = useRecoilState(
     createPlaceModalDisplayState,
   );
+  const [placeMap, setPlaceMap] = useRecoilState(placeMapState);
   const [newPlaceName, setNewPlaceName] = useState('');
   const [newPlaceBrand, setNewPlaceBrand] = useState('');
   const [newPlaceDescription, setNewPlaceDescription] = useState('');
@@ -76,7 +83,7 @@ function CreatePlaceModal(): React.ReactElement {
     ? { bottom: 100, left: 30, height: 500, width: 300 }
     : {
         top: '30%',
-        left: '20%',
+        right: '10%',
         width: 300,
       };
 
@@ -100,6 +107,81 @@ function CreatePlaceModal(): React.ReactElement {
       }
       console.log(newPlaceHashtagList);
     }
+  };
+
+  const resetForm = (closeAfterRequest: boolean): void => {
+    closeAfterRequest && setCreatePlaceModalDisplay(false);
+    setNewPlaceName('');
+    setNewPlaceBrand('');
+    setNewPlaceHashtag('');
+    setNewPlaceHashtagList([]);
+    setNewPlaceDescription('');
+    window.newPlace.setMap(null);
+  };
+
+  const placeToMarker = (place: IPlace): any => {
+    class PlaceMarker extends window.kakao.maps.Marker {
+      id: string;
+
+      constructor(props: any) {
+        super(props);
+        this.id = props.id;
+      }
+    }
+
+    const marker = new PlaceMarker({
+      position: new window.kakao.maps.LatLng(place.latitude, place.longitude),
+      title: place.name,
+      clickable: true,
+      id: place.id,
+    });
+    window.kakao.maps.event.addListener(marker, 'click', () => {
+      setClickedPlace(marker.id);
+    });
+    return marker;
+  };
+
+  const createRequest = (closeAfterRequest: boolean): void => {
+    console.log(placeMap);
+    if (!newPlaceName) {
+      alert('이름을 입력하세요');
+      return;
+    }
+    if (!newPlaceBrand) {
+      alert("브랜드를 입력하세요 (없다면 '로컬'이라고 입력)");
+      return;
+    }
+    if (!newPlaceHashtagList.length) {
+      alert('태그를 최소 1개이상 입력하세요');
+      return;
+    }
+    if (!newPlaceDescription) {
+      alert('설명을 입력하세요');
+      return;
+    }
+    if (!latLng) {
+      alert('지도에서 매장 위치를 클릭하세요');
+      return;
+    }
+
+    axios
+      .post(env.api.host + '/api/places/', {
+        name: newPlaceName,
+        description: newPlaceDescription,
+        latitude: latLng?.latitude,
+        longitude: latLng?.longitude,
+        brand_name: newPlaceBrand,
+        hashtags: newPlaceHashtagList,
+      })
+      .then((res: AxiosResponse) => {
+        const newPlace: IPlace = res.data;
+        setPlaceMap(_.assign(placeMap, { [newPlace.id]: newPlace }));
+        window.clusterer.addMarker(placeToMarker(newPlace));
+        resetForm(closeAfterRequest);
+      })
+      .catch(() => {
+        alert('서버 문제로 생성에 요청에 실패했습니다');
+      });
   };
 
   return (
@@ -244,8 +326,16 @@ function CreatePlaceModal(): React.ReactElement {
           </div>
         </div>
         <div style={{ marginTop: 8, flexDirection: 'row-reverse', display: 'flex' }}>
-          <Button variant={'contained'} color={'primary'} onClick={(): void => alert('신청!!')}>
-            생성 요청하기 <MdSend />
+          <Button variant={'contained'} color={'primary'} onClick={(): void => createRequest(true)}>
+            생성 후 닫기 <MdSend />
+          </Button>
+          <Button
+            style={{ marginRight: 8 }}
+            variant={'contained'}
+            color={'primary'}
+            onClick={(): void => createRequest(false)}
+          >
+            생성 후 계속 작성하기 <MdSend />
           </Button>
         </div>
       </div>

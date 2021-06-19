@@ -5,7 +5,7 @@ export function setMarkerCluster(
   placeMap: { [p: string]: IPlace },
   setClickedPlace: SetterOrUpdater<string | undefined>,
 ): void {
-  class Place extends window.kakao.maps.Marker {
+  class PlaceMarker extends window.kakao.maps.Marker {
     id: string;
 
     constructor(props: any) {
@@ -14,8 +14,8 @@ export function setMarkerCluster(
     }
   }
 
-  const markers = Object.values(placeMap).map((place: IPlace) => {
-    const marker = new Place({
+  const placeToMarker = (place: IPlace): PlaceMarker => {
+    const marker = new PlaceMarker({
       position: new window.kakao.maps.LatLng(place.latitude, place.longitude),
       title: place.name,
       clickable: true,
@@ -25,7 +25,9 @@ export function setMarkerCluster(
       setClickedPlace(marker.id);
     });
     return marker;
-  });
+  };
+
+  const markers = Object.values(placeMap).map((place: IPlace) => placeToMarker(place));
   window.clusterer = new window.kakao.maps.MarkerClusterer({
     map: window.map,
     averageCenter: true,

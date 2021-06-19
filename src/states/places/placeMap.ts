@@ -1,4 +1,4 @@
-import { selector } from 'recoil';
+import { atom } from 'recoil';
 import axios from 'axios';
 import { env } from '../../env';
 
@@ -11,9 +11,9 @@ export interface IPlace {
   phone?: string;
 }
 
-export const placeMapState = selector<{ [key: string]: IPlace }>({
+export const placeMapState = atom<{ [key: string]: IPlace }>({
   key: 'places',
-  get: async () => {
+  default: (async (): Promise<{ [key: string]: IPlace }> => {
     const placeMap: { [key: string]: IPlace } = {};
     console.log(env.api.host);
     const response = await axios.get<IPlace[]>(env.api.host + '/api/places/');
@@ -21,7 +21,7 @@ export const placeMapState = selector<{ [key: string]: IPlace }>({
       placeMap[place.id] = place;
     });
     return placeMap;
-  },
+  })(),
 });
 
 // const places: IPlace[] = [
