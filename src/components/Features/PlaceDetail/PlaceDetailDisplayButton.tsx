@@ -27,14 +27,14 @@ function PlaceDetailDisplayButton(): React.ReactElement {
       >
         {isMobile ? (
           display ? (
-            <BsFillCaretUpFill size={size} />
-          ) : (
             <BsFillCaretDownFill size={size} />
+          ) : (
+            <BsFillCaretUpFill size={size} />
           )
         ) : display ? (
-          <BsFillCaretLeftFill size={size} />
-        ) : (
           <BsFillCaretRightFill size={size} />
+        ) : (
+          <BsFillCaretLeftFill size={size} />
         )}
       </Button>
     </div>
