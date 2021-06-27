@@ -49,6 +49,7 @@ function CreatePlaceButton(): React.ReactElement {
   return (
     <div style={{ position: 'fixed', top: 100, right: 10, zIndex: 400 }}>
       <Button
+        title={'장소 생성'}
         variant={'contained'}
         color={createPlaceModalDisplay ? 'secondary' : 'primary'}
         style={{ height: 32, width: 32, padding: 0 }}

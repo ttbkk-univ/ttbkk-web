@@ -6,6 +6,7 @@ function FindMyLocationButton(): React.ReactElement {
   return (
     <div style={{ position: 'fixed', top: 50, right: 10, zIndex: 400 }}>
       <Button
+        title={'내 위치'}
         variant={'contained'}
         color={'primary'}
         style={{ height: 32, width: 32, padding: 0 }}
