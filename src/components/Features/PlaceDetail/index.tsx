@@ -1,17 +1,13 @@
 import React from 'react';
-import PlaceDetailDisplayButton from './PlaceDetailDisplayButton';
 import PlaceDetailModal from './PlaceDetailModal';
 import { useRecoilValue } from 'recoil';
 import { placeDetailDisplayState } from '../../../states/sidebar/displayToggleButton';
+import { clickedPlaceState } from '../../../states/places/clickedPlace';
 
 function PlaceDetail(): React.ReactElement {
   const display = useRecoilValue(placeDetailDisplayState);
-  return (
-    <div>
-      <PlaceDetailDisplayButton />
-      {display ? <PlaceDetailModal /> : undefined}
-    </div>
-  );
+  const clickedPlace = useRecoilValue(clickedPlaceState);
+  return <div>{display && clickedPlace && <PlaceDetailModal />}</div>;
 }
 
 export default PlaceDetail;
