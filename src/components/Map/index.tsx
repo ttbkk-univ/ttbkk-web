@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { zoomState } from '../../states/maps/zoom';
-import { centerState } from '../../states/maps/center';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { placeMapState } from '../../states/places/placeMap';
 import { setMarkerCluster } from './PlaceCluster';
 import { setMapControl } from './MapControl';
@@ -18,7 +16,29 @@ declare global {
   }
 }
 
-function setMap(center: { latitude: number; longitude: number }, zoom: number): void {
+export interface LatLng {
+  latitude: number;
+  longitude: number;
+}
+
+function getZoom(): number {
+  const zoomFromLocalStorage = window.localStorage.getItem('zoom');
+  return zoomFromLocalStorage ? Number(zoomFromLocalStorage) : 8;
+}
+
+function getCenter(): LatLng {
+  const centerFromLocalStorage = window.localStorage.getItem('center');
+  return centerFromLocalStorage
+    ? JSON.parse(centerFromLocalStorage)
+    : {
+        latitude: 37.53026789291489,
+        longitude: 127.12380358542175,
+      };
+}
+
+function setMap(): void {
+  const zoom = getZoom();
+  const center = getCenter();
   const container = document.getElementById('map');
   const options = {
     center: new window.kakao.maps.LatLng(center.latitude, center.longitude),
@@ -27,9 +47,23 @@ function setMap(center: { latitude: number; longitude: number }, zoom: number): 
   window.map = new window.kakao.maps.Map(container, options);
 }
 
+function setZoom(): void {
+  window.localStorage.setItem('zoom', window.map.getLevel().toString());
+  setCenter();
+}
+
+function setCenter(): void {
+  const center = window.map.getCenter();
+  window.localStorage.setItem(
+    'center',
+    JSON.stringify({
+      latitude: center.getLat(),
+      longitude: center.getLng(),
+    }),
+  );
+}
+
 function MapContent(): React.ReactElement {
-  const [zoom, setZoom] = useRecoilState(zoomState);
-  const center = useRecoilValue(centerState);
   const placeMap = useRecoilValue(placeMapState);
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
   const setDisplayDetailPlace = useSetRecoilState(placeDetailDisplayState);
@@ -37,10 +71,9 @@ function MapContent(): React.ReactElement {
   useEffect(() => {
     loadKakaoMap(() => {
       window.kakao.maps.load(() => {
-        setMap(center, zoom);
-        window.kakao.maps.event.addListener(window.map, 'zoom_changed', () => {
-          setZoom(window.map.getLevel());
-        });
+        setMap();
+        window.kakao.maps.event.addListener(window.map, 'zoom_changed', () => setZoom());
+        window.kakao.maps.event.addListener(window.map, 'center_changed', () => setCenter());
         window.map.setDraggable(true);
         setMapControl();
         setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
