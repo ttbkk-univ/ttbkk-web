@@ -202,7 +202,7 @@ function CreatePlaceModal(): React.ReactElement {
     >
       <div
         id={'create_place_modal_body'}
-        style={{ display: 'flex', justifyContent: 'space-between' }}
+        style={{ display: 'flex', justifyContent: 'space-between', cursor: 'grab' }}
       >
         <span style={{ color: 'ActiveBorder', fontSize: 20 }}>장소 생성</span>
         <div style={{ flexDirection: 'row-reverse', display: 'flex' }}>
