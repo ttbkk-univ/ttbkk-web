@@ -162,10 +162,7 @@ function CreatePlaceModal(): React.ReactElement {
       alert('태그를 최소 1개이상 입력하세요');
       return;
     }
-    if (!newPlaceDescription) {
-      alert('설명을 입력하세요');
-      return;
-    }
+
     if (!latLng) {
       alert('지도에서 매장 위치를 클릭하세요');
       return;
@@ -205,7 +202,7 @@ function CreatePlaceModal(): React.ReactElement {
     >
       <div
         id={'create_place_modal_body'}
-        style={{ display: 'flex', justifyContent: 'space-between' }}
+        style={{ display: 'flex', justifyContent: 'space-between', cursor: 'grab' }}
       >
         <span style={{ color: 'ActiveBorder', fontSize: 20 }}>장소 생성</span>
         <div style={{ flexDirection: 'row-reverse', display: 'flex' }}>
@@ -222,11 +219,13 @@ function CreatePlaceModal(): React.ReactElement {
       <div>
         <div style={{ flexDirection: 'row' }}>
           <div>
-            <span style={inputTypeStyle}>이름</span>
+            <span style={inputTypeStyle}>
+              이름 <MdHelp title={'매장 이름을 입력해주세요.\n' + 'ex)신전떡볶이 풍납점'} />
+            </span>
             <Input
               style={inputStyle}
               name={'name'}
-              placeholder={'신전떡볶이 풍납2동점'}
+              placeholder={'신전떡볶이 풍납점'}
               type={'text'}
               disableUnderline={true}
               fullWidth={true}
@@ -236,7 +235,15 @@ function CreatePlaceModal(): React.ReactElement {
           </div>
           <div>
             <span style={inputTypeStyle}>
-              브랜드 <MdHelp title={'체인점의 경우 입력\nex) 신전떡볶이'} />
+              브랜드{' '}
+              <MdHelp
+                title={
+                  '가맹점이 있는 경우 해당 상호명을 입력해주세요.\n' +
+                  "가맹점이 없는 경우 '로컬'이라고 입력하면 됩니다.\n" +
+                  'ex) 신전떡볶이\n' +
+                  'ex) 로컬'
+                }
+              />
             </span>
             <Input
               style={inputStyle}
@@ -251,7 +258,14 @@ function CreatePlaceModal(): React.ReactElement {
           </div>
           <div>
             <span style={inputTypeStyle}>
-              태그 <MdHelp title={'메뉴 등 검색에 필요한 해시태그'} />
+              태그{' '}
+              <MdHelp
+                title={
+                  '쉼표(,)를 누를때마다 태그가 생성됩니다.\n' +
+                  '생성된 태그는 검색 등에 활용될 예정입니다.\n' +
+                  'ex)서울,송파구,풍납동,국물떡볶이,순대,오뎅,송파구,서울'
+                }
+              />
             </span>
             {newPlaceHashtagList.length ? (
               <div
@@ -294,7 +308,7 @@ function CreatePlaceModal(): React.ReactElement {
                 boxSizing: 'border-box',
               }}
               name={'hashtag'}
-              placeholder={'ex) 국물떡볶이, 순대, 오뎅, 송파구, 서울'}
+              placeholder={'ex) 국물떡볶이,순대,오뎅,송파구,서울'}
               multiline={true}
               fullWidth={true}
               disableUnderline={true}
@@ -304,14 +318,25 @@ function CreatePlaceModal(): React.ReactElement {
             />
           </div>
           <div>
-            <span style={inputTypeStyle}>설명</span>
+            <span style={inputTypeStyle}>
+              설명{' '}
+              <MdHelp
+                title={
+                  '가게에 대한 설명을 적어주세요.\n' +
+                  '자세하게 적어주시면 서비스 품질 개선에 도움이 됩니다.'
+                }
+              />
+            </span>
             <Input
               style={{
                 ...inputStyle,
                 boxSizing: 'border-box',
               }}
               name={'description'}
-              placeholder={'치즈떡볶이 주문시 정량보다 많이 주시는 느낌이라 자주 시켜먹게 되는 곳'}
+              placeholder={
+                '가게에 대한 설명을 적어주세요.\n' +
+                '자세하게 적어주시면 서비스 품질 개선에 도움이 됩니다.'
+              }
               multiline={true}
               fullWidth={true}
               disableUnderline={true}
@@ -321,11 +346,16 @@ function CreatePlaceModal(): React.ReactElement {
             />
           </div>
           <div>
-            <span style={inputTypeStyle}>좌표 (지도 클릭)</span>
+            <span style={inputTypeStyle}>
+              좌표 (지도 클릭){' '}
+              <MdHelp
+                title={'지도에서 실제 위치를 클릭하세요.\n' + '생성할 장소의 위치가 표시됩니다.'}
+              />
+            </span>
             <Input
               style={inputStyle}
               name={'latlng'}
-              placeholder={'생성하고싶은 위치를 클릭하세요'}
+              placeholder={'지도에서 실제 위치를 클릭하세요.'}
               disableUnderline={true}
               fullWidth={true}
               disabled={true}
