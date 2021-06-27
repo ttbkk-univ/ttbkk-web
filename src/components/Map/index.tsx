@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { placeMapState } from '../../states/places/placeMap';
 import { setMarkerCluster } from './PlaceCluster';
 import { setMapControl } from './MapControl';
