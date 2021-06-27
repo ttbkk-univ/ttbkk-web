@@ -7,7 +7,7 @@ import { clickedPlaceState } from '../../../states/places/clickedPlace';
 function PlaceDetail(): React.ReactElement {
   const display = useRecoilValue(placeDetailDisplayState);
   const clickedPlace = useRecoilValue(clickedPlaceState);
-  return <div>{display && clickedPlace && <PlaceDetailModal />}</div>;
+  return display && clickedPlace ? <PlaceDetailModal /> : <></>;
 }
 
 export default PlaceDetail;

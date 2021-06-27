@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { placeMapState } from '../../states/places/placeMap';
 import { setMarkerCluster } from './PlaceCluster';
 import { setMapControl } from './MapControl';
 import { loadKakaoMap } from './MapLoader';
 import { clickedPlaceState } from '../../states/places/clickedPlace';
 import { placeDetailDisplayState } from '../../states/sidebar/displayToggleButton';
+import { createPlaceModalDisplayState } from '../../states/buttons/createPlaceModalDisplayState';
 
 declare global {
   interface Window {
@@ -67,7 +68,7 @@ function MapContent(): React.ReactElement {
   const placeMap = useRecoilValue(placeMapState);
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
   const setDisplayDetailPlace = useSetRecoilState(placeDetailDisplayState);
-
+  const setCreatePlaceModalDisplay = useSetRecoilState(createPlaceModalDisplayState);
   useEffect(() => {
     loadKakaoMap(() => {
       window.kakao.maps.load(() => {
@@ -77,6 +78,13 @@ function MapContent(): React.ReactElement {
         window.map.setDraggable(true);
         setMapControl();
         setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
+        document.onkeydown = (e: KeyboardEvent): void => {
+          if (e.key === 'Escape') {
+            setClickedPlace(undefined);
+            setDisplayDetailPlace(false);
+            setCreatePlaceModalDisplay(false);
+          }
+        };
       });
     });
   }, []);

@@ -110,7 +110,6 @@ function CreatePlaceModal(): React.ReactElement {
       } else {
         setNewPlaceHashtag(value);
       }
-      console.log(newPlaceHashtagList);
     }
   };
 
