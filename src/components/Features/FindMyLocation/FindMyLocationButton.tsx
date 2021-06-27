@@ -17,6 +17,7 @@ function FindMyLocationButton(): React.ReactElement {
                 position.coords.longitude,
               );
               window.map.setCenter(moveCenter);
+              window.map.setLevel(6);
             },
             (err: PositionError) => {
               alert(err.message); // cross origin일때, https로 요청해야함

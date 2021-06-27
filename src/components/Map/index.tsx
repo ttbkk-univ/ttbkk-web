@@ -73,7 +73,7 @@ function MapContent(): React.ReactElement {
       window.kakao.maps.load(() => {
         setMap();
         window.kakao.maps.event.addListener(window.map, 'zoom_changed', () => setZoom());
-        window.kakao.maps.event.addListener(window.map, 'dragend', () => setCenter());
+        window.kakao.maps.event.addListener(window.map, 'center_changed', () => setCenter());
         window.map.setDraggable(true);
         setMapControl();
         setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
