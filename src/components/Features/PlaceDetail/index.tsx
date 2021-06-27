@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PlaceDetailDisplayButton from './PlaceDetailDisplayButton';
 import PlaceDetailModal from './PlaceDetailModal';
 import { useRecoilValue } from 'recoil';
