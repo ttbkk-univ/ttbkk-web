@@ -149,7 +149,6 @@ function CreatePlaceModal(): React.ReactElement {
   };
 
   const createRequest = (closeAfterRequest: boolean): void => {
-    console.log(placeMap);
     if (!newPlaceName) {
       alert('이름을 입력하세요');
       return;
@@ -359,9 +358,7 @@ function CreatePlaceModal(): React.ReactElement {
               disableUnderline={true}
               fullWidth={true}
               disabled={true}
-              value={
-                latLng?.latitude && `${latLng.latitude.toFixed(6)}, ${latLng.longitude.toFixed(6)}`
-              }
+              value={latLng ? `${latLng.latitude.toFixed(6)}, ${latLng.longitude.toFixed(6)}` : ''}
             />
           </div>
         </div>
