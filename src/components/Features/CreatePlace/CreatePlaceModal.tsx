@@ -209,7 +209,7 @@ function CreatePlaceModal(): React.ReactElement {
             color={'secondary'}
             onClick={(): void => {
               setCreatePlaceModalDisplay(false);
-              window.newPlace.setMap(null);
+              window.newPlace?.setMap(null);
             }}
           >
             <MdCancel />
