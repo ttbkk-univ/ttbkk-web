@@ -14,22 +14,25 @@ function PlaceDetailModal(): React.ReactElement {
   const isMobile: boolean = width < 600;
   const position = isMobile
     ? {
-        top: '20%',
-        right: '11%',
-        width: '80%',
+        top: '5%',
+        width: '95%',
+        left: '50%',
+        transform: 'translateX(-50%)',
       }
     : { top: 50, right: 90, width: 400 };
   return clickedPlace ? (
     <div
       style={{
-        paddingBottom: 10,
         overflow: 'auto',
-        position: 'fixed',
-        zIndex: 400,
+        position: isMobile ? 'absolute' : 'fixed',
+        zIndex: 401,
         backgroundColor: 'rgba(30, 60,80,0.8)',
         fontWeight: 'bold',
         color: 'white',
-        padding: 6,
+        paddingLeft: 6,
+        paddingRight: 6,
+        paddingTop: 6,
+        paddingBottom: 6,
         overflowY: 'auto',
         ...position,
       }}
