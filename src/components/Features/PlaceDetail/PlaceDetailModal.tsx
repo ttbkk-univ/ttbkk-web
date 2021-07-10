@@ -34,28 +34,29 @@ function PlaceDetailModal(): React.ReactElement {
         ...position,
       }}
     >
-      <div
-        style={{
-          right: 10,
-          position: 'absolute',
-          flexDirection: 'row-reverse',
-          display: 'flex',
-        }}
-      >
-        <Button
-          variant={'contained'}
-          color={'secondary'}
-          onClick={(): void => {
-            setClickedPlace(undefined);
-            setDisplay(false);
-          }}
-        >
-          선택취소
-        </Button>
-      </div>
       <div>
-        <div style={{ fontSize: '32px', color: 'rgb(255, 68, 85)' }}>
-          {placeMap[clickedPlace].name}
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ fontSize: '32px', color: 'rgb(255, 68, 85)' }}>
+            {placeMap[clickedPlace].name}
+          </div>
+          <div
+            style={{
+              right: 10,
+              minWidth: 'max-content',
+              flexDirection: 'row-reverse',
+            }}
+          >
+            <Button
+              variant={'contained'}
+              color={'secondary'}
+              onClick={(): void => {
+                setClickedPlace(undefined);
+                setDisplay(false);
+              }}
+            >
+              선택취소
+            </Button>
+          </div>
         </div>
         <hr />
         <div style={{ whiteSpace: 'pre-line' }}>{placeMap[clickedPlace].description}</div>
