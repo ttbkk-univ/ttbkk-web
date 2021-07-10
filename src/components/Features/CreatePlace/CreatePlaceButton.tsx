@@ -53,7 +53,13 @@ function CreatePlaceButton(): React.ReactElement {
         variant={'contained'}
         color={createPlaceModalDisplay ? 'secondary' : 'primary'}
         style={{ height: 32, width: 32, padding: 0 }}
-        onClick={(): void => setCreatePlaceModalDisplay(!createPlaceModalDisplay)}
+        onClick={(): void => {
+          // 생성모달 열거나 닫을때, 지도에 선택한 마커 아이콘도 같이 생성하거나 없애준다
+          if (window.newPlace) {
+            window.newPlace.setMap(createPlaceModalDisplay ? null : window.map);
+          }
+          setCreatePlaceModalDisplay(!createPlaceModalDisplay);
+        }}
       >
         <MdPlace size={20} />
       </Button>
