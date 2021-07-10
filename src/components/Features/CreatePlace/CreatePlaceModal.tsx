@@ -207,7 +207,10 @@ function CreatePlaceModal(): React.ReactElement {
           <Button
             variant={'contained'}
             color={'secondary'}
-            onClick={(): void => setCreatePlaceModalDisplay(false)}
+            onClick={(): void => {
+              setCreatePlaceModalDisplay(false);
+              window.newPlace.setMap(null);
+            }}
           >
             <MdCancel />
           </Button>
