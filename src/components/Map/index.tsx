@@ -80,6 +80,7 @@ function MapContent(): React.ReactElement {
         setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
         document.onkeydown = (e: KeyboardEvent): void => {
           if (e.key === 'Escape') {
+            window.newPlace.setMap(null);
             setClickedPlace(undefined);
             setDisplayDetailPlace(false);
             setCreatePlaceModalDisplay(false);
