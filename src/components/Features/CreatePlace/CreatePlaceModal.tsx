@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../states/buttons/createPlaceLatLngState';
-import { Button, Input } from '@material-ui/core';
+import { Button, CircularProgress, Input, TextField } from '@material-ui/core';
 import { MdCancel, MdHelp, MdSend } from 'react-icons/all';
 import { isMobile } from '../../../utils/is-mobile';
 import { createPlaceModalDisplayState } from '../../../states/buttons/createPlaceModalDisplayState';
@@ -10,6 +10,12 @@ import { env } from '../../../env';
 import { IPlace, placeMapState } from '../../../states/places/placeMap';
 import _ from 'lodash';
 import { clickedPlaceState } from '../../../states/places/clickedPlace';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+
+interface Brand {
+  id: string;
+  name: string;
+}
 
 function CreatePlaceModal(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
@@ -23,6 +29,30 @@ function CreatePlaceModal(): React.ReactElement {
   const [newPlaceDescription, setNewPlaceDescription] = useState('');
   const [newPlaceHashtagList, setNewPlaceHashtagList] = useState<string[]>([]);
   const [newPlaceHashtag, setNewPlaceHashtag] = useState('');
+
+  const [brandOpen, setBrandOpen] = useState(false);
+  const [brandOptions, setBrandOptions] = useState<Brand[] | undefined>(undefined);
+  const brandLoading: boolean = brandOpen && !brandOptions;
+
+  useEffect(() => {
+    let active: boolean = true;
+    if (!brandLoading) return undefined;
+
+    console.log('init');
+    (async (): Promise<void> => {
+      console.log('requesting');
+      const response = await axios.get(env.api.host + '/api/brands/?search=' + newPlaceBrand);
+      if (active) setBrandOptions(response.data);
+    })();
+
+    return (): void => {
+      active = false;
+    };
+  }, [brandLoading]);
+
+  useEffect(() => {
+    if (!brandOpen) setBrandOptions(undefined);
+  }, [brandOpen]);
 
   useEffect(() => {
     latLng && console.log(latLng);
@@ -98,7 +128,6 @@ function CreatePlaceModal(): React.ReactElement {
   const onChange = (e: any): void => {
     const { value, name } = e.target;
     if (name === 'name') setNewPlaceName(value);
-    if (name === 'brand') setNewPlaceBrand(value);
     if (name === 'description') setNewPlaceDescription(value);
     if (name === 'hashtag') {
       if (value[value.length - 1] === ',') {
@@ -111,6 +140,11 @@ function CreatePlaceModal(): React.ReactElement {
         setNewPlaceHashtag(value);
       }
     }
+  };
+
+  const onBrandSelect = (e: any): void => {
+    const { value } = e.target;
+    setNewPlaceBrand(value);
   };
 
   const resetForm = (closeAfterRequest: boolean): void => {
@@ -246,15 +280,35 @@ function CreatePlaceModal(): React.ReactElement {
                 }
               />
             </span>
-            <Input
+            <Autocomplete
               style={inputStyle}
-              name={'brand'}
-              placeholder={'신전떡볶이'}
-              type={'text'}
-              disableUnderline={true}
-              fullWidth={true}
-              onChange={onChange}
-              value={newPlaceBrand}
+              open={brandOpen}
+              onOpen={(): void => setBrandOpen(true)}
+              onClose={(): void => setBrandOpen(false)}
+              onSelect={onBrandSelect}
+              getOptionSelected={(option: Brand, value: Brand): boolean =>
+                option.name === value.name
+              }
+              freeSolo={true}
+              getOptionLabel={(option: Brand): string => option.name}
+              options={brandOptions || []}
+              loading={brandLoading}
+              renderInput={(params): JSX.Element => (
+                <TextField
+                  {...params}
+                  InputProps={{
+                    ...params.InputProps,
+                    disableUnderline: true,
+                    placeholder: '신전떡볶이',
+                    endAdornment: (
+                      <React.Fragment>
+                        {brandLoading ? <CircularProgress color={'inherit'} size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )}
             />
           </div>
           <div>
