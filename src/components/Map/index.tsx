@@ -23,18 +23,33 @@ export interface LatLng {
 }
 
 function getZoom(): number {
+  const zoomFromSearchParams = new URLSearchParams(window.location.search).get('zoom');
+  if (zoomFromSearchParams && !isNaN(Number(zoomFromSearchParams))) {
+    return Number(zoomFromSearchParams);
+  }
+
   const zoomFromLocalStorage = window.localStorage.getItem('zoom');
   return zoomFromLocalStorage ? Number(zoomFromLocalStorage) : 8;
 }
 
 function getCenter(): LatLng {
+  // search param 이 있는 경우
+  const centerFromSearchParams = new URLSearchParams(window.location.search).get('center');
+  if (centerFromSearchParams?.toString().split(',').length) {
+    const [lat, lng]: string[] = centerFromSearchParams?.toString().split(',', 2);
+    if (!isNaN(Number(lat)) && !isNaN(Number(lng))) {
+      return { latitude: Number(lat), longitude: Number(lng) };
+    }
+  }
+
+  // localstorage 가 있는 경우
   const centerFromLocalStorage = window.localStorage.getItem('center');
-  return centerFromLocalStorage
-    ? JSON.parse(centerFromLocalStorage)
-    : {
-        latitude: 37.53026789291489,
-        longitude: 127.12380358542175,
-      };
+  if (centerFromLocalStorage) {
+    return JSON.parse(centerFromLocalStorage);
+  }
+
+  // default
+  return { latitude: 37.53026789291489, longitude: 127.12380358542175 };
 }
 
 function setMap(): void {
