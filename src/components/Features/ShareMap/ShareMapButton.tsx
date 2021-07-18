@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { MdMyLocation, MdShare } from 'react-icons/md';
+import { MdShare } from 'react-icons/md';
 import { Button, Snackbar } from '@material-ui/core';
-import { IoMdClipboard } from 'react-icons/all';
-import { useRecoilValue } from 'recoil';
 
 function ShareMapButton(): React.ReactElement {
   const [open, setOpen] = useState(false);
