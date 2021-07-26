@@ -41,7 +41,7 @@ function CreatePlaceModal(): React.ReactElement {
     console.log('init');
     (async (): Promise<void> => {
       console.log('requesting');
-      const response = await axios.get(env.api.host + '/api/brands/?search=' + newPlaceBrand);
+      const response = await axios.get(env.api.host + '/api/brands/?search=');
       if (active) setBrandOptions(response.data);
     })();
 
@@ -142,7 +142,7 @@ function CreatePlaceModal(): React.ReactElement {
     }
   };
 
-  const onBrandSelect = (e: any): void => {
+  const onBrandSelectOrChange = (e: any): void => {
     const { value } = e.target;
     setNewPlaceBrand(value);
   };
@@ -200,15 +200,16 @@ function CreatePlaceModal(): React.ReactElement {
       return;
     }
 
+    const data = {
+      name: newPlaceName,
+      description: newPlaceDescription,
+      latitude: latLng?.latitude,
+      longitude: latLng?.longitude,
+      brand_name: newPlaceBrand,
+      hashtags: newPlaceHashtagList,
+    };
     axios
-      .post(env.api.host + '/api/places/', {
-        name: newPlaceName,
-        description: newPlaceDescription,
-        latitude: latLng?.latitude,
-        longitude: latLng?.longitude,
-        brand_name: newPlaceBrand,
-        hashtags: newPlaceHashtagList,
-      })
+      .post(env.api.host + '/api/places/', data)
       .then((res: AxiosResponse) => {
         const newPlace: IPlace = res.data;
         setPlaceMap(_.assign(placeMap, { [newPlace.id]: newPlace }));
@@ -285,17 +286,18 @@ function CreatePlaceModal(): React.ReactElement {
               open={brandOpen}
               onOpen={(): void => setBrandOpen(true)}
               onClose={(): void => setBrandOpen(false)}
-              onSelect={onBrandSelect}
+              onSelect={onBrandSelectOrChange}
               getOptionSelected={(option: Brand, value: Brand): boolean =>
                 option.name === value.name
               }
               freeSolo={true}
-              getOptionLabel={(option: Brand): string => option.name}
+              getOptionLabel={(option: Brand): string => option?.name || newPlaceBrand}
               options={brandOptions || []}
               loading={brandLoading}
               renderInput={(params): JSX.Element => (
                 <TextField
                   {...params}
+                  onChange={onBrandSelectOrChange}
                   InputProps={{
                     ...params.InputProps,
                     disableUnderline: true,
