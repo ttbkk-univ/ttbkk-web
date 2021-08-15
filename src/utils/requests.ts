@@ -1,9 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { env } from '../env';
 
-export async function post(
+export async function post<T>(
   url: string,
-  data?: any,
+  data?: T,
   headers?: AxiosRequestConfig,
 ): Promise<AxiosResponse> {
   return axios.post(url, data, headers).catch(() => {

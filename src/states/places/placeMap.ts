@@ -1,5 +1,4 @@
 import { atom } from 'recoil';
-import axios from 'axios';
 import { env } from '../../env';
 import { get } from '../../utils/requests';
 
