@@ -1,6 +1,7 @@
 import { atom } from 'recoil';
 import axios from 'axios';
 import { env } from '../../env';
+import { get } from '../../utils/requests';
 
 export interface IPlace {
   id: string;
@@ -16,7 +17,9 @@ export const placeMapState = atom<{ [key: string]: IPlace }>({
   default: (async (): Promise<{ [key: string]: IPlace }> => {
     const placeMap: { [key: string]: IPlace } = {};
     console.log(env.api.host);
-    const response = await axios.get<IPlace[]>(env.api.host + '/api/places/');
+    const response = await get<IPlace[]>(env.api.host + '/api/places/').catch(() => {
+      return { data: [] };
+    });
     Object.values(response.data).forEach((place) => {
       placeMap[place.id] = place;
     });

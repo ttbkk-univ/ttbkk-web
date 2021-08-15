@@ -5,12 +5,13 @@ import { Button, CircularProgress, Input, TextField } from '@material-ui/core';
 import { MdCancel, MdHelp, MdSend } from 'react-icons/all';
 import { isMobile } from '../../../utils/is-mobile';
 import { createPlaceModalDisplayState } from '../../../states/buttons/createPlaceModalDisplayState';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { env } from '../../../env';
 import { IPlace, placeMapState } from '../../../states/places/placeMap';
 import _ from 'lodash';
 import { clickedPlaceState } from '../../../states/places/clickedPlace';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { get, post } from '../../../utils/requests';
 
 interface Brand {
   id: string;
@@ -41,7 +42,7 @@ function CreatePlaceModal(): React.ReactElement {
     console.log('init');
     (async (): Promise<void> => {
       console.log('requesting');
-      const response = await axios.get(env.api.host + '/api/brands/?search=');
+      const response: AxiosResponse<Brand[]> = await get(env.api.host + '/api/brands/?search=');
       if (active) setBrandOptions(response.data);
     })();
 
@@ -208,8 +209,7 @@ function CreatePlaceModal(): React.ReactElement {
       brand_name: newPlaceBrand,
       hashtags: newPlaceHashtagList,
     };
-    axios
-      .post(env.api.host + '/api/places/', data)
+    post(env.api.host + '/api/places/', data)
       .then((res: AxiosResponse) => {
         const newPlace: IPlace = res.data;
         setPlaceMap(_.assign(placeMap, { [newPlace.id]: newPlace }));
