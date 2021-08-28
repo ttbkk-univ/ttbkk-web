@@ -7,7 +7,7 @@ import { loadKakaoMap } from '../../utils/kakaoMap/loadKakaoMap';
 import { clickedPlaceState } from '../../states/places/clickedPlace';
 import { placeDetailDisplayState } from '../../states/sidebar/displayToggleButton';
 import { createPlaceModalDisplayState } from '../../states/buttons/createPlaceModalDisplayState';
-import { setZoom } from '../../utils/kakaoMap/zoom';
+import { getZoom, setZoom } from '../../utils/kakaoMap/zoom';
 import { setMap } from '../../utils/kakaoMap/setMap';
 import { setCenter } from '../../utils/kakaoMap/center';
 import { getGeoBound } from '../../utils/kakaoMap/geoBound';
@@ -37,24 +37,33 @@ function MapContent(): React.ReactElement {
   const setCreatePlaceModalDisplay = useSetRecoilState(createPlaceModalDisplayState);
 
   let debounce: any = null;
-  const debounceTime: number = 300;
+  let zoomChanged: boolean = false;
+  const debounceTime: number = 500;
 
   useEffect(() => {
     loadKakaoMap(() => {
       window.kakao.maps.load(() => {
         setMap();
         window.kakao.maps.event.addListener(window.map, 'zoom_changed', () => {
+          zoomChanged = true;
+          if (getZoom() > window.map.getLevel()) {
+            setZoom();
+            zoomChanged = false;
+            return;
+          }
+          setZoom();
           clearTimeout(debounce);
           debounce = setTimeout(() => {
-            setZoom();
             const geoBound: [LatLng, LatLng] = getGeoBound();
             getPlaceMap(geoBound).then((newPlaceMap: { [p: string]: IPlace }) => {
-              window.placeMap = { ...window.placeMap, ...newPlaceMap };
               setMarkerCluster(newPlaceMap, setClickedPlace, setDisplayDetailPlace);
+              window.placeMap = { ...window.placeMap, ...newPlaceMap };
             });
           }, debounceTime);
+          zoomChanged = false;
         });
         window.kakao.maps.event.addListener(window.map, 'center_changed', () => {
+          if (zoomChanged) return;
           clearTimeout(debounce);
           debounce = setTimeout(() => {
             setCenter();

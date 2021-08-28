@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../../states/buttons/createPlaceLatLngState';
 import { Button, CircularProgress, Input, TextField } from '@material-ui/core';
 import { MdCancel, MdHelp, MdSend } from 'react-icons/all';
@@ -7,7 +7,7 @@ import { isMobile } from '../../../../utils/browser.util';
 import { createPlaceModalDisplayState } from '../../../../states/buttons/createPlaceModalDisplayState';
 import { AxiosResponse } from 'axios';
 import { env } from '../../../../env';
-import { IPlace, placeMapState } from '../../../../states/places/placeMap';
+import { IPlace } from '../../../../states/places/placeMap';
 import { clickedPlaceState } from '../../../../states/places/clickedPlace';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { get, post } from '../../../../utils/httpRequest.util';
@@ -23,7 +23,6 @@ function CreatePlaceModal(): React.ReactElement {
   const [createPlaceModalDisplay, setCreatePlaceModalDisplay] = useRecoilState(
     createPlaceModalDisplayState,
   );
-  const placeMap = useRecoilValue(placeMapState);
   const [newPlaceName, setNewPlaceName] = useState('');
   const [newPlaceBrand, setNewPlaceBrand] = useState('');
   const [newPlaceDescription, setNewPlaceDescription] = useState('');
@@ -209,7 +208,7 @@ function CreatePlaceModal(): React.ReactElement {
     post(env.api.host + '/api/places/', data)
       .then((res: AxiosResponse) => {
         const newPlace: IPlace = res.data;
-        window.placeMap = { ...placeMap, ...{ [newPlace.id]: newPlace } };
+        window.placeMap = { ...window.placeMap, ...{ [newPlace.id]: newPlace } };
         window.clusterer.addMarker(placeToMarker(newPlace));
         resetForm(closeAfterRequest);
       })
