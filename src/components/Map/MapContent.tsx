@@ -41,36 +41,38 @@ function MapContent(): React.ReactElement {
 
   useEffect(() => {
     loadKakaoMap(() => {
-      window.kakao.maps.load(async () => {
+      window.kakao.maps.load(() => {
         setMap();
-        window.kakao.maps.event.addListener(window.map, 'zoom_changed', async () => {
+        window.kakao.maps.event.addListener(window.map, 'zoom_changed', () => {
           clearTimeout(debounce);
-          debounce = setTimeout(async () => {
+          debounce = setTimeout(() => {
             setZoom();
             const geoBound: [LatLng, LatLng] = getGeoBound();
-            const placeMap: { [p: string]: IPlace } = await getPlaceMap(geoBound);
-            setPlaceMap(placeMap);
-            setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
+            getPlaceMap(geoBound).then((placeMap: { [p: string]: IPlace }) => {
+              setPlaceMap(placeMap);
+              setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
+            });
           }, debounceTime);
         });
-        window.kakao.maps.event.addListener(window.map, 'center_changed', async () => {
+        window.kakao.maps.event.addListener(window.map, 'center_changed', () => {
           clearTimeout(debounce);
-          debounce = setTimeout(async () => {
+          debounce = setTimeout(() => {
             setCenter();
             const geoBound: [LatLng, LatLng] = getGeoBound();
-            const placeMap: { [p: string]: IPlace } = await getPlaceMap(geoBound);
-            setPlaceMap(placeMap);
-            setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
+            getPlaceMap(geoBound).then((placeMap: { [p: string]: IPlace }) => {
+              setPlaceMap(placeMap);
+              setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
+            });
           }, debounceTime);
         });
         window.map.setDraggable(true);
         setMapController();
 
         const geoBound: [LatLng, LatLng] = getGeoBound();
-        const placeMap: { [p: string]: IPlace } = await getPlaceMap(geoBound);
-        setPlaceMap(placeMap);
-
-        setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
+        getPlaceMap(geoBound).then((placeMap: { [p: string]: IPlace }) => {
+          setPlaceMap(placeMap);
+          setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
+        });
         document.onkeydown = (e: KeyboardEvent): void => {
           if (e.key === 'Escape') {
             window.newPlace.setMap(null);
