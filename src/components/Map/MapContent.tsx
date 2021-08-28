@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { getPlaceMap, IPlace, placeMapState } from '../../states/places/placeMap';
 import { setMarkerCluster } from '../../utils/kakaoMap/setCluster';
 import { setMapController } from '../../utils/kakaoMap/setMapController';
@@ -17,6 +17,7 @@ declare global {
     kakao: {
       maps: any;
     };
+    placeMap: { [p: string]: IPlace };
     map: any;
     clusterer: any;
     newPlace: any;
@@ -31,7 +32,6 @@ export interface LatLng {
 export type GeoBound = [LatLng, LatLng];
 
 function MapContent(): React.ReactElement {
-  const setPlaceMap = useSetRecoilState(placeMapState);
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
   const setDisplayDetailPlace = useSetRecoilState(placeDetailDisplayState);
   const setCreatePlaceModalDisplay = useSetRecoilState(createPlaceModalDisplayState);
@@ -48,9 +48,9 @@ function MapContent(): React.ReactElement {
           debounce = setTimeout(() => {
             setZoom();
             const geoBound: [LatLng, LatLng] = getGeoBound();
-            getPlaceMap(geoBound).then((placeMap: { [p: string]: IPlace }) => {
-              setPlaceMap(placeMap);
-              setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
+            getPlaceMap(geoBound).then((newPlaceMap: { [p: string]: IPlace }) => {
+              window.placeMap = { ...window.placeMap, ...newPlaceMap };
+              setMarkerCluster(newPlaceMap, setClickedPlace, setDisplayDetailPlace);
             });
           }, debounceTime);
         });
@@ -59,9 +59,9 @@ function MapContent(): React.ReactElement {
           debounce = setTimeout(() => {
             setCenter();
             const geoBound: [LatLng, LatLng] = getGeoBound();
-            getPlaceMap(geoBound).then((placeMap: { [p: string]: IPlace }) => {
-              setPlaceMap(placeMap);
-              setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
+            getPlaceMap(geoBound).then(async (newPlaceMap: { [p: string]: IPlace }) => {
+              setMarkerCluster(newPlaceMap, setClickedPlace, setDisplayDetailPlace);
+              window.placeMap = { ...window.placeMap, ...newPlaceMap };
             });
           }, debounceTime);
         });
@@ -69,9 +69,9 @@ function MapContent(): React.ReactElement {
         setMapController();
 
         const geoBound: [LatLng, LatLng] = getGeoBound();
-        getPlaceMap(geoBound).then((placeMap: { [p: string]: IPlace }) => {
-          setPlaceMap(placeMap);
-          setMarkerCluster(placeMap, setClickedPlace, setDisplayDetailPlace);
+        getPlaceMap(geoBound).then((newPlaceMap: { [p: string]: IPlace }) => {
+          setMarkerCluster(newPlaceMap, setClickedPlace, setDisplayDetailPlace);
+          window.placeMap = newPlaceMap;
         });
         document.onkeydown = (e: KeyboardEvent): void => {
           if (e.key === 'Escape') {

@@ -2,7 +2,7 @@ import { SetterOrUpdater } from 'recoil';
 import { IPlace } from '../../states/places/placeMap';
 
 export function setMarkerCluster(
-  placeMap: { [p: string]: IPlace },
+  newPlaceMap: { [p: string]: IPlace },
   setClickedPlace: SetterOrUpdater<string | undefined>,
   setDisplayDetailPlace: SetterOrUpdater<boolean>,
 ): void {
@@ -29,11 +29,17 @@ export function setMarkerCluster(
     return marker;
   };
 
-  const markers = Object.values(placeMap).map((place: IPlace) => placeToMarker(place));
-  window.clusterer = new window.kakao.maps.MarkerClusterer({
-    map: window.map,
-    averageCenter: true,
-    minLevel: 7,
+  const markers: PlaceMarker[] = [];
+  Object.values(newPlaceMap).forEach((place: IPlace) => {
+    if (window?.placeMap && window?.placeMap[place.id]) return;
+    markers.push(placeToMarker(place));
   });
+  window.clusterer =
+    window.clusterer ||
+    new window.kakao.maps.MarkerClusterer({
+      map: window.map,
+      averageCenter: true,
+      minLevel: 7,
+    });
   window.clusterer.addMarkers(markers);
 }
