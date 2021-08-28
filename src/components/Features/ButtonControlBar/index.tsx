@@ -1,13 +1,11 @@
 import React from 'react';
-import PlaceDetail from './PlaceDetail';
 import CreatePlace from './CreatePlace';
 import FindMyLocation from './FindMyLocation';
 import ShareMap from './ShareMap';
 
-function FeatureList(): React.ReactElement {
+function ButtonControlBar(): React.ReactElement {
   return (
     <div>
-      <PlaceDetail />
       <FindMyLocation />
       <CreatePlace />
       <ShareMap />
@@ -15,4 +13,4 @@ function FeatureList(): React.ReactElement {
   );
 }
 
-export default FeatureList;
+export default ButtonControlBar;
