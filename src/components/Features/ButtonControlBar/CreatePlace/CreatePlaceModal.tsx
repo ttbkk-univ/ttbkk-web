@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../../states/buttons/createPlaceLatLngState';
 import { Button, CircularProgress, Input, TextField } from '@material-ui/core';
 import { MdCancel, MdHelp, MdSend } from 'react-icons/all';
@@ -8,7 +8,6 @@ import { createPlaceModalDisplayState } from '../../../../states/buttons/createP
 import { AxiosResponse } from 'axios';
 import { env } from '../../../../env';
 import { IPlace, placeMapState } from '../../../../states/places/placeMap';
-import _ from 'lodash';
 import { clickedPlaceState } from '../../../../states/places/clickedPlace';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { get, post } from '../../../../utils/httpRequest.util';
@@ -24,7 +23,7 @@ function CreatePlaceModal(): React.ReactElement {
   const [createPlaceModalDisplay, setCreatePlaceModalDisplay] = useRecoilState(
     createPlaceModalDisplayState,
   );
-  const [placeMap, setPlaceMap] = useRecoilState(placeMapState);
+  const placeMap = useRecoilValue(placeMapState);
   const [newPlaceName, setNewPlaceName] = useState('');
   const [newPlaceBrand, setNewPlaceBrand] = useState('');
   const [newPlaceDescription, setNewPlaceDescription] = useState('');

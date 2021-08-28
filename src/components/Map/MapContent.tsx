@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
-import { getPlaceMap, IPlace, placeMapState } from '../../states/places/placeMap';
+import { useSetRecoilState } from 'recoil';
+import { getPlaceMap, IPlace } from '../../states/places/placeMap';
 import { setMarkerCluster } from '../../utils/kakaoMap/setCluster';
 import { setMapController } from '../../utils/kakaoMap/setMapController';
 import { loadKakaoMap } from '../../utils/kakaoMap/loadKakaoMap';
