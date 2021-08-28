@@ -23,7 +23,7 @@ jobs:
             ${{ runner.OS }}-
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install --production
 
       - name: Build
         env:
