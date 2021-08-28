@@ -1,7 +1,6 @@
 import React from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { clickedPlaceState } from '../../../states/places/clickedPlace';
-import { placeMapState } from '../../../states/places/placeMap';
 import useWindowDimensions from '../../../hooks/useWindowDimentions';
 import { Button } from '@material-ui/core';
 import { placeDetailDisplayState } from '../../../states/sidebar/displayToggleButton';
@@ -9,7 +8,6 @@ import { placeDetailDisplayState } from '../../../states/sidebar/displayToggleBu
 function PlaceDetailModal(): React.ReactElement {
   const [clickedPlace, setClickedPlace] = useRecoilState(clickedPlaceState);
   const setDisplay = useSetRecoilState(placeDetailDisplayState);
-  const placeMap = useRecoilValue(placeMapState);
   const { width } = useWindowDimensions();
   const isMobile: boolean = width < 600;
   const position = isMobile
@@ -40,7 +38,7 @@ function PlaceDetailModal(): React.ReactElement {
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div style={{ fontSize: '32px', color: 'rgb(255, 68, 85)' }}>
-            {placeMap[clickedPlace].name}
+            {window.placeMap[clickedPlace].name}
           </div>
           <div
             style={{
@@ -62,10 +60,10 @@ function PlaceDetailModal(): React.ReactElement {
           </div>
         </div>
         <hr />
-        <div style={{ whiteSpace: 'pre-line' }}>{placeMap[clickedPlace].description}</div>
+        <div style={{ whiteSpace: 'pre-line' }}>{window.placeMap[clickedPlace].description}</div>
         <hr />
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {placeMap[clickedPlace].hashtags.map((hashtag) => (
+          {window.placeMap[clickedPlace].hashtags.map((hashtag) => (
             <span
               style={{ margin: 3, backgroundColor: 'rgba(150, 202, 140, 0.5)' }}
               key={hashtag.name}

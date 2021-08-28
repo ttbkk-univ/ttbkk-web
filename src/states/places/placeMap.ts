@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+// import { atom } from 'recoil';
 import { env } from '../../env';
 import { get } from '../../utils/httpRequest.util';
 import { GeoBound } from '../../components/Map/MapContent';
@@ -32,10 +32,10 @@ export async function getPlaceMap([bottomLeft, topRight]: GeoBound): Promise<{
   return placeMap;
 }
 
-export const placeMapState = atom<{ [key: string]: IPlace }>({
-  key: 'places',
-  default: {},
-});
+// export const placeMapState = atom<{ [key: string]: IPlace }>({
+//   key: 'places',
+//   default: {},
+// });
 
 // const places: IPlace[] = [
 //   {
