@@ -3,15 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
-import MapContent from './components/Map';
-import FeatureList from './components/Features';
+import ButtonControlBar from './components/Features/ButtonControlBar';
+import Map from './components/Map';
+import PlaceDetail from './components/Features/PlaceDetail';
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
       <React.Suspense fallback={<div>Loading...</div>}>
-        <MapContent />
-        <FeatureList />
+        <Map />
+        <PlaceDetail />
+        <ButtonControlBar />
       </React.Suspense>
     </RecoilRoot>
   </React.StrictMode>,

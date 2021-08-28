@@ -2,7 +2,7 @@ import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clickedPlaceState } from '../../../states/places/clickedPlace';
 import { placeMapState } from '../../../states/places/placeMap';
-import useWindowDimensions from '../../../hooks/window';
+import useWindowDimensions from '../../../hooks/useWindowDimentions';
 import { Button } from '@material-ui/core';
 import { placeDetailDisplayState } from '../../../states/sidebar/displayToggleButton';
 

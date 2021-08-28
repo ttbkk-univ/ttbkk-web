@@ -1,6 +1,7 @@
 import { atom } from 'recoil';
 import { env } from '../../env';
-import { get } from '../../utils/requests';
+import { get } from '../../utils/httpRequest.util';
+import { GeoBound } from '../../components/Map/MapContent';
 
 export interface IPlace {
   id: string;
@@ -11,19 +12,29 @@ export interface IPlace {
   hashtags: any[];
 }
 
+export async function getPlaceMap([bottomLeft, topRight]: GeoBound): Promise<{
+  [key: string]: IPlace;
+}> {
+  const placeMap: { [key: string]: IPlace } = {};
+
+  const searchParam = new URLSearchParams();
+  searchParam.append('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
+  searchParam.append('top_right', `${topRight.latitude},${topRight.longitude}`);
+  const response = await get<IPlace[]>(
+    env.api.host + '/api/places/?' + searchParam.toString(),
+  ).catch(() => {
+    return { data: [] };
+  });
+
+  Object.values(response.data).forEach((place) => {
+    placeMap[place.id] = place;
+  });
+  return placeMap;
+}
+
 export const placeMapState = atom<{ [key: string]: IPlace }>({
   key: 'places',
-  default: (async (): Promise<{ [key: string]: IPlace }> => {
-    const placeMap: { [key: string]: IPlace } = {};
-    console.log(env.api.host);
-    const response = await get<IPlace[]>(env.api.host + '/api/places/').catch(() => {
-      return { data: [] };
-    });
-    Object.values(response.data).forEach((place) => {
-      placeMap[place.id] = place;
-    });
-    return placeMap;
-  })(),
+  default: {},
 });
 
 // const places: IPlace[] = [
