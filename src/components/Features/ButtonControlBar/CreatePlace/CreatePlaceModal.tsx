@@ -39,9 +39,7 @@ function CreatePlaceModal(): React.ReactElement {
     let active: boolean = true;
     if (!brandLoading) return undefined;
 
-    console.log('init');
     (async (): Promise<void> => {
-      console.log('requesting');
       const response: AxiosResponse<Brand[]> = await get(env.api.host + '/api/brands/?search=');
       if (active) setBrandOptions(response.data);
     })();
@@ -212,7 +210,7 @@ function CreatePlaceModal(): React.ReactElement {
     post(env.api.host + '/api/places/', data)
       .then((res: AxiosResponse) => {
         const newPlace: IPlace = res.data;
-        setPlaceMap(_.assign(placeMap, { [newPlace.id]: newPlace }));
+        window.placeMap = { ...placeMap, ...{ [newPlace.id]: newPlace } };
         window.clusterer.addMarker(placeToMarker(newPlace));
         resetForm(closeAfterRequest);
       })
