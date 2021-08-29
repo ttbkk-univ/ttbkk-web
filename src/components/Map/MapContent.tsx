@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { getPlaceMap, IPlace } from '../../states/places/placeMap';
+import { getPlaceCount, getPlaceMap, IPlace } from '../../states/places/placeMap';
 import { setMarkerCluster } from '../../utils/kakaoMap/setCluster';
 import { setMapController } from '../../utils/kakaoMap/setMapController';
 import { loadKakaoMap } from '../../utils/kakaoMap/loadKakaoMap';
@@ -40,48 +40,45 @@ function MapContent(): React.ReactElement {
   let zoomChanged: boolean = false;
   const debounceTime: number = 500;
 
+  const getAndAddPlace = (): void => {
+    const geoBound: [LatLng, LatLng] = getGeoBound();
+    getPlaceCount(geoBound).then((count: number) => {
+      const maxPageNumber = count / 100;
+      for (let page = 1; page < maxPageNumber + 1; page++) {
+        getPlaceMap(geoBound, page).then((newPlaceMap: { [p: string]: IPlace }) => {
+          setMarkerCluster(newPlaceMap, setClickedPlace, setDisplayDetailPlace);
+          window.placeMap = window.placeMap ? { ...window.placeMap, ...newPlaceMap } : newPlaceMap;
+        });
+      }
+    });
+  };
+
+  const moveEventHandler = (): void => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => {
+      getAndAddPlace();
+    }, debounceTime);
+  };
+
   useEffect(() => {
     loadKakaoMap(() => {
       window.kakao.maps.load(() => {
         setMap();
+        setMapController();
         window.kakao.maps.event.addListener(window.map, 'zoom_changed', () => {
           zoomChanged = true;
-          if (getZoom() > window.map.getLevel()) {
-            setZoom();
-            zoomChanged = false;
-            return;
-          }
+          const currentZoom: number = getZoom();
           setZoom();
-          clearTimeout(debounce);
-          debounce = setTimeout(() => {
-            const geoBound: [LatLng, LatLng] = getGeoBound();
-            getPlaceMap(geoBound).then((newPlaceMap: { [p: string]: IPlace }) => {
-              setMarkerCluster(newPlaceMap, setClickedPlace, setDisplayDetailPlace);
-              window.placeMap = { ...window.placeMap, ...newPlaceMap };
-            });
-          }, debounceTime);
+          if (currentZoom <= window.map.getLevel()) moveEventHandler();
           zoomChanged = false;
         });
+
         window.kakao.maps.event.addListener(window.map, 'center_changed', () => {
-          if (zoomChanged) return;
-          clearTimeout(debounce);
-          debounce = setTimeout(() => {
-            setCenter();
-            const geoBound: [LatLng, LatLng] = getGeoBound();
-            getPlaceMap(geoBound).then(async (newPlaceMap: { [p: string]: IPlace }) => {
-              setMarkerCluster(newPlaceMap, setClickedPlace, setDisplayDetailPlace);
-              window.placeMap = { ...window.placeMap, ...newPlaceMap };
-            });
-          }, debounceTime);
+          setCenter();
+          if (!zoomChanged) moveEventHandler();
         });
         window.map.setDraggable(true);
-        setMapController();
-
-        const geoBound: [LatLng, LatLng] = getGeoBound();
-        getPlaceMap(geoBound).then((newPlaceMap: { [p: string]: IPlace }) => {
-          setMarkerCluster(newPlaceMap, setClickedPlace, setDisplayDetailPlace);
-          window.placeMap = newPlaceMap;
-        });
+        getAndAddPlace();
         document.onkeydown = (e: KeyboardEvent): void => {
           if (e.key === 'Escape') {
             window.newPlace.setMap(null);

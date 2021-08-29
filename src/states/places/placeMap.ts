@@ -2,6 +2,7 @@
 import { env } from '../../env';
 import { get } from '../../utils/httpRequest.util';
 import { GeoBound } from '../../components/Map/MapContent';
+import { AxiosResponse } from 'axios';
 
 export interface IPlace {
   id: string;
@@ -12,14 +13,33 @@ export interface IPlace {
   hashtags: any[];
 }
 
-export async function getPlaceMap([bottomLeft, topRight]: GeoBound): Promise<{
+export async function getPlaceCount([bottomLeft, topRight]: GeoBound): Promise<number> {
+  const searchParam = new URLSearchParams();
+  searchParam.append('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
+  searchParam.append('top_right', `${topRight.latitude},${topRight.longitude}`);
+  const response = await get<number>(
+    env.api.host + '/api/places/count/?' + searchParam.toString(),
+  ).catch(() => {
+    return { data: 0 };
+  });
+  return response.data;
+}
+
+export async function getPlaceMap(
+  [bottomLeft, topRight]: GeoBound,
+  page: number,
+): Promise<{
   [key: string]: IPlace;
 }> {
+  const pageLimit: number = 100;
   const placeMap: { [key: string]: IPlace } = {};
 
   const searchParam = new URLSearchParams();
   searchParam.append('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
   searchParam.append('top_right', `${topRight.latitude},${topRight.longitude}`);
+  searchParam.append('page', page.toString());
+  searchParam.append('limit', pageLimit.toString());
+
   const response = await get<IPlace[]>(
     env.api.host + '/api/places/?' + searchParam.toString(),
   ).catch(() => {
