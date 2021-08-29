@@ -9,6 +9,9 @@ export interface IPlace {
   description?: string;
   name: string;
   hashtags: any[];
+  brand: {
+    name: string;
+  };
 }
 
 export async function getPlaceCount([bottomLeft, topRight]: GeoBound): Promise<number> {

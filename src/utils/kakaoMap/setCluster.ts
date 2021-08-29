@@ -1,5 +1,6 @@
 import { SetterOrUpdater } from 'recoil';
 import { IPlace } from '../../states/places/placeMap';
+import { createHash } from 'crypto';
 
 export function setMarkerCluster(
   newPlaceMap: { [p: string]: IPlace },
@@ -32,7 +33,12 @@ export function setMarkerCluster(
   const markers: PlaceMarker[] = [];
   Object.values(newPlaceMap).forEach((place: IPlace) => {
     if (window?.placeMap && window?.placeMap[place.id]) return;
-    markers.push(placeToMarker(place));
+    const marker: PlaceMarker = placeToMarker(place);
+    markers.push(marker);
+    const brandHash = createHash('md5').update(place.brand.name).digest('hex');
+    if (!window.brandMarkers) window.brandMarkers = {};
+    if (!window.brandMarkers[brandHash]) window.brandMarkers[brandHash] = [];
+    window.brandMarkers[brandHash].push(marker);
   });
   window.clusterer =
     window.clusterer ||

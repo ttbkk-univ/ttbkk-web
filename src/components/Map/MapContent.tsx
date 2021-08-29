@@ -21,6 +21,7 @@ declare global {
     map: any;
     clusterer: any;
     newPlace: any;
+    brandMarkers: { [p: string]: any[] }; // experiments
   }
 }
 
