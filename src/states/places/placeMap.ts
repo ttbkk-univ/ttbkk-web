@@ -1,8 +1,6 @@
-// import { atom } from 'recoil';
 import { env } from '../../env';
 import { get } from '../../utils/httpRequest.util';
 import { GeoBound } from '../../components/Map/MapContent';
-import { AxiosResponse } from 'axios';
 
 export interface IPlace {
   id: string;
