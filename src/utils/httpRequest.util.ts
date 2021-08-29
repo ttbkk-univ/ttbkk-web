@@ -17,10 +17,11 @@ export async function post<T>(
 }
 
 export async function get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-  return axios.get(url, { ...config, timeout }).catch(() => {
-    return axios.post(env.api.errorHelper, {
+  return axios.get<T>(url, { ...config, timeout }).catch(() => {
+    axios.post(env.api.errorHelper, {
       serviceName: 'TTBKK',
       types: ['slack'],
     });
+    throw new Error('request error');
   });
 }
