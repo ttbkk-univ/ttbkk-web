@@ -36,9 +36,11 @@ export function setMarkerCluster(
     const marker: PlaceMarker = placeToMarker(place);
     markers.push(marker);
     const brandHash = createHash('md5').update(place.brand.name).digest('hex');
-    if (!window.brandMarkers) window.brandMarkers = {};
-    if (!window.brandMarkers[brandHash]) window.brandMarkers[brandHash] = [];
-    window.brandMarkers[brandHash].push(marker);
+    if (!window.brands) window.brands = {};
+    if (!window.brands[brandHash]) {
+      window.brands[brandHash] = { name: place.brand.name, markers: [], visible: true };
+    }
+    window.brands[brandHash].markers.push(marker);
   });
   window.clusterer =
     window.clusterer ||
