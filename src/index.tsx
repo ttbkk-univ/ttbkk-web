@@ -6,6 +6,7 @@ import { RecoilRoot } from 'recoil';
 import ButtonControlBar from './components/Features/ButtonControlBar';
 import Map from './components/Map';
 import PlaceDetail from './components/Features/PlaceDetail';
+import BrandFilter from './components/Features/BrandFilter';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,6 +15,7 @@ ReactDOM.render(
         <Map />
         <PlaceDetail />
         <ButtonControlBar />
+        <BrandFilter />
       </React.Suspense>
     </RecoilRoot>
   </React.StrictMode>,

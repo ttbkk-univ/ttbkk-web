@@ -21,6 +21,13 @@ declare global {
     map: any;
     clusterer: any;
     newPlace: any;
+    brands: {
+      [p: string]: {
+        name: string;
+        markers: any[]; // PlaceMarker
+        visible: boolean;
+      };
+    };
   }
 }
 
