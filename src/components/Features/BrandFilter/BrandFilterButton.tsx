@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import { Button } from '@material-ui/core';
 import { MdLayers } from 'react-icons/all';
 
-function BrandFilterButton(props: any): React.ReactElement {
+interface BrandFilterButtonProps {
+  onMouseOver: MouseEventHandler;
+}
+
+function BrandFilterButton(props: BrandFilterButtonProps): React.ReactElement {
   return (
     <Button
       onMouseOver={props.onMouseOver}

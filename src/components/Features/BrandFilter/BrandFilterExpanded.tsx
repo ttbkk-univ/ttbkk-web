@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import { Checkbox } from '@material-ui/core';
 import { applyClusterFilter } from '../../../utils/kakaoMap/clusterFilter';
 
-function BrandFilterExpanded(props: any): React.ReactElement {
+interface BrandFilterExpandedProps {
+  onMouseLeave: MouseEventHandler;
+}
+
+function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElement {
   const onClick = (e: any, brandName: string): void => {
     console.log(e.target.checked);
     applyClusterFilter([brandName], e.target.checked);
