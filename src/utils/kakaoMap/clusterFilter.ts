@@ -1,8 +1,8 @@
-import { createHash } from 'crypto';
+import { getMD5 } from '../hash.util';
 
 export function applyClusterFilter(brandNames: string[], status: boolean): void {
   brandNames.forEach((brandName) => {
-    const brandHash = createHash('md5').update(brandName).digest('hex');
+    const brandHash = getMD5(brandName);
     if (status) {
       window.clusterer.addMarkers(window.brands[brandHash].markers);
     } else {

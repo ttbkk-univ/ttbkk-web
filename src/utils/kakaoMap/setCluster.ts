@@ -1,6 +1,6 @@
 import { SetterOrUpdater } from 'recoil';
 import { IPlace } from '../../states/places/placeMap';
-import { createHash } from 'crypto';
+import { getMD5 } from '../hash.util';
 
 export function setMarkerCluster(
   newPlaceMap: { [p: string]: IPlace },
@@ -30,18 +30,6 @@ export function setMarkerCluster(
     return marker;
   };
 
-  const markers: PlaceMarker[] = [];
-  Object.values(newPlaceMap).forEach((place: IPlace) => {
-    if (window?.placeMap && window?.placeMap[place.id]) return;
-    const marker: PlaceMarker = placeToMarker(place);
-    markers.push(marker);
-    const brandHash = createHash('md5').update(place.brand.name).digest('hex');
-    if (!window.brands) window.brands = {};
-    if (!window.brands[brandHash]) {
-      window.brands[brandHash] = { name: place.brand.name, markers: [], visible: true };
-    }
-    window.brands[brandHash].markers.push(marker);
-  });
   window.clusterer =
     window.clusterer ||
     new window.kakao.maps.MarkerClusterer({
@@ -49,5 +37,18 @@ export function setMarkerCluster(
       averageCenter: true,
       minLevel: 7,
     });
+
+  const markers: PlaceMarker[] = [];
+  Object.values(newPlaceMap).forEach((place: IPlace) => {
+    if (window?.placeMap && window?.placeMap[place.id]) return;
+    const marker: PlaceMarker = placeToMarker(place);
+    const brandHash = getMD5(place.brand.name);
+    if (!window.brands) window.brands = {};
+    if (!window.brands[brandHash]) {
+      window.brands[brandHash] = { name: place.brand.name, markers: [], visible: true };
+    }
+    window.brands[brandHash].markers.push(marker);
+    window.brands[brandHash].visible && markers.push(marker);
+  });
   window.clusterer.addMarkers(markers);
 }
