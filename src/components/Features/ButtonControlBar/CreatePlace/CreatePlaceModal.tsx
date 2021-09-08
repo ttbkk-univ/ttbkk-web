@@ -11,6 +11,7 @@ import { IPlace } from '../../../../states/places/placeMap';
 import { clickedPlaceState } from '../../../../states/places/clickedPlace';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { get, post } from '../../../../utils/httpRequest.util';
+import { getMD5 } from '../../../../utils/hash.util';
 
 interface Brand {
   id: string;
@@ -209,7 +210,10 @@ function CreatePlaceModal(): React.ReactElement {
       .then((res: AxiosResponse) => {
         const newPlace: IPlace = res.data;
         window.placeMap = { ...window.placeMap, ...{ [newPlace.id]: newPlace } };
-        window.clusterer.addMarker(placeToMarker(newPlace));
+        const brandHash: string = getMD5(data.brand_name);
+        const marker = placeToMarker(newPlace);
+        window.brands[brandHash].markers.push(marker);
+        window.brands[brandHash].visible && window.clusterer.addMarker(marker);
         resetForm(closeAfterRequest);
       })
       .catch(() => {
