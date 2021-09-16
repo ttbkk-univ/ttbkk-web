@@ -23,7 +23,7 @@ jobs:
             ${{ runner.OS }}-
 
       - name: Install Dependencies
-        run: npm install --production
+        run: npm install
 
       - name: Build
         env:
@@ -31,6 +31,9 @@ jobs:
           REACT_APP_API_HOST: ${{ secrets.REACT_APP_API_HOST }}
           REACT_APP_API_ERROR_HELPER_HOST: ${{ secrets.REACT_APP_API_ERROR_HELPER_HOST }}
         run: npm run build
+
+      - name: Reinstall without Dev Dependencies
+        run: rm -rf node_modules && npm install --production
 
       - name: Deploy
         env:
@@ -52,4 +55,3 @@ jobs:
           aws cloudfront create-invalidation \
               --distribution-id $DISTRIBUTION_ID \
               --paths "/*"
-
