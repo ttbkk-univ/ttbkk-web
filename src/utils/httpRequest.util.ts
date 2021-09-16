@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { env } from '../env';
 
-const timeout: number = 5000;
+const timeout: number = 30000;
 
 export async function post<T>(
   url: string,
