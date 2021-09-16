@@ -214,11 +214,9 @@ function CreatePlaceModal(): React.ReactElement {
         const marker = placeToMarker(newPlace);
         window.brands[brandHash].markers.push(marker);
         window.brands[brandHash].visible && window.clusterer.addMarker(marker);
-        resetForm(closeAfterRequest);
       })
-      .catch(() => {
-        alert('서버 문제로 생성에 요청에 실패했습니다');
-      });
+      .catch(() => alert('서버 문제로 생성에 요청에 실패했습니다'))
+      .then(() => resetForm(closeAfterRequest));
   };
 
   return (
