@@ -50,9 +50,10 @@ function MapContent(): React.ReactElement {
   const getAndAddPlace = (): void => {
     const geoBound: [LatLng, LatLng] = getGeoBound();
     getPlaceCount(geoBound).then((count: number) => {
-      const maxPageNumber = count / 100;
+      const limit: number = 200;
+      const maxPageNumber = count / limit;
       for (let page = 1; page < maxPageNumber + 1; page++) {
-        getPlaceMap(geoBound, page).then((newPlaceMap: { [p: string]: IPlace }) => {
+        getPlaceMap(geoBound, page, limit).then((newPlaceMap: { [p: string]: IPlace }) => {
           setMarkerCluster(newPlaceMap, setClickedPlace, setDisplayDetailPlace);
           window.placeMap = window.placeMap ? { ...window.placeMap, ...newPlaceMap } : newPlaceMap;
         });
