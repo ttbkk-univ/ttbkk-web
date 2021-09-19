@@ -29,17 +29,17 @@ export async function getPlaceCount([bottomLeft, topRight]: GeoBound): Promise<n
 export async function getPlaceMap(
   [bottomLeft, topRight]: GeoBound,
   page: number,
+  limit: number,
 ): Promise<{
   [key: string]: IPlace;
 }> {
-  const pageLimit: number = 100;
   const placeMap: { [key: string]: IPlace } = {};
 
   const searchParam = new URLSearchParams();
   searchParam.append('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
   searchParam.append('top_right', `${topRight.latitude},${topRight.longitude}`);
   searchParam.append('page', page.toString());
-  searchParam.append('limit', pageLimit.toString());
+  searchParam.append('limit', limit.toString());
 
   const response = await get<IPlace[]>(
     env.api.host + '/api/places/?' + searchParam.toString(),
