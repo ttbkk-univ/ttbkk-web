@@ -13,26 +13,34 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
   };
 
   return (
-    <div
-      onMouseLeave={props.onMouseLeave}
-      style={{
-        zIndex: 401,
-        right: 120,
-        padding: 12,
-        position: 'fixed',
-        display: 'flex',
-        flexDirection: 'column',
-        float: 'right',
-        backgroundColor: 'white',
-      }}
-    >
-      {Object.entries(window.brands).map(([key, brand]) => (
-        <label key={key}>
-          <Checkbox defaultChecked={brand.visible} onClick={(e): void => onClick(e, brand.name)} />
-          {brand.name}
-        </label>
-      ))}
-    </div>
+    <>
+      {window.brands && (
+        <div
+          onMouseLeave={props.onMouseLeave}
+          style={{
+            zIndex: 401,
+            right: 120,
+            padding: 12,
+            position: 'fixed',
+            display: 'flex',
+            flexDirection: 'column',
+            float: 'right',
+            backgroundColor: 'white',
+          }}
+        >
+          {window.brands &&
+            Object.entries(window.brands).map(([key, brand]) => (
+              <label key={key}>
+                <Checkbox
+                  defaultChecked={brand.visible}
+                  onClick={(e): void => onClick(e, brand.name)}
+                />
+                {brand.name}
+              </label>
+            ))}
+        </div>
+      )}
+    </>
   );
 }
 
