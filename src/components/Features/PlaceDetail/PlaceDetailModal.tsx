@@ -64,10 +64,16 @@ function PlaceDetailModal(): React.ReactElement {
         </div>
         <hr />
         <div style={{ whiteSpace: 'pre-line' }}>{window.placeMap[clickedPlace].description}</div>
-        <br />
-        <div style={{ whiteSpace: 'pre-line' }}>
-          {window.placeMap[clickedPlace].brand.description}
-        </div>
+        {window.placeMap[clickedPlace].brand.description ? (
+          <>
+            <br />
+            <div style={{ whiteSpace: 'pre-line' }}>
+              {window.placeMap[clickedPlace].brand.description}
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
         <hr />
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           {window.placeMap[clickedPlace].brand.hashtags.map((hashtag: IHashtag) => (
