@@ -4,6 +4,9 @@ import { clickedPlaceState } from '../../../states/places/clickedPlace';
 import useWindowDimensions from '../../../hooks/useWindowDimentions';
 import { Button } from '@material-ui/core';
 import { placeDetailDisplayState } from '../../../states/sidebar/displayToggleButton';
+import { IHashtag } from '../../../states/places/placeMap';
+import PlaceHashtag from './PlaceHashtag';
+import BrandHashtag from './BrandHashtag';
 
 function PlaceDetailModal(): React.ReactElement {
   const [clickedPlace, setClickedPlace] = useRecoilState(clickedPlaceState);
@@ -61,15 +64,17 @@ function PlaceDetailModal(): React.ReactElement {
         </div>
         <hr />
         <div style={{ whiteSpace: 'pre-line' }}>{window.placeMap[clickedPlace].description}</div>
+        <br />
+        <div style={{ whiteSpace: 'pre-line' }}>
+          {window.placeMap[clickedPlace].brand.description}
+        </div>
         <hr />
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {window.placeMap[clickedPlace].hashtags.map((hashtag) => (
-            <span
-              style={{ margin: 3, backgroundColor: 'rgba(150, 202, 140, 0.5)' }}
-              key={hashtag.name}
-            >
-              {hashtag.name}
-            </span>
+          {window.placeMap[clickedPlace].brand.hashtags.map((hashtag: IHashtag) => (
+            <BrandHashtag hashtag={hashtag} />
+          ))}
+          {window.placeMap[clickedPlace].hashtags.map((hashtag: IHashtag) => (
+            <PlaceHashtag hashtag={hashtag} />
           ))}
         </div>
       </div>
