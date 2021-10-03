@@ -2,16 +2,24 @@ import { env } from '../../env';
 import { get } from '../../utils/httpRequest.util';
 import { GeoBound } from '../../components/Map/MapContent';
 
+export interface IHashtag {
+  name: string;
+}
+
+export interface IBrand {
+  name: string;
+  description: string;
+  hashtags: IHashtag[];
+}
+
 export interface IPlace {
   id: string;
   latitude: number;
   longitude: number;
   description?: string;
   name: string;
-  hashtags: any[];
-  brand: {
-    name: string;
-  };
+  hashtags: IHashtag[];
+  brand: IBrand;
 }
 
 export async function getPlaceCount([bottomLeft, topRight]: GeoBound): Promise<number> {
