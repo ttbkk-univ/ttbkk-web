@@ -33,6 +33,7 @@ function CreatePlaceModal(): React.ReactElement {
   const [brandOpen, setBrandOpen] = useState(false);
   const [brandOptions, setBrandOptions] = useState<Brand[] | undefined>(undefined);
   const brandLoading: boolean = brandOpen && !brandOptions;
+  const [autoCompleteKey, setAutoCompleteKey] = useState(new Date().getTime());
 
   useEffect(() => {
     let active: boolean = true;
@@ -152,6 +153,7 @@ function CreatePlaceModal(): React.ReactElement {
     setNewPlaceHashtag('');
     setNewPlaceHashtagList([]);
     setNewPlaceDescription('');
+    setAutoCompleteKey(new Date().getTime());
     setCreatePlaceLatLng(undefined);
     window.newPlace.setMap(null);
     window.newPlace = null;
@@ -280,6 +282,7 @@ function CreatePlaceModal(): React.ReactElement {
               />
             </span>
             <Autocomplete
+              key={autoCompleteKey}
               style={inputStyle}
               open={brandOpen}
               onOpen={(): void => setBrandOpen(true)}
