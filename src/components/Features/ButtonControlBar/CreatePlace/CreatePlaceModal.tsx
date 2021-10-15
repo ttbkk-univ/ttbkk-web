@@ -12,11 +12,7 @@ import { clickedPlaceState } from '../../../../states/places/clickedPlace';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { get, post } from '../../../../utils/httpRequest.util';
 import { getMD5 } from '../../../../utils/hash.util';
-
-interface Brand {
-  id: string;
-  name: string;
-}
+import { Brand } from '../../../../states/brands/brand';
 
 function CreatePlaceModal(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
