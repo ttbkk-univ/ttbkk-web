@@ -4,8 +4,10 @@ export function applyClusterFilter(brandNames: string[], status: boolean): void 
   const markers: any[] = [];
   brandNames.forEach((brandName) => {
     const brandHash = getMD5(brandName);
-    markers.push(...window.brands[brandHash].markers);
-    window.brands[brandHash].visible = status;
+    if (window.brands[brandHash]) {
+      markers.push(...window.brands[brandHash].markers);
+      window.brands[brandHash].visible = status;
+    }
   });
   if (status) {
     window.clusterer.addMarkers(markers);
