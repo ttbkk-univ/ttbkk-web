@@ -25,7 +25,6 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
   }, []);
 
   const filterAllBrand = (e: any): void => {
-    console.log(e.target.checked);
     setAllBrandFilterChecked(!allBrandFilterChecked);
     applyClusterFilter(
       brandFilter.map((brand) => brand.name),
@@ -42,7 +41,6 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
   };
 
   const filterBrand = (e: any, brandName: string): void => {
-    console.log(e.target.checked);
     applyClusterFilter([brandName], e.target.checked);
     setBrandFilter(
       brandFilter.map((brand) => {

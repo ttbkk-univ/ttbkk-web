@@ -50,10 +50,6 @@ function CreatePlaceModal(): React.ReactElement {
   }, [brandOpen]);
 
   useEffect(() => {
-    latLng && console.log(latLng);
-  }, [latLng]);
-
-  useEffect(() => {
     const tagContainer: HTMLElement | null = document.getElementById('tag-container');
     if (tagContainer) tagContainer.scrollTop = tagContainer.scrollHeight;
   }, [newPlaceHashtagList]);
