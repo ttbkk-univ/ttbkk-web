@@ -33,7 +33,7 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
     setBrandFilter(
       brandFilter.map((brand) => {
         return {
-          visible: !brand.visible,
+          visible: e.target.checked,
           name: brand.name,
         };
       }),
@@ -46,7 +46,7 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
       brandFilter.map((brand) => {
         if (brand.name !== brandName) return brand;
         return {
-          visible: !brand.visible,
+          visible: e.target.checked,
           name: brand.name,
         };
       }),
