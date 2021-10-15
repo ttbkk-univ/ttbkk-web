@@ -1,28 +1,18 @@
-import React, { MouseEventHandler, useEffect, useState } from 'react';
+import React, { MouseEventHandler } from 'react';
 import { Checkbox } from '@material-ui/core';
 import { applyClusterFilter } from '../../../utils/kakaoMap/clusterFilter';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { brandFilterState } from '../../../states/brands/brandFilter';
-import { Brand, brandListState } from '../../../states/brands/brand';
+import { useRecoilState } from 'recoil';
+import { allBrandFilterCheckedState, brandFilterState } from '../../../states/brands/brandFilter';
 
 interface BrandFilterExpandedProps {
   onMouseLeave: MouseEventHandler;
 }
 
 function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElement {
-  const brandList = useRecoilValue(brandListState);
+  const [allBrandFilterChecked, setAllBrandFilterChecked] = useRecoilState(
+    allBrandFilterCheckedState,
+  );
   const [brandFilter, setBrandFilter] = useRecoilState(brandFilterState);
-  const [allBrandFilterChecked, setAllBrandFilterChecked] = useState(true);
-
-  useEffect(() => {
-    const filterData = brandList.map((brand: Brand) => {
-      return {
-        name: brand.name,
-        visible: true,
-      };
-    });
-    setBrandFilter(filterData);
-  }, []);
 
   const filterAllBrand = (e: any): void => {
     setAllBrandFilterChecked(!allBrandFilterChecked);
