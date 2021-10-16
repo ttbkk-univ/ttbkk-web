@@ -56,9 +56,6 @@ function MapContent(): React.ReactElement {
       for (let page = 1; page < maxPageNumber + 1; page++) {
         getPlaceMap(geoBound, page, limit).then((newPlaceMap) => {
           setPlaceMap((prevPlaceMap: { [p: string]: IPlace }) => {
-            console.log(Object.keys(prevPlaceMap).length);
-            console.log(prevPlaceMap);
-            console.log(newPlaceMap);
             setMarkerCluster(prevPlaceMap, newPlaceMap, setClickedPlace, setDisplayDetailPlace);
             return { ...prevPlaceMap, ...newPlaceMap };
           });
