@@ -1,6 +1,4 @@
-import { selector } from 'recoil';
-import axios from 'axios';
-import { env } from '../../env';
+import { atom } from 'recoil';
 
 export interface Brand {
   id: string;
@@ -9,10 +7,7 @@ export interface Brand {
   description?: string;
 }
 
-export const brandListState = selector<Brand[]>({
+export const brandListState = atom<Brand[]>({
   key: 'brandList',
-  get: async () => {
-    const res = await axios.get(`${env.api.host}/api/brands/`);
-    return res.data;
-  },
+  default: [],
 });
