@@ -1,6 +1,7 @@
 import { env } from '../../env';
 import { get } from '../../utils/httpRequest.util';
 import { GeoBound } from '../../components/Map/MapContent';
+import { atom } from 'recoil';
 
 export interface IHashtag {
   name: string;
@@ -61,10 +62,10 @@ export async function getPlaceMap(
   return placeMap;
 }
 
-// export const placeMapState = atom<{ [key: string]: IPlace }>({
-//   key: 'places',
-//   default: {},
-// });
+export const placeMapState = atom<{ [key: string]: IPlace }>({
+  key: 'placeMap',
+  default: {},
+});
 
 // const places: IPlace[] = [
 //   {

@@ -3,6 +3,7 @@ import { IPlace } from '../../states/places/placeMap';
 import { getMD5 } from '../hash.util';
 
 export function setMarkerCluster(
+  placeMap: { [p: string]: IPlace },
   newPlaceMap: { [p: string]: IPlace },
   setClickedPlace: SetterOrUpdater<string | undefined>,
   setDisplayDetailPlace: SetterOrUpdater<boolean>,
@@ -40,7 +41,7 @@ export function setMarkerCluster(
 
   const markers: PlaceMarker[] = [];
   Object.values(newPlaceMap).forEach((place: IPlace) => {
-    if (window?.placeMap && window?.placeMap[place.id]) return;
+    if (placeMap && placeMap[place.id]) return;
     const marker: PlaceMarker = placeToMarker(place);
     const brandHash = getMD5(place.brand.name);
     if (!window.brands) window.brands = {};

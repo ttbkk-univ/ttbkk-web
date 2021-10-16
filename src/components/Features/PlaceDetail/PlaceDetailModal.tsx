@@ -1,15 +1,16 @@
 import React from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clickedPlaceState } from '../../../states/places/clickedPlace';
 import useWindowDimensions from '../../../hooks/useWindowDimentions';
 import { Button } from '@material-ui/core';
 import { placeDetailDisplayState } from '../../../states/sidebar/displayToggleButton';
-import { IHashtag } from '../../../states/places/placeMap';
+import { IHashtag, placeMapState } from '../../../states/places/placeMap';
 import PlaceHashtag from './PlaceHashtag';
 import BrandHashtag from './BrandHashtag';
 
 function PlaceDetailModal(): React.ReactElement {
   const [clickedPlace, setClickedPlace] = useRecoilState(clickedPlaceState);
+  const placeMap = useRecoilValue(placeMapState);
   const setDisplay = useSetRecoilState(placeDetailDisplayState);
   const { width } = useWindowDimensions();
   const isMobile: boolean = width < 600;
@@ -41,7 +42,7 @@ function PlaceDetailModal(): React.ReactElement {
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div style={{ fontSize: '32px', color: 'rgb(255, 68, 85)' }}>
-            {window.placeMap[clickedPlace].name}
+            {placeMap[clickedPlace].name}
           </div>
           <div
             style={{
@@ -63,23 +64,21 @@ function PlaceDetailModal(): React.ReactElement {
           </div>
         </div>
         <hr />
-        <div style={{ whiteSpace: 'pre-line' }}>{window.placeMap[clickedPlace].description}</div>
-        {window.placeMap[clickedPlace].brand.description ? (
+        <div style={{ whiteSpace: 'pre-line' }}>{placeMap[clickedPlace].description}</div>
+        {placeMap[clickedPlace].brand.description ? (
           <>
             <br />
-            <div style={{ whiteSpace: 'pre-line' }}>
-              {window.placeMap[clickedPlace].brand.description}
-            </div>
+            <div style={{ whiteSpace: 'pre-line' }}>{placeMap[clickedPlace].brand.description}</div>
           </>
         ) : (
           <></>
         )}
         <hr />
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {window.placeMap[clickedPlace].brand.hashtags.map((hashtag: IHashtag) => (
+          {placeMap[clickedPlace].brand.hashtags.map((hashtag: IHashtag) => (
             <BrandHashtag hashtag={hashtag} />
           ))}
-          {window.placeMap[clickedPlace].hashtags.map((hashtag: IHashtag) => (
+          {placeMap[clickedPlace].hashtags.map((hashtag: IHashtag) => (
             <PlaceHashtag hashtag={hashtag} />
           ))}
         </div>
