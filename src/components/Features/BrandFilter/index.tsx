@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import BrandFilterButton from './BrandFilterButton';
 import BrandFilterExpanded from './BrandFilterExpanded';
-import { useRecoilValue } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { Brand, brandListState } from '../../../states/brands/brand';
 import { getMD5 } from '../../../utils/hash.util';
+import { AxiosResponse } from 'axios';
+import { get } from '../../../utils/httpRequest.util';
+import { env } from '../../../env';
 
 function BrandFilter(): React.ReactElement {
   const [hover, setHover] = useState(false);
 
-  const brandList = useRecoilValue(brandListState);
+  const setBrandList = useSetRecoilState(brandListState);
 
   useEffect(() => {
-    brandList.forEach((brand: Brand) => {
-      const brandHash: string = getMD5(brand.name);
-      if (!window.brands) window.brands = {};
-      if (!window.brands[brandHash]) {
-        window.brands[brandHash] = {
-          name: brand.name,
-          markers: [],
-          visible: true,
-        };
-      }
-    });
+    (async (): Promise<void> => {
+      const response: AxiosResponse<Brand[]> = await get(env.api.host + '/api/brands/?search=');
+      setBrandList(response.data);
+      response.data.forEach((brand: Brand) => {
+        const brandHash: string = getMD5(brand.name);
+        if (!window.brands) window.brands = {};
+        if (!window.brands[brandHash]) {
+          window.brands[brandHash] = {
+            name: brand.name,
+            markers: [],
+            visible: true,
+          };
+        }
+      });
+    })();
   }, []);
 
   return (
