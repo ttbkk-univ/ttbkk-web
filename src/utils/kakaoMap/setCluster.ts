@@ -49,7 +49,7 @@ export function setMarkerCluster(
       window.brands[brandHash] = { name: place.brand.name, markers: [], visible: true };
     }
     window.brands[brandHash].markers.push(marker);
-    window.brands[brandHash].visible && markers.push(marker);
+    window.brands[brandHash]?.visible && markers.push(marker);
   });
   window.clusterer.addMarkers(markers);
 }

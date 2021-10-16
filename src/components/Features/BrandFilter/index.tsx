@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import BrandFilterButton from './BrandFilterButton';
 import BrandFilterExpanded from './BrandFilterExpanded';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { Brand, brandListState } from '../../../states/brands/brand';
-import { brandFilterState } from '../../../states/brands/brandFilter';
+import { getMD5 } from '../../../utils/hash.util';
 
 function BrandFilter(): React.ReactElement {
   const [hover, setHover] = useState(false);
+
   const brandList = useRecoilValue(brandListState);
-  const setBrandFilter = useSetRecoilState(brandFilterState);
 
   useEffect(() => {
-    const filterData = brandList.map((brand: Brand) => {
-      return {
-        name: brand.name,
-        visible: true,
-      };
+    brandList.forEach((brand: Brand) => {
+      const brandHash: string = getMD5(brand.name);
+      if (!window.brands) window.brands = {};
+      if (!window.brands[brandHash]) {
+        window.brands[brandHash] = {
+          name: brand.name,
+          markers: [],
+          visible: true,
+        };
+      }
     });
-    setBrandFilter(filterData);
   }, []);
 
   return (

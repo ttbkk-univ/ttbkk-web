@@ -25,7 +25,7 @@ declare global {
       [p: string]: {
         name: string;
         markers: any[]; // PlaceMarker
-        visible: boolean;
+        visible: true;
       };
     };
   }
