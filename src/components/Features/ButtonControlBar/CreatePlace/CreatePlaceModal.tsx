@@ -7,16 +7,18 @@ import { isMobile } from '../../../../utils/browser.util';
 import { createPlaceModalDisplayState } from '../../../../states/buttons/createPlaceModalDisplayState';
 import { AxiosResponse } from 'axios';
 import { env } from '../../../../env';
-import { IPlace } from '../../../../states/places/placeMap';
+import { IPlace, placeMapState } from '../../../../states/places/placeMap';
 import { clickedPlaceState } from '../../../../states/places/clickedPlace';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { get, post } from '../../../../utils/httpRequest.util';
 import { getMD5 } from '../../../../utils/hash.util';
 import { Brand } from '../../../../states/brands/brand';
+import _ from 'lodash';
 
 function CreatePlaceModal(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
   const [latLng, setCreatePlaceLatLng] = useRecoilState(createPlaceLatLngState);
+  const [placeMap, setPlaceMap] = useRecoilState(placeMapState);
   const [createPlaceModalDisplay, setCreatePlaceModalDisplay] = useRecoilState(
     createPlaceModalDisplayState,
   );
@@ -203,7 +205,7 @@ function CreatePlaceModal(): React.ReactElement {
     post(env.api.host + '/api/places/', data)
       .then((res: AxiosResponse) => {
         const newPlace: IPlace = res.data;
-        window.placeMap = { ...window.placeMap, ...{ [newPlace.id]: newPlace } };
+        setPlaceMap(_.assign(placeMap, { [newPlace.id]: newPlace }));
         const brandHash: string = getMD5(data.brand_name);
         const marker = placeToMarker(newPlace);
         window.brands[brandHash].markers.push(marker);

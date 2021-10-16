@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { getPlaceCount, getPlaceMap, IPlace } from '../../states/places/placeMap';
+import { getPlaceCount, getPlaceMap, IPlace, placeMapState } from '../../states/places/placeMap';
 import { setMarkerCluster } from '../../utils/kakaoMap/setCluster';
 import { setMapController } from '../../utils/kakaoMap/setMapController';
 import { loadKakaoMap } from '../../utils/kakaoMap/loadKakaoMap';
@@ -17,9 +17,9 @@ declare global {
     kakao: {
       maps: any;
     };
-    placeMap: { [p: string]: IPlace };
     map: any;
     clusterer: any;
+    placeMap: { [p: string]: IPlace };
     newPlace: any;
     brands: {
       [p: string]: {
@@ -42,6 +42,7 @@ function MapContent(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
   const setDisplayDetailPlace = useSetRecoilState(placeDetailDisplayState);
   const setCreatePlaceModalDisplay = useSetRecoilState(createPlaceModalDisplayState);
+  const setPlaceMap = useSetRecoilState(placeMapState);
 
   let debounce: any = null;
   let zoomChanged: boolean = false;
@@ -53,9 +54,11 @@ function MapContent(): React.ReactElement {
       const limit: number = 200;
       const maxPageNumber = count / limit;
       for (let page = 1; page < maxPageNumber + 1; page++) {
-        getPlaceMap(geoBound, page, limit).then((newPlaceMap: { [p: string]: IPlace }) => {
-          setMarkerCluster(newPlaceMap, setClickedPlace, setDisplayDetailPlace);
-          window.placeMap = window.placeMap ? { ...window.placeMap, ...newPlaceMap } : newPlaceMap;
+        getPlaceMap(geoBound, page, limit).then((newPlaceMap) => {
+          setPlaceMap((prevPlaceMap: { [p: string]: IPlace }) => {
+            setMarkerCluster(prevPlaceMap, newPlaceMap, setClickedPlace, setDisplayDetailPlace);
+            return { ...prevPlaceMap, ...newPlaceMap };
+          });
         });
       }
     });
