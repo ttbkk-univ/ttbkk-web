@@ -92,7 +92,7 @@ function MapContent(): React.ReactElement {
         getAndAddPlace();
         document.onkeydown = (e: KeyboardEvent): void => {
           if (e.key === 'Escape') {
-            window.newPlace.setMap(null);
+            window.newPlace?.setMap(null);
             setClickedPlace(undefined);
             setDisplayDetailPlace(false);
             setCreatePlaceModalDisplay(false);
