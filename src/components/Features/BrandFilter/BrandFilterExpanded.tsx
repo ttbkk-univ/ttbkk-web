@@ -1,45 +1,32 @@
-import React, { MouseEventHandler } from 'react';
-import { Checkbox } from '@material-ui/core';
+import React, { MouseEventHandler, useState } from 'react';
+import { isMobile } from '../../../utils/browser.util';
+import BrandFilterRow from './BrandFilterRow';
+import { Button, Checkbox } from '@material-ui/core';
+import { MdClose } from 'react-icons/all';
 import { applyClusterFilter } from '../../../utils/kakaoMap/clusterFilter';
-import { useRecoilState } from 'recoil';
-import { allBrandFilterCheckedState } from '../../../states/brands/allBrandFilterChecked';
-import { getMD5 } from '../../../utils/hash.util';
 
 interface BrandFilterExpandedProps {
   onMouseLeave: MouseEventHandler;
+  setHover: (value: ((prevState: boolean) => boolean) | boolean) => void;
 }
 
 function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElement {
-  const [allBrandFilterChecked, setAllBrandFilterChecked] = useRecoilState(
-    allBrandFilterCheckedState,
-  );
+  const { onMouseLeave, setHover } = props;
+  const [allBrandFilterChecked, setAllBrandFilterChecked] = useState(true);
 
   const filterAllBrand = (e: any): void => {
-    setAllBrandFilterChecked(!allBrandFilterChecked);
+    setAllBrandFilterChecked(e.target.checked);
     applyClusterFilter(Object.keys(window.brands), e.target.checked);
     Object.keys(window.brands).forEach((brandHash) => {
       window.brands[brandHash].visible = e.target.checked;
     });
   };
 
-  const filterBrand = (e: any, brandName: string): void => {
-    const brandHash: string = getMD5(brandName);
-    applyClusterFilter([brandHash], e.target.checked);
-    if (!window.brands[brandHash]) {
-      window.brands[brandHash] = {
-        name: brandName,
-        markers: [],
-        visible: e.target.checked,
-      };
-    }
-    window.brands[brandHash].visible = e.target.checked;
-  };
-
   return (
     <>
       {window.brands && (
         <div
-          onMouseLeave={props.onMouseLeave}
+          onMouseLeave={onMouseLeave}
           style={{
             zIndex: 401,
             right: 120,
@@ -49,18 +36,42 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
             flexDirection: 'column',
             float: 'right',
             backgroundColor: 'white',
+            minWidth: 200,
           }}
         >
-          <label key="all">
-            <Checkbox checked={allBrandFilterChecked} onClick={(e): void => filterAllBrand(e)} />
-            전체
-          </label>
-          {Object.entries(window.brands).map(([key, brand]) => (
-            <label key={key}>
-              <Checkbox checked={brand.visible} onClick={(e): void => filterBrand(e, brand.name)} />
-              {brand.name}
+          <div>
+            <label key="all">
+              <Checkbox checked={allBrandFilterChecked} onClick={(e): void => filterAllBrand(e)} />
+              전체
             </label>
-          ))}
+            {isMobile() && (
+              <Button
+                style={{ float: 'right' }}
+                onClick={(): void => setHover(false)}
+                variant={'contained'}
+                color={'secondary'}
+                size={'large'}
+              >
+                <MdClose />
+              </Button>
+            )}
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              maxHeight: isMobile() ? 300 : 500,
+              overflowY: 'scroll',
+            }}
+          >
+            {Object.entries(window.brands).map(([key, brand]) => (
+              <BrandFilterRow
+                key={key}
+                brand={brand}
+                allBrandFilterChecked={allBrandFilterChecked}
+              />
+            ))}
+          </div>
         </div>
       )}
     </>

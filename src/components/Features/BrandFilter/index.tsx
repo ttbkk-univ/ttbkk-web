@@ -10,7 +10,6 @@ import { env } from '../../../env';
 
 function BrandFilter(): React.ReactElement {
   const [hover, setHover] = useState(false);
-
   const setBrandList = useSetRecoilState(brandListState);
 
   useEffect(() => {
@@ -35,7 +34,9 @@ function BrandFilter(): React.ReactElement {
     <>
       <div style={{ position: 'fixed', top: 5, right: 120, zIndex: 400 }}>
         {<BrandFilterButton onMouseOver={(): void => window.brands && setHover(true)} />}
-        {hover && <BrandFilterExpanded onMouseLeave={(): void => setHover(false)} />}
+        {hover && (
+          <BrandFilterExpanded onMouseLeave={(): void => setHover(false)} setHover={setHover} />
+        )}
       </div>
     </>
   );
