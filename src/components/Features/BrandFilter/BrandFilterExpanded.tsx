@@ -40,7 +40,7 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
           }}
         >
           <div>
-            <label key="all">
+            <label key="all" style={{ height: 32, fontSize: 'small' }}>
               <Checkbox checked={allBrandFilterChecked} onClick={(e): void => filterAllBrand(e)} />
               전체
             </label>

@@ -34,7 +34,7 @@ function BrandFilterRow(props: BrandFilterRowProps): React.ReactElement {
   };
 
   return (
-    <label>
+    <label style={{ height: 32, fontSize: 'small' }}>
       <Checkbox
         checked={checked}
         onClick={(e): void => {
