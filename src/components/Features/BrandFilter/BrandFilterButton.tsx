@@ -7,9 +7,10 @@ interface BrandFilterButtonProps {
 }
 
 function BrandFilterButton(props: BrandFilterButtonProps): React.ReactElement {
+  const { onMouseOver } = props;
   return (
     <Button
-      onMouseOver={props.onMouseOver}
+      onMouseOver={onMouseOver}
       variant={'contained'}
       color={'inherit'}
       style={{
