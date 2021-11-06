@@ -1,9 +1,11 @@
-import React, { MouseEventHandler, useState } from 'react';
+import React, { MouseEventHandler } from 'react';
 import { isMobile } from '../../../utils/browser.util';
 import BrandFilterRow from './BrandFilterRow';
 import { Button, Checkbox } from '@material-ui/core';
 import { MdClose } from 'react-icons/all';
 import { applyClusterFilter } from '../../../utils/kakaoMap/clusterFilter';
+import { brandFilterCheckedState } from '../../../states/brands/brandFilterChecked';
+import { useRecoilState } from 'recoil';
 
 interface BrandFilterExpandedProps {
   onMouseLeave: MouseEventHandler;
@@ -12,10 +14,17 @@ interface BrandFilterExpandedProps {
 
 function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElement {
   const { onMouseLeave, setHover } = props;
-  const [allBrandFilterChecked, setAllBrandFilterChecked] = useState(true);
+  const [brandFilterChecked, setBrandFilterChecked] = useRecoilState(brandFilterCheckedState);
 
   const filterAllBrand = (e: any): void => {
-    setAllBrandFilterChecked(e.target.checked);
+    setBrandFilterChecked(
+      Object.fromEntries(
+        Object.entries(brandFilterChecked).map(([brandName, checked]: [string, boolean]) => [
+          brandName,
+          e.target.checked,
+        ]),
+      ),
+    );
     applyClusterFilter(Object.keys(window.brands), e.target.checked);
     Object.keys(window.brands).forEach((brandHash) => {
       window.brands[brandHash].visible = e.target.checked;
@@ -41,7 +50,10 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
         >
           <div>
             <label key="all" style={{ height: 32, fontSize: 'small' }}>
-              <Checkbox checked={allBrandFilterChecked} onClick={(e): void => filterAllBrand(e)} />
+              <Checkbox
+                checked={brandFilterChecked['all']}
+                onClick={(e): void => filterAllBrand(e)}
+              />
               전체
             </label>
             {isMobile() && (
@@ -65,11 +77,7 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
             }}
           >
             {Object.entries(window.brands).map(([key, brand]) => (
-              <BrandFilterRow
-                key={key}
-                brand={brand}
-                allBrandFilterChecked={allBrandFilterChecked}
-              />
+              <BrandFilterRow key={key} brand={brand} />
             ))}
           </div>
         </div>
