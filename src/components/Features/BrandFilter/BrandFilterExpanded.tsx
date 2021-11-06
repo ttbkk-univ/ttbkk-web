@@ -19,7 +19,7 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
   const filterAllBrand = (e: any): void => {
     setBrandFilterChecked(
       Object.fromEntries(
-        Object.entries(brandFilterChecked).map(([brandName, checked]: [string, boolean]) => [
+        Object.entries(brandFilterChecked).map(([brandName]: [string, boolean]) => [
           brandName,
           e.target.checked,
         ]),

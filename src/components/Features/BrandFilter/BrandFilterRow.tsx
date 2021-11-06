@@ -1,8 +1,8 @@
 import { Checkbox } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { getMD5 } from '../../../utils/hash.util';
 import { applyClusterFilter } from '../../../utils/kakaoMap/clusterFilter';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { brandFilterCheckedState } from '../../../states/brands/brandFilterChecked';
 
 interface BrandFilterRowProps {
