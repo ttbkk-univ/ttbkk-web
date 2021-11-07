@@ -5,8 +5,7 @@ import { Button, Checkbox } from '@material-ui/core';
 import { MdClose } from 'react-icons/all';
 import { applyClusterFilter } from '../../../utils/kakaoMap/clusterFilter';
 import { brandFilterCheckedState } from '../../../states/brands/brandFilterChecked';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { sidebarIsOpenState } from '../../../states/sidebar/siteIsOpen';
+import { useRecoilState } from 'recoil';
 
 interface BrandFilterExpandedProps {
   onMouseLeave: MouseEventHandler;

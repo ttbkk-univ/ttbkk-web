@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect } from 'react';
-import { MdPlace } from 'react-icons/md';
 import { Button } from '@material-ui/core';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../../../states/buttons/createPlaceLatLngState';
