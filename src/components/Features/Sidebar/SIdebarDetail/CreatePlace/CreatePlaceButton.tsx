@@ -2,8 +2,8 @@ import React, { useCallback, useEffect } from 'react';
 import { MdPlace } from 'react-icons/md';
 import { Button } from '@material-ui/core';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { createPlaceLatLngState } from '../../../../states/buttons/createPlaceLatLngState';
-import { createPlaceModalDisplayState } from '../../../../states/buttons/createPlaceModalDisplayState';
+import { createPlaceLatLngState } from '../../../../../states/buttons/createPlaceLatLngState';
+import { createPlaceModalDisplayState } from '../../../../../states/buttons/createPlaceModalDisplayState';
 
 function CreatePlaceButton(): React.ReactElement {
   const setCreatePlaceLatLng = useSetRecoilState(createPlaceLatLngState);
@@ -47,12 +47,11 @@ function CreatePlaceButton(): React.ReactElement {
   }, [createPlaceModalDisplay]);
 
   return (
-    <div style={{ position: 'fixed', top: 100, right: 10, zIndex: 400 }}>
+    <div style={{ position: 'fixed', bottom: 100, left: 10, zIndex: 400 }}>
       <Button
-        title={'장소 생성'}
+        title={'새로운 장소 추가'}
         variant={'contained'}
         color={createPlaceModalDisplay ? 'secondary' : 'primary'}
-        style={{ height: 32, width: 32, padding: 0 }}
         onClick={(): void => {
           // 생성모달 열거나 닫을때, 지도에 선택한 마커 아이콘도 같이 생성하거나 없애준다
           if (window.newPlace) {
@@ -61,7 +60,7 @@ function CreatePlaceButton(): React.ReactElement {
           setCreatePlaceModalDisplay(!createPlaceModalDisplay);
         }}
       >
-        <MdPlace size={20} />
+        새로운 장소 추가
       </Button>
     </div>
   );

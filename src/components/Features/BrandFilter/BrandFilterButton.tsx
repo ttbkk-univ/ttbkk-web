@@ -1,5 +1,4 @@
 import React, { MouseEventHandler } from 'react';
-import { Button } from '@material-ui/core';
 import { MdLayers } from 'react-icons/all';
 
 interface BrandFilterButtonProps {
@@ -9,19 +8,22 @@ interface BrandFilterButtonProps {
 function BrandFilterButton(props: BrandFilterButtonProps): React.ReactElement {
   const { onMouseOver } = props;
   return (
-    <Button
+    <button
       onMouseOver={onMouseOver}
-      variant={'contained'}
-      color={'inherit'}
       style={{
+        backgroundColor: 'white',
         height: 32,
         width: 32,
         padding: 0,
         float: 'right',
+        border: 'none',
+        borderRadius: 3,
+        boxShadow: 'rgb(0 0 0 / 15%) 0px 2px 2px 0px',
+        cursor: 'pointer',
       }}
     >
-      <MdLayers size={20} />
-    </Button>
+      <MdLayers size={16} />
+    </button>
   );
 }
 

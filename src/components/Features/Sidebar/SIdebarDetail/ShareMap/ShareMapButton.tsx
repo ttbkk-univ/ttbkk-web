@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { MdShare } from 'react-icons/md';
 import { Button, Snackbar } from '@material-ui/core';
 
 function ShareMapButton(): React.ReactElement {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ position: 'fixed', top: 150, right: 10, zIndex: 400 }}>
+    <div style={{ position: 'fixed', top: 160, left: 10, zIndex: 400 }}>
       <Button
         title={'위치 공유'}
         variant={'contained'}
@@ -33,7 +32,7 @@ function ShareMapButton(): React.ReactElement {
           onClose={(): void => setOpen(false)}
           autoHideDuration={1000}
         />
-        <MdShare size={20} />
+        위치 공유
       </Button>
     </div>
   );
