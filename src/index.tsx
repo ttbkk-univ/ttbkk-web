@@ -4,7 +4,6 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
 import Map from './components/Map';
-import PlaceDetail from './components/Features/PlaceDetail';
 import Features from './components/Features';
 
 ReactDOM.render(
@@ -12,7 +11,6 @@ ReactDOM.render(
     <RecoilRoot>
       <React.Suspense fallback={<div>Loading...</div>}>
         <Map />
-        <PlaceDetail />
         <Features />
       </React.Suspense>
     </RecoilRoot>

@@ -1,7 +1,7 @@
 import React from 'react';
-import { IHashtag } from '../../../states/places/placeMap';
+import { IHashtag } from '../../../../../states/places/placeMap';
 
-function PlaceHashtag(props: { hashtag: IHashtag }): React.ReactElement {
+function BrandHashtag(props: { hashtag: IHashtag }): React.ReactElement {
   return (
     <span
       style={{ margin: 3, backgroundColor: 'rgba(150, 202, 140, 0.5)' }}
@@ -12,4 +12,4 @@ function PlaceHashtag(props: { hashtag: IHashtag }): React.ReactElement {
   );
 }
 
-export default PlaceHashtag;
+export default BrandHashtag;

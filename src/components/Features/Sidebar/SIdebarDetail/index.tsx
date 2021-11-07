@@ -1,7 +1,8 @@
 import React from 'react';
 import CreatePlace from './CreatePlace';
 import ShareMap from './ShareMap';
-import Profile from './Profile';
+// import Profile from './Profile';
+import PlaceDetail from './PlaceDetail';
 
 function SidebarDetail(): React.ReactElement {
   return (
@@ -17,9 +18,10 @@ function SidebarDetail(): React.ReactElement {
         boxShadow: 'rgb(0 0 0 / 15%) 0px 2px 2px 0px',
       }}
     >
+      {/*<Profile />*/}
+      <PlaceDetail />
       <CreatePlace />
       <ShareMap />
-      <Profile />
     </div>
   );
 }
