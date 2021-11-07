@@ -6,7 +6,7 @@ export function setMarkerCluster(
   placeMap: { [p: string]: IPlace },
   newPlaceMap: { [p: string]: IPlace },
   setClickedPlace: SetterOrUpdater<string | undefined>,
-  setDisplayDetailPlace: SetterOrUpdater<boolean>,
+  setSidebarIsOpen: SetterOrUpdater<boolean>,
 ): void {
   class PlaceMarker extends window.kakao.maps.Marker {
     id: string;
@@ -26,7 +26,7 @@ export function setMarkerCluster(
     });
     window.kakao.maps.event.addListener(marker, 'click', () => {
       setClickedPlace(marker.id);
-      setDisplayDetailPlace(true);
+      setSidebarIsOpen(true);
     });
     return marker;
   };

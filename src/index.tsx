@@ -3,19 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
-import ButtonControlBar from './components/Features/ButtonControlBar';
 import Map from './components/Map';
-import PlaceDetail from './components/Features/PlaceDetail';
-import BrandFilter from './components/Features/BrandFilter';
+import Features from './components/Features';
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
       <React.Suspense fallback={<div>Loading...</div>}>
         <Map />
-        <PlaceDetail />
-        <ButtonControlBar />
-        <BrandFilter />
+        <Features />
       </React.Suspense>
     </RecoilRoot>
   </React.StrictMode>,

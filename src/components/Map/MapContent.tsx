@@ -5,12 +5,12 @@ import { setMarkerCluster } from '../../utils/kakaoMap/setCluster';
 import { setMapController } from '../../utils/kakaoMap/setMapController';
 import { loadKakaoMap } from '../../utils/kakaoMap/loadKakaoMap';
 import { clickedPlaceState } from '../../states/places/clickedPlace';
-import { placeDetailDisplayState } from '../../states/sidebar/displayToggleButton';
 import { createPlaceModalDisplayState } from '../../states/buttons/createPlaceModalDisplayState';
 import { getZoom, setZoom } from '../../utils/kakaoMap/zoom';
 import { setMap } from '../../utils/kakaoMap/setMap';
 import { setCenter } from '../../utils/kakaoMap/center';
 import { getGeoBound } from '../../utils/kakaoMap/geoBound';
+import { sidebarIsOpenState } from '../../states/sidebar/siteIsOpen';
 
 declare global {
   interface Window {
@@ -40,9 +40,9 @@ export type GeoBound = [LatLng, LatLng];
 
 function MapContent(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
-  const setDisplayDetailPlace = useSetRecoilState(placeDetailDisplayState);
   const setCreatePlaceModalDisplay = useSetRecoilState(createPlaceModalDisplayState);
   const setPlaceMap = useSetRecoilState(placeMapState);
+  const setSidebarIsOpen = useSetRecoilState(sidebarIsOpenState);
 
   let debounce: any = null;
   let zoomChanged: boolean = false;
@@ -56,7 +56,7 @@ function MapContent(): React.ReactElement {
       for (let page = 1; page < maxPageNumber + 1; page++) {
         getPlaceMap(geoBound, page, limit).then((newPlaceMap) => {
           setPlaceMap((prevPlaceMap: { [p: string]: IPlace }) => {
-            setMarkerCluster(prevPlaceMap, newPlaceMap, setClickedPlace, setDisplayDetailPlace);
+            setMarkerCluster(prevPlaceMap, newPlaceMap, setClickedPlace, setSidebarIsOpen);
             return { ...prevPlaceMap, ...newPlaceMap };
           });
         });
@@ -94,7 +94,6 @@ function MapContent(): React.ReactElement {
           if (e.key === 'Escape') {
             window.newPlace?.setMap(null);
             setClickedPlace(undefined);
-            setDisplayDetailPlace(false);
             setCreatePlaceModalDisplay(false);
           }
         };
