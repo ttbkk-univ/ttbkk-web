@@ -6,7 +6,6 @@ import { createPlaceModalDisplayState } from '../../states/buttons/createPlaceMo
 import { sidebarIsOpenState } from '../../states/sidebar/siteIsOpen';
 import { MapService } from '../../utils/kakaoMap/services/MapService';
 import { MarkerService } from '../../utils/kakaoMap/services/MarkerService';
-import Map from './index';
 
 declare global {
   interface Window {
