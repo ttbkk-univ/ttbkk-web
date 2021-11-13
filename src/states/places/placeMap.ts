@@ -1,5 +1,5 @@
 import { env } from '../../env';
-import { get } from '../../utils/httpRequest.util';
+import { get } from '../../utils/HttpRequestUtil';
 import { GeoBound } from '../../components/Map/MapContent';
 import { atom } from 'recoil';
 

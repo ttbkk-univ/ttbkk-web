@@ -1,16 +1,11 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { getPlaceCount, getPlaceMap, IPlace, placeMapState } from '../../states/places/placeMap';
-import { setMarkerCluster } from '../../utils/kakaoMap/setCluster';
-import { setMapController } from '../../utils/kakaoMap/setMapController';
-import { loadKakaoMap } from '../../utils/kakaoMap/loadKakaoMap';
 import { clickedPlaceState } from '../../states/places/clickedPlace';
 import { createPlaceModalDisplayState } from '../../states/buttons/createPlaceModalDisplayState';
-import { getZoom, setZoom } from '../../utils/kakaoMap/zoom';
-import { setMap } from '../../utils/kakaoMap/setMap';
-import { setCenter } from '../../utils/kakaoMap/center';
-import { getGeoBound } from '../../utils/kakaoMap/geoBound';
 import { sidebarIsOpenState } from '../../states/sidebar/siteIsOpen';
+import { MapService } from '../../utils/kakaoMap/services/MapService';
+import { MarkerService } from '../../utils/kakaoMap/services/MarkerService';
 
 declare global {
   interface Window {
@@ -25,6 +20,7 @@ declare global {
       [p: string]: {
         name: string;
         markers: any[]; // PlaceMarker
+        nameOverlays: any[]; // CustomOverlay
         visible: boolean;
       };
     };
@@ -49,14 +45,19 @@ function MapContent(): React.ReactElement {
   const debounceTime: number = 500;
 
   const getAndAddPlace = (): void => {
-    const geoBound: [LatLng, LatLng] = getGeoBound();
+    const geoBound: [LatLng, LatLng] = MapService.getGeoBound();
     getPlaceCount(geoBound).then((count: number) => {
       const limit: number = 200;
       const maxPageNumber = count / limit;
       for (let page = 1; page < maxPageNumber + 1; page++) {
         getPlaceMap(geoBound, page, limit).then((newPlaceMap) => {
           setPlaceMap((prevPlaceMap: { [p: string]: IPlace }) => {
-            setMarkerCluster(prevPlaceMap, newPlaceMap, setClickedPlace, setSidebarIsOpen);
+            MarkerService.setMarkerCluster(
+              prevPlaceMap,
+              newPlaceMap,
+              setClickedPlace,
+              setSidebarIsOpen,
+            );
             return { ...prevPlaceMap, ...newPlaceMap };
           });
         });
@@ -72,20 +73,31 @@ function MapContent(): React.ReactElement {
   };
 
   useEffect(() => {
-    loadKakaoMap(() => {
+    MapService.loadKakaoMap(() => {
       window.kakao.maps.load(() => {
-        setMap();
-        setMapController();
+        MapService.setMap();
+        MapService.setMapController();
         window.kakao.maps.event.addListener(window.map, 'zoom_changed', () => {
           zoomChanged = true;
-          const currentZoom: number = getZoom();
-          setZoom();
+          const currentZoom: number = MapService.getZoom();
+          // 추가되어있었다면 없애고, 없었으면 추가해주고
+          if (MapService.isPassMinLevel()) {
+            const visible: boolean = window.map.getLevel() < MapService.minLevel;
+            Object.values(window.brands).map((brand) => {
+              const isOverlayVisible = brand.visible && visible === brand.visible;
+              brand.nameOverlays.map((nameOverlay) =>
+                nameOverlay.setMap(isOverlayVisible ? window.map : null),
+              );
+            });
+          }
+
+          MapService.setZoom();
           if (currentZoom <= window.map.getLevel()) moveEventHandler();
           zoomChanged = false;
         });
 
         window.kakao.maps.event.addListener(window.map, 'center_changed', () => {
-          setCenter();
+          MapService.setCenter();
           if (!zoomChanged) moveEventHandler();
         });
         window.map.setDraggable(true);
