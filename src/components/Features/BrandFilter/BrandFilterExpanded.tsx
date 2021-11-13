@@ -1,11 +1,11 @@
 import React, { MouseEventHandler } from 'react';
-import { isMobile } from '../../../utils/browser.util';
+import { isMobile } from '../../../utils/BrowserUtil';
 import BrandFilterRow from './BrandFilterRow';
 import { Button, Checkbox } from '@material-ui/core';
 import { MdClose } from 'react-icons/all';
-import { applyClusterFilter } from '../../../utils/kakaoMap/clusterFilter';
 import { brandFilterCheckedState } from '../../../states/brands/brandFilterChecked';
 import { useRecoilState } from 'recoil';
+import { MarkerService } from '../../../utils/kakaoMap/services/MarkerService';
 
 interface BrandFilterExpandedProps {
   onMouseLeave: MouseEventHandler;
@@ -25,7 +25,7 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
         ]),
       ),
     );
-    applyClusterFilter(Object.keys(window.brands), e.target.checked);
+    MarkerService.applyClusterFilter(Object.keys(window.brands), e.target.checked);
     Object.keys(window.brands).forEach((brandHash) => {
       window.brands[brandHash].visible = e.target.checked;
     });

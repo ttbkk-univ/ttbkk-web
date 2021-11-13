@@ -3,15 +3,15 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../../../states/buttons/createPlaceLatLngState';
 import { Button, CircularProgress, Input, TextField } from '@material-ui/core';
 import { MdCancel, MdHelp, MdSend } from 'react-icons/all';
-import { isMobile } from '../../../../../utils/browser.util';
+import { isMobile } from '../../../../../utils/BrowserUtil';
 import { createPlaceModalDisplayState } from '../../../../../states/buttons/createPlaceModalDisplayState';
 import { AxiosResponse } from 'axios';
 import { env } from '../../../../../env';
 import { IPlace, placeMapState } from '../../../../../states/places/placeMap';
 import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { get, post } from '../../../../../utils/httpRequest.util';
-import { getMD5 } from '../../../../../utils/hash.util';
+import { get, post } from '../../../../../utils/HttpRequestUtil';
+import { getMD5 } from '../../../../../utils/HashUtil';
 import { Brand } from '../../../../../states/brands/brand';
 import _ from 'lodash';
 

@@ -3,9 +3,9 @@ import BrandFilterButton from './BrandFilterButton';
 import BrandFilterExpanded from './BrandFilterExpanded';
 import { useSetRecoilState } from 'recoil';
 import { Brand, brandListState } from '../../../states/brands/brand';
-import { getMD5 } from '../../../utils/hash.util';
+import { getMD5 } from '../../../utils/HashUtil';
 import { AxiosResponse } from 'axios';
-import { get } from '../../../utils/httpRequest.util';
+import { get } from '../../../utils/HttpRequestUtil';
 import { env } from '../../../env';
 
 function BrandFilter(): React.ReactElement {
@@ -23,6 +23,7 @@ function BrandFilter(): React.ReactElement {
           window.brands[brandHash] = {
             name: brand.name,
             markers: [],
+            nameOverlays: [],
             visible: true,
           };
         }
