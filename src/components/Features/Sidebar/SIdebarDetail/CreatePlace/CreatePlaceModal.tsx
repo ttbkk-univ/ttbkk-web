@@ -13,7 +13,6 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { get, post } from '../../../../../utils/HttpRequestUtil';
 import { getMD5 } from '../../../../../utils/HashUtil';
 import { Brand } from '../../../../../states/brands/brand';
-import _ from 'lodash';
 
 function CreatePlaceModal(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
@@ -205,7 +204,7 @@ function CreatePlaceModal(): React.ReactElement {
     post(env.api.host + '/api/places/', data)
       .then((res: AxiosResponse) => {
         const newPlace: IPlace = res.data;
-        setPlaceMap(_.assign(placeMap, { [newPlace.id]: newPlace }));
+        setPlaceMap(Object.assign(placeMap, { [newPlace.id]: newPlace }));
         const brandHash: string = getMD5(data.brand_name);
         const marker = placeToMarker(newPlace);
         window.brands[brandHash].markers.push(marker);
