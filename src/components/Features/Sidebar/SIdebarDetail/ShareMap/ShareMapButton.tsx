@@ -4,7 +4,7 @@ import { Button, Snackbar } from '@material-ui/core';
 function ShareMapButton(): React.ReactElement {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ position: 'fixed', bottom: 160, left: 10, zIndex: 400 }}>
+    <div style={{ position: 'fixed', bottom: 160, left: 10 }}>
       <Button
         title={'위치 공유'}
         variant={'contained'}

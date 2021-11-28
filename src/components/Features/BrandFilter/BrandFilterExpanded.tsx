@@ -37,7 +37,6 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
         <div
           onMouseLeave={onMouseLeave}
           style={{
-            zIndex: 401,
             right: 120,
             padding: 12,
             position: 'fixed',

@@ -220,7 +220,6 @@ function CreatePlaceModal(): React.ReactElement {
       style={{
         ...modalStyle,
         position: 'fixed',
-        zIndex: 400,
         visibility: createPlaceModalDisplay ? 'visible' : 'hidden',
         padding: 8,
         backgroundColor: 'rgba(30, 60, 80, 0.8)',

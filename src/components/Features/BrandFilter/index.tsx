@@ -33,7 +33,7 @@ function BrandFilter(): React.ReactElement {
 
   return (
     <>
-      <div style={{ position: 'fixed', top: 5, right: 120, zIndex: 400 }}>
+      <div style={{ position: 'fixed', top: 5, right: 120 }}>
         {<BrandFilterButton onMouseOver={(): void => window.brands && setHover(true)} />}
         {hover && (
           <BrandFilterExpanded onMouseLeave={(): void => setHover(false)} setHover={setHover} />

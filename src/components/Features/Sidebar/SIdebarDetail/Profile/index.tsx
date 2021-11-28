@@ -4,7 +4,7 @@ import ProfileAvatar from './ProfileAvatar';
 function Profile(): React.ReactElement {
   return (
     <div
-      style={{ position: 'fixed', zIndex: 400, top: 3, left: 255, cursor: 'pointer' }}
+      style={{ position: 'fixed', top: 3, left: 255, cursor: 'pointer' }}
       onClick={(): void => alert('로그인 기능은 추후 개발 예정입니다')}
     >
       <ProfileAvatar />

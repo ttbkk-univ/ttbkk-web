@@ -14,7 +14,6 @@ function FindMyLocationButton(): React.ReactElement {
         position: 'fixed',
         bottom: 215,
         right: 3,
-        zIndex: 399,
         borderRadius: 3,
         cursor: 'pointer',
         boxShadow: 'rgb(0 0 0 / 15%) 0px 2px 2px 0px',
