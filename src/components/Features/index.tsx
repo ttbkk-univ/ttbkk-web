@@ -5,11 +5,11 @@ import BrandFilter from './BrandFilter';
 
 function Features(): React.ReactElement {
   return (
-    <>
+    <div style={{ position: 'fixed', zIndex: 400 }}>
       <BrandFilter />
       <Sidebar />
       <FindMyLocation />
-    </>
+    </div>
   );
 }
 

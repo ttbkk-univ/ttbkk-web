@@ -46,7 +46,7 @@ function CreatePlaceButton(): React.ReactElement {
   }, [createPlaceModalDisplay]);
 
   return (
-    <div style={{ position: 'fixed', bottom: 100, left: 10, zIndex: 400 }}>
+    <div style={{ position: 'fixed', bottom: 100, left: 10 }}>
       <Button
         title={'새로운 장소 추가'}
         variant={'contained'}

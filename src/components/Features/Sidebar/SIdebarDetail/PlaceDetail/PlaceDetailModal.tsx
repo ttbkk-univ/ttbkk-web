@@ -11,7 +11,6 @@ function PlaceDetailModal(): React.ReactElement {
   return clickedPlace ? (
     <div
       style={{
-        zIndex: 401,
         fontWeight: 'bold',
         paddingLeft: 6,
         paddingRight: 6,

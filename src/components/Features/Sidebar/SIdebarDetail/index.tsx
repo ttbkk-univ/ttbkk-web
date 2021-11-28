@@ -9,7 +9,6 @@ function SidebarDetail(): React.ReactElement {
     <div
       style={{
         position: 'fixed',
-        zIndex: 400,
         left: 0,
         top: 0,
         backgroundColor: 'white',
@@ -20,8 +19,8 @@ function SidebarDetail(): React.ReactElement {
     >
       {/*<Profile />*/}
       <PlaceDetail />
-      <CreatePlace />
       <ShareMap />
+      <CreatePlace />
     </div>
   );
 }

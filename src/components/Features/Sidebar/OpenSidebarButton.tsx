@@ -13,7 +13,6 @@ function OpenSidebarButton(): React.ReactElement {
         top: '25%',
         left: isOpened ? 300 : 0,
         position: 'fixed',
-        zIndex: 401,
         borderRadius: '0px 10px 10px 0px',
         backgroundColor: 'white',
         border: 'none',
