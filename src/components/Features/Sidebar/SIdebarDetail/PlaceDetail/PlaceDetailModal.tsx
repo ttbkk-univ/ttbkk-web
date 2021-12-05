@@ -30,6 +30,22 @@ function PlaceDetailModal(): React.ReactElement {
       <hr />
       {place.address ? <PlaceAddress address={place.address} /> : <></>}
       {place.telephone ? <PlaceTelephone telephone={place.telephone} /> : <></>}
+      <p
+        style={{
+          width: '100%',
+        }}
+      >
+        <PlaceFindingWayNaver
+          latitude={place.latitude}
+          longitude={place.longitude}
+          name={place.name}
+        />
+        <PlaceFindingWayKakao
+          latitude={place.latitude}
+          longitude={place.longitude}
+          name={place.name}
+        />
+      </p>
       <div style={{ whiteSpace: 'pre-line' }}>{place.description}</div>
       {place.brand.description ? (
         <>
