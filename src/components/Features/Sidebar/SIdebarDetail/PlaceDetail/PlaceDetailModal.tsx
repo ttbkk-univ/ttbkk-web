@@ -4,11 +4,16 @@ import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
 import { IHashtag, placeMapState } from '../../../../../states/places/placeMap';
 import PlaceHashtag from './PlaceHashtag';
 import BrandHashtag from './BrandHashtag';
+import PlaceAddress from './PlaceAddress';
+import PlaceTelephone from './PlaceTelephone';
+import PlaceFindingWayNaver from './PlaceFindingWayNaver';
+import PlaceFindingWayKakao from './PlaceFindingWayKakao';
 
 function PlaceDetailModal(): React.ReactElement {
   const [clickedPlace] = useRecoilState(clickedPlaceState);
   const placeMap = useRecoilValue(placeMapState);
-  return clickedPlace ? (
+  const place = clickedPlace ? placeMap[clickedPlace] : undefined;
+  return place ? (
     <div
       style={{
         fontWeight: 'bold',
@@ -21,25 +26,41 @@ function PlaceDetailModal(): React.ReactElement {
         top: 100,
       }}
     >
-      <div style={{ fontSize: '32px', color: 'rgb(255, 68, 85)' }}>
-        {placeMap[clickedPlace].name}
-      </div>
+      <div style={{ fontSize: '32px', color: 'rgb(255, 68, 85)' }}>{place.name}</div>
       <hr />
-      <div style={{ whiteSpace: 'pre-line' }}>{placeMap[clickedPlace].description}</div>
-      {placeMap[clickedPlace].brand.description ? (
+      {place.address ? <PlaceAddress address={place.address} /> : <></>}
+      {place.telephone ? <PlaceTelephone telephone={place.telephone} /> : <></>}
+      <p
+        style={{
+          width: '100%',
+        }}
+      >
+        <PlaceFindingWayNaver
+          latitude={place.latitude}
+          longitude={place.longitude}
+          name={place.name}
+        />
+        <PlaceFindingWayKakao
+          latitude={place.latitude}
+          longitude={place.longitude}
+          name={place.name}
+        />
+      </p>
+      <div style={{ whiteSpace: 'pre-line' }}>{place.description}</div>
+      {place.brand.description ? (
         <>
           <br />
-          <div style={{ whiteSpace: 'pre-line' }}>{placeMap[clickedPlace].brand.description}</div>
+          <div style={{ whiteSpace: 'pre-line' }}>{place.brand.description}</div>
         </>
       ) : (
         <></>
       )}
       <hr />
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {placeMap[clickedPlace].brand.hashtags.map((hashtag: IHashtag) => (
+        {place.brand.hashtags.map((hashtag: IHashtag) => (
           <BrandHashtag hashtag={hashtag} />
         ))}
-        {placeMap[clickedPlace].hashtags.map((hashtag: IHashtag) => (
+        {place.hashtags.map((hashtag: IHashtag) => (
           <PlaceHashtag hashtag={hashtag} />
         ))}
       </div>
