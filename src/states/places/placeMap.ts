@@ -17,6 +17,8 @@ export interface IPlace {
   id: string;
   latitude: number;
   longitude: number;
+  address?: string;
+  telephone?: string;
   description?: string;
   name: string;
   hashtags: IHashtag[];
