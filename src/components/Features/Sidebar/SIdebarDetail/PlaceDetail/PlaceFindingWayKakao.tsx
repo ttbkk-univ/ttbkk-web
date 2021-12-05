@@ -8,21 +8,11 @@ interface PlaceFindingWayProps {
 }
 
 function PlaceFindingWayKakao(props: PlaceFindingWayProps): React.ReactElement {
-  const { latitude, longitude, name } = props;
+  const { latitude, longitude } = props;
   const href: string = `kakaomap://route?ep=${latitude},${longitude}&by=PUBLICTRANSIT`;
-  const hrefAlternate: string = `https://map.kakao.com/link/to/${name},${latitude},${longitude}`;
+  // const hrefAlternate: string = `https://map.kakao.com/link/to/${name},${latitude},${longitude}`;
   return (
-    <Button
-      color={'primary'}
-      variant={'contained'}
-      href={href}
-      onClick={(): void => {
-        setTimeout(() => {
-          window.location.assign(hrefAlternate);
-          return;
-        }, 500);
-      }}
-    >
+    <Button color={'primary'} variant={'contained'} href={href}>
       길찾기 (카카오)
     </Button>
   );
