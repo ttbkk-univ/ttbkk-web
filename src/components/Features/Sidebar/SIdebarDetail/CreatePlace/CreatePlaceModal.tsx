@@ -7,7 +7,7 @@ import { isMobile } from '../../../../../utils/BrowserUtil';
 import { createPlaceModalDisplayState } from '../../../../../states/buttons/createPlaceModalDisplayState';
 import { AxiosResponse } from 'axios';
 import { env } from '../../../../../env';
-import { IPlace, placeMapState } from '../../../../../states/places/placeMap';
+import { IPlace } from '../../../../../states/places/placeMap';
 import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { get, post } from '../../../../../utils/HttpRequestUtil';
@@ -17,7 +17,6 @@ import { Brand } from '../../../../../states/brands/brand';
 function CreatePlaceModal(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
   const [latLng, setCreatePlaceLatLng] = useRecoilState(createPlaceLatLngState);
-  const [placeMap, setPlaceMap] = useRecoilState(placeMapState);
   const [createPlaceModalDisplay, setCreatePlaceModalDisplay] = useRecoilState(
     createPlaceModalDisplayState,
   );
@@ -183,11 +182,6 @@ function CreatePlaceModal(): React.ReactElement {
       alert("브랜드를 입력하세요 (없다면 '로컬'이라고 입력)");
       return;
     }
-    if (!newPlaceHashtagList.length) {
-      alert('태그를 최소 1개이상 입력하세요');
-      return;
-    }
-
     if (!latLng) {
       alert('지도에서 매장 위치를 클릭하세요');
       return;
@@ -204,13 +198,16 @@ function CreatePlaceModal(): React.ReactElement {
     post(env.api.host + '/api/places/', data)
       .then((res: AxiosResponse) => {
         const newPlace: IPlace = res.data;
-        setPlaceMap(Object.assign(placeMap, { [newPlace.id]: newPlace }));
+        window.placeMap[newPlace.id] = newPlace;
         const brandHash: string = getMD5(data.brand_name);
         const marker = placeToMarker(newPlace);
         window.brands[brandHash].markers.push(marker);
         window.brands[brandHash].visible && window.clusterer.addMarker(marker);
       })
-      .catch(() => alert('서버 문제로 생성에 요청에 실패했습니다'))
+      .catch((e) => {
+        console.log(e);
+        alert('서버 문제로 생성에 요청에 실패했습니다');
+      })
       .then(() => resetForm(closeAfterRequest));
   };
 

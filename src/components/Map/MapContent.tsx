@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { getPlaceCount, getPlaceMap, IPlace, placeMapState } from '../../states/places/placeMap';
+import { getPlaceCount, getPlaceMap, IPlace } from '../../states/places/placeMap';
 import { clickedPlaceState } from '../../states/places/clickedPlace';
 import { createPlaceModalDisplayState } from '../../states/buttons/createPlaceModalDisplayState';
 import { sidebarIsOpenState } from '../../states/sidebar/siteIsOpen';
@@ -37,7 +37,6 @@ export type GeoBound = [LatLng, LatLng];
 function MapContent(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
   const setCreatePlaceModalDisplay = useSetRecoilState(createPlaceModalDisplayState);
-  const setPlaceMap = useSetRecoilState(placeMapState);
   const setSidebarIsOpen = useSetRecoilState(sidebarIsOpenState);
 
   let debounce: any = null;
@@ -51,15 +50,7 @@ function MapContent(): React.ReactElement {
       const maxPageNumber = count / limit;
       for (let page = 1; page < maxPageNumber + 1; page++) {
         getPlaceMap(geoBound, page, limit).then((newPlaceMap) => {
-          setPlaceMap((prevPlaceMap: { [p: string]: IPlace }) => {
-            MarkerService.setMarkerCluster(
-              prevPlaceMap,
-              newPlaceMap,
-              setClickedPlace,
-              setSidebarIsOpen,
-            );
-            return { ...prevPlaceMap, ...newPlaceMap };
-          });
+          MarkerService.setMarkerCluster(newPlaceMap, setClickedPlace, setSidebarIsOpen);
         });
       }
     });

@@ -1,7 +1,7 @@
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
-import { IHashtag, placeMapState } from '../../../../../states/places/placeMap';
+import { IHashtag } from '../../../../../states/places/placeMap';
 import PlaceHashtag from './PlaceHashtag';
 import BrandHashtag from './BrandHashtag';
 import PlaceAddress from './PlaceAddress';
@@ -11,8 +11,7 @@ import PlaceFindingWayKakao from './PlaceFindingWayKakao';
 
 function PlaceDetailModal(): React.ReactElement {
   const [clickedPlace] = useRecoilState(clickedPlaceState);
-  const placeMap = useRecoilValue(placeMapState);
-  const place = clickedPlace ? placeMap[clickedPlace] : undefined;
+  const place = clickedPlace ? window.placeMap[clickedPlace] : undefined;
   return place ? (
     <div
       style={{
