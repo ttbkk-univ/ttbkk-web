@@ -5,7 +5,6 @@ import { MapService } from './MapService';
 
 export class MarkerService {
   static setMarkerCluster(
-    placeMap: { [p: string]: IPlace },
     newPlaceMap: { [p: string]: IPlace },
     setClickedPlace: SetterOrUpdater<string | undefined>,
     setSidebarIsOpen: SetterOrUpdater<boolean>,
@@ -42,8 +41,10 @@ export class MarkerService {
       });
 
     const markers: PlaceMarker[] = [];
+    if (!window.placeMap) window.placeMap = {};
     Object.values(newPlaceMap).forEach((place: IPlace) => {
-      if (placeMap && placeMap[place.id]) return;
+      if (window.placeMap.hasOwnProperty(place.id)) return;
+      window.placeMap[place.id] = place;
       const marker: PlaceMarker = placeToMarker(place);
       const brandHash = getMD5(place.brand.name);
       if (!window.brands) window.brands = {};
