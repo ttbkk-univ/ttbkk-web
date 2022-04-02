@@ -1,6 +1,5 @@
 import { IPlace } from '../../../states/places/placeMap';
 import { SetterOrUpdater } from 'recoil';
-import { getMD5 } from '../../HashUtil';
 import { MapService } from './MapService';
 
 export class MarkerService {
@@ -46,23 +45,23 @@ export class MarkerService {
       if (window.placeMap.hasOwnProperty(place.id)) return;
       window.placeMap[place.id] = place;
       const marker: PlaceMarker = placeToMarker(place);
-      const brandHash = getMD5(place.brand.name);
       if (!window.brands) window.brands = {};
-      if (!window.brands[brandHash]) {
-        window.brands[brandHash] = {
+      if (!window.brands[place.brand.id]) {
+        window.brands[place.brand.id] = {
+          id: place.brand.id,
           name: place.brand.name,
           markers: [],
           nameOverlays: [],
           visible: true,
         };
       }
-      window.brands[brandHash].markers.push(marker);
-      window.brands[brandHash]?.visible && markers.push(marker);
+      window.brands[place.brand.id].markers.push(marker);
+      window.brands[place.brand.id]?.visible && markers.push(marker);
 
       const nameOverlay = MarkerService.createNameOverlay(place);
-      window.brands[brandHash].nameOverlays.push(nameOverlay);
+      window.brands[place.brand.id].nameOverlays.push(nameOverlay);
       MapService.minLevel > MapService.getZoom() &&
-        window.brands[brandHash]?.visible &&
+        window.brands[place.brand.id]?.visible &&
         nameOverlay.setMap(window.map);
     });
     window.clusterer.addMarkers(markers);

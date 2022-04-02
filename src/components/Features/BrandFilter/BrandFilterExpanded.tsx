@@ -26,8 +26,8 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
       ),
     );
     MarkerService.applyClusterFilter(Object.keys(window.brands), e.target.checked);
-    Object.keys(window.brands).forEach((brandHash) => {
-      window.brands[brandHash].visible = e.target.checked;
+    Object.keys(window.brands).forEach((brandId) => {
+      window.brands[brandId].visible = e.target.checked;
     });
   };
 
