@@ -44,7 +44,7 @@ jobs:
           aws s3 cp \
               --recursive \
               --region ap-northeast-2 \
-              build s3://AWS_BUCKET
+              build s3://$AWS_BUCKET
 
       - name: Cloudfront Invalidation
         env:
