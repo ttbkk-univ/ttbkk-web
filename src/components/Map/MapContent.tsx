@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { getPlaceCount, getPlaceMap, IPlace } from '../../states/places/placeMap';
+import { getPlaceMap, IPlace } from '../../states/places/placeMap';
 import { clickedPlaceState } from '../../states/places/clickedPlace';
 import { createPlaceModalDisplayState } from '../../states/buttons/createPlaceModalDisplayState';
 import { sidebarIsOpenState } from '../../states/sidebar/siteIsOpen';
@@ -18,6 +18,7 @@ declare global {
     newPlace: any;
     brands: {
       [p: string]: {
+        id: string;
         name: string;
         markers: any[]; // PlaceMarker
         nameOverlays: any[]; // CustomOverlay
@@ -45,15 +46,20 @@ function MapContent(): React.ReactElement {
 
   const getAndAddPlace = (): void => {
     const geoBound: [LatLng, LatLng] = MapService.getGeoBound();
-    getPlaceCount(geoBound).then((count: number) => {
-      const limit: number = 200;
-      const maxPageNumber = count / limit;
-      for (let page = 1; page < maxPageNumber + 1; page++) {
-        getPlaceMap(geoBound, page, limit).then((newPlaceMap) => {
+    const minLat = Math.floor(geoBound[0].latitude);
+    const minLon = Math.floor(geoBound[0].longitude);
+    const maxLat = Math.ceil(geoBound[1].latitude);
+    const maxLon = Math.ceil(geoBound[1].longitude);
+    for (let lat = minLat; lat < maxLat; lat++) {
+      for (let lon = minLon; lon < maxLon; lon++) {
+        getPlaceMap(
+          { latitude: lat, longitude: lon },
+          { latitude: lat + 1, longitude: lon + 1 },
+        ).then((newPlaceMap) => {
           MarkerService.setMarkerCluster(newPlaceMap, setClickedPlace, setSidebarIsOpen);
         });
       }
-    });
+    }
   };
 
   const moveEventHandler = (): void => {

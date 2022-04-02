@@ -1,12 +1,13 @@
 import { env } from '../../env';
 import { get } from '../../utils/HttpRequestUtil';
-import { GeoBound } from '../../components/Map/MapContent';
+import { LatLng } from '../../components/Map/MapContent';
 
 export interface IHashtag {
   name: string;
 }
 
 export interface IBrand {
+  id: string;
   name: string;
   description: string;
   hashtags: IHashtag[];
@@ -24,22 +25,9 @@ export interface IPlace {
   brand: IBrand;
 }
 
-export async function getPlaceCount([bottomLeft, topRight]: GeoBound): Promise<number> {
-  const searchParam = new URLSearchParams();
-  searchParam.append('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
-  searchParam.append('top_right', `${topRight.latitude},${topRight.longitude}`);
-  const response = await get<number>(
-    env.api.host + '/api/places/count/?' + searchParam.toString(),
-  ).catch(() => {
-    return { data: 0 };
-  });
-  return response.data;
-}
-
 export async function getPlaceMap(
-  [bottomLeft, topRight]: GeoBound,
-  page: number,
-  limit: number,
+  bottomLeft: LatLng,
+  topRight: LatLng,
 ): Promise<{
   [key: string]: IPlace;
 }> {
@@ -48,16 +36,14 @@ export async function getPlaceMap(
   const searchParam = new URLSearchParams();
   searchParam.append('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
   searchParam.append('top_right', `${topRight.latitude},${topRight.longitude}`);
-  searchParam.append('page', page.toString());
-  searchParam.append('limit', limit.toString());
 
-  const response = await get<IPlace[]>(
-    env.api.host + '/api/places/?' + searchParam.toString(),
+  const response = await get<{ edges: IPlace[]; count: number }>(
+    env.api.host + '/api/places/grid/?' + searchParam.toString(),
   ).catch(() => {
-    return { data: [] };
+    return { data: { edges: [], count: 0 } };
   });
 
-  Object.values(response.data).forEach((place) => {
+  Object.values(response.data.edges).forEach((place) => {
     placeMap[place.id] = place;
   });
   return placeMap;

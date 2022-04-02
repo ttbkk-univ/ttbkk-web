@@ -3,7 +3,6 @@ import BrandFilterButton from './BrandFilterButton';
 import BrandFilterExpanded from './BrandFilterExpanded';
 import { useSetRecoilState } from 'recoil';
 import { Brand, brandListState } from '../../../states/brands/brand';
-import { getMD5 } from '../../../utils/HashUtil';
 import { AxiosResponse } from 'axios';
 import { get } from '../../../utils/HttpRequestUtil';
 import { env } from '../../../env';
@@ -17,10 +16,10 @@ function BrandFilter(): React.ReactElement {
       const response: AxiosResponse<Brand[]> = await get(env.api.host + '/api/brands/?search=');
       setBrandList(response.data);
       response.data.forEach((brand: Brand) => {
-        const brandHash: string = getMD5(brand.name);
         if (!window.brands) window.brands = {};
-        if (!window.brands[brandHash]) {
-          window.brands[brandHash] = {
+        if (!window.brands[brand.id]) {
+          window.brands[brand.id] = {
+            id: brand.id,
             name: brand.name,
             markers: [],
             nameOverlays: [],

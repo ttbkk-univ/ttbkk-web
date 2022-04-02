@@ -102,7 +102,6 @@ export class MapService {
   }
 
   static isPassMinLevel(): boolean {
-    // console.log(this.getZoom(), window.map.getLevel(), MapService.minLevel);
     const isPrevLevelLargerThanMinLevel = this.getZoom() >= MapService.minLevel;
     const isCurrentLevelLargerThanMinLevel = window.map.getLevel() >= MapService.minLevel;
     return isPrevLevelLargerThanMinLevel !== isCurrentLevelLargerThanMinLevel;
