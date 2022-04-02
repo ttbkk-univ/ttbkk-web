@@ -1,4 +1,4 @@
-name: Deploy To Production
+name: Deploy To Develop
 
 on:
   push:
