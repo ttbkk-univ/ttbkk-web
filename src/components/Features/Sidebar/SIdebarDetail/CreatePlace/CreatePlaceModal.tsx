@@ -11,7 +11,6 @@ import { IPlace } from '../../../../../states/places/placeMap';
 import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { get, post } from '../../../../../utils/HttpRequestUtil';
-import { getMD5 } from '../../../../../utils/HashUtil';
 import { Brand } from '../../../../../states/brands/brand';
 
 function CreatePlaceModal(): React.ReactElement {
@@ -199,10 +198,9 @@ function CreatePlaceModal(): React.ReactElement {
       .then((res: AxiosResponse) => {
         const newPlace: IPlace = res.data;
         window.placeMap[newPlace.id] = newPlace;
-        const brandHash: string = getMD5(data.brand_name);
         const marker = placeToMarker(newPlace);
-        window.brands[brandHash].markers.push(marker);
-        window.brands[brandHash].visible && window.clusterer.addMarker(marker);
+        window.brands[newPlace.brand.id].markers.push(marker);
+        window.brands[newPlace.brand.id].visible && window.clusterer.addMarker(marker);
       })
       .catch((e) => {
         console.log(e);
