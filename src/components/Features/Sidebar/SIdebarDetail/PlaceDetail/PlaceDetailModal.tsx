@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
-import { IHashtag } from '../../../../../states/places/placeMap';
+import { IHashtag, IPlace } from '../../../../../states/places/placeMap';
 import PlaceHashtag from './PlaceHashtag';
 import BrandHashtag from './BrandHashtag';
 import PlaceAddress from './PlaceAddress';
 import PlaceTelephone from './PlaceTelephone';
 import PlaceFindingWayNaver from './PlaceFindingWayNaver';
 import PlaceFindingWayKakao from './PlaceFindingWayKakao';
+import axios from 'axios';
+import { env } from '../../../../../env';
 
 function PlaceDetailModal(): React.ReactElement {
   const [clickedPlace] = useRecoilState(clickedPlaceState);
-  const place = clickedPlace ? window.placeMap[clickedPlace] : undefined;
+  const [place, setPlace] = useState<IPlace | undefined>(undefined);
+
+  useEffect(() => {
+    axios.get(`${env.api.host}/api/places/${clickedPlace}/`).then((res) => {
+      setPlace(res.data);
+    });
+  }, [clickedPlace]);
+
   return place ? (
     <div
       style={{
