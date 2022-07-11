@@ -3,6 +3,7 @@ import CreatePlace from './CreatePlace';
 import ShareMap from './ShareMap';
 // import Profile from './Profile';
 import PlaceDetail from './PlaceDetail';
+import Login from './Login';
 
 function SidebarDetail(): React.ReactElement {
   return (
@@ -18,6 +19,7 @@ function SidebarDetail(): React.ReactElement {
       }}
     >
       {/*<Profile />*/}
+      <Login />
       <PlaceDetail />
       <ShareMap />
       <CreatePlace />
