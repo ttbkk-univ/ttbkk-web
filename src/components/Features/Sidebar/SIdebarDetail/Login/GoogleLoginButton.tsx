@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import GoogleLogin, { GoogleLoginResponse } from 'react-google-login';
+import GoogleLogin from 'react-google-login';
 /**
  * 구글 로그인
- * @returns
  */
 function GoogleLoginButton() {
   const onLoginResult = (response: any) => {
@@ -14,7 +13,7 @@ function GoogleLoginButton() {
     <div className="App">
       <header className="App-header">
         <GoogleLogin
-          clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+          clientId="567251896725-4o4alg3r60d68oldrgenodf97i0thmfb.apps.googleusercontent.com" //{process.env.REACT_APP_CLIENT_ID}
           buttonText="구글 로그인"
           //우선 성공과 실패를 하나의 이벤트로 연결함.
           onSuccess={onLoginResult}
