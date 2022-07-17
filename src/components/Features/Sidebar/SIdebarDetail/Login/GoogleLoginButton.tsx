@@ -6,7 +6,7 @@ import GoogleLogin from 'react-google-login';
  */
 function GoogleLoginButton() {
   const onLoginResult = (response: any) => {
-    //response의 type을 결정할 필요가 있어보임..
+    //onSuccess와 onFailure을 하나의 이벤트로 쓰기 위해서 any type 으로 사용.
     console.log(response);
   };
   return (
