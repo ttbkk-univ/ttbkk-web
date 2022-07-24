@@ -33,7 +33,7 @@ jobs:
         run: npm run build
 
       - name: Reinstall without Dev Dependencies
-        run: rm -rf node_modules && npm install --production
+        run: rm -rf node_modules && npm ci --only=production --ignore-scripts
 
       - name: Deploy
         env:
