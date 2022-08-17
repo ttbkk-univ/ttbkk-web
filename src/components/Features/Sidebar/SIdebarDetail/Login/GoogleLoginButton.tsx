@@ -1,27 +1,24 @@
 import React from 'react';
-
-import GoogleLogin from 'react-google-login';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import { env } from '../../../../../env'; //env 소스는 '우와'에게 문의 바람.
 /**
  * 구글 로그인
+ * credentialResponse : 로그인 ID 토큰을 받아옴. (clientId /credential /select_by: "btn")
  */
-function GoogleLoginButton() {
-  const onLoginResult = (response: any) => {
-    //onSuccess와 onFailure을 하나의 이벤트로 쓰기 위해서 any type 으로 사용.
-    console.log(response);
-  };
+function GoogleLoginButton(): React.ReactElement {
   return (
-    <div className="App">
-      <header className="App-header">
+    <div id="singleButton">
+      <GoogleOAuthProvider clientId={env.google.login}>
         <GoogleLogin
-          clientId="567251896725-4o4alg3r60d68oldrgenodf97i0thmfb.apps.googleusercontent.com" //{process.env.REACT_APP_CLIENT_ID}
-          buttonText="구글 로그인"
-          //우선 성공과 실패를 하나의 이벤트로 연결함.
-          onSuccess={onLoginResult}
-          onFailure={onLoginResult}
+          onSuccess={(credentialResponse) => {
+            console.log('Login');
+          }}
+          onError={() => {
+            console.log('Login Error');
+          }}
         />
-      </header>
+      </GoogleOAuthProvider>
     </div>
   );
 }
-
 export default GoogleLoginButton;
