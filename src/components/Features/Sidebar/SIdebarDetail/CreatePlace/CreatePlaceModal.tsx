@@ -12,6 +12,7 @@ import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { get, post } from '../../../../../utils/HttpRequestUtil';
 import { Brand } from '../../../../../states/brands/brand';
+import { MarkerService } from '../../../../../utils/kakaoMap/services/MarkerService';
 
 function CreatePlaceModal(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
@@ -199,6 +200,15 @@ function CreatePlaceModal(): React.ReactElement {
         const newPlace: IPlace = res.data;
         window.placeMap[newPlace.id] = newPlace;
         const marker = placeToMarker(newPlace);
+        if (!window.brands[newPlace.brand.id]) {
+          window.brands[newPlace.brand.id] = {
+            id: newPlace.brand.id,
+            name: newPlace.brand.name,
+            markers: [],
+            nameOverlays: MarkerService.createNameOverlay(newPlace),
+            visible: true,
+          };
+        }
         window.brands[newPlace.brand.id].markers.push(marker);
         window.brands[newPlace.brand.id].visible && window.clusterer.addMarker(marker);
       })
