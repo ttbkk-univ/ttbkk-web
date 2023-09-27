@@ -34,7 +34,7 @@ function PlaceDetailModal(): React.ReactElement {
         top: 100,
       }}
     >
-      <div style={{ fontSize: '32px', color: 'rgb(255, 68, 85)' }}>{place.name}</div>
+      <div style={{ fontSize: '32px', color: '#000000' }}>{place.name}</div>
       <hr />
       {place.address ? <PlaceAddress address={place.address} /> : <></>}
       {place.telephone ? <PlaceTelephone telephone={place.telephone} /> : <></>}
