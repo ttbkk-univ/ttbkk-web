@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../../../states/buttons/createPlaceLatLngState';
 import { Button, CircularProgress, Input, TextField } from '@material-ui/core';
-import { MdCancel, MdHelp, MdSend } from 'react-icons/all';
+import { MdCancel, MdHelp, MdSend } from 'react-icons/md';
 import { isMobile } from '../../../../../utils/BrowserUtil';
 import { createPlaceModalDisplayState } from '../../../../../states/buttons/createPlaceModalDisplayState';
 import { AxiosResponse } from 'axios';
