@@ -1,5 +1,5 @@
 import React, { MouseEventHandler } from 'react';
-import { MdLayers } from 'react-icons/all';
+import { MdLayers } from 'react-icons/md';
 
 interface BrandFilterButtonProps {
   onMouseOver: MouseEventHandler;

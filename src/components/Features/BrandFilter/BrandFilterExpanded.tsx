@@ -2,7 +2,7 @@ import React, { MouseEventHandler } from 'react';
 import { isMobile } from '../../../utils/BrowserUtil';
 import BrandFilterRow from './BrandFilterRow';
 import { Button, Checkbox } from '@material-ui/core';
-import { MdClose } from 'react-icons/all';
+import { MdClose } from 'react-icons/md';
 import { brandFilterCheckedState } from '../../../states/brands/brandFilterChecked';
 import { useRecoilState } from 'recoil';
 import { MarkerService } from '../../../utils/kakaoMap/services/MarkerService';
