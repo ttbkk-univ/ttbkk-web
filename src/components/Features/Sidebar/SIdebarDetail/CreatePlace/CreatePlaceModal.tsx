@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { KeyboardEventHandler, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../../../states/buttons/createPlaceLatLngState';
 import { Button, CircularProgress, Input, TextField } from '@material-ui/core';
@@ -116,20 +116,38 @@ function CreatePlaceModal(): React.ReactElement {
   const inputStyle = { paddingLeft: 8, paddingRight: 8, backgroundColor: 'white' };
   const inputTypeStyle = { color: 'white' };
 
-  const onChange = (e: any): void => {
-    const { value, name } = e.target;
-    if (name === 'name') setNewPlaceName(value);
-    if (name === 'description') setNewPlaceDescription(value);
-    if (name === 'hashtag') {
-      if (value[value.length - 1] === ',') {
-        if (value.length === 1) return;
-        const newHashtag = value.substr(0, value.length - 1);
-        setNewPlaceHashtag('');
-        if (newPlaceHashtagList.find((hashtag) => hashtag === newHashtag)) return;
-        setNewPlaceHashtagList([...newPlaceHashtagList, newHashtag]);
-      } else {
-        setNewPlaceHashtag(value);
-      }
+  const nameOnChange = (e: any): void => {
+    const { value } = e.target;
+    setNewPlaceName(value);
+  };
+
+  const descriptionOnChange = (e: any): void => {
+    const { value } = e.target;
+    setNewPlaceDescription(value);
+  };
+
+  const hashtagOnChange = (e: any): void => {
+    const { value } = e.target;
+    if (value === ',' || value === ' ') return;
+    setNewPlaceHashtag(value);
+  };
+
+  const hashtagOnKeyDown: KeyboardEventHandler = (e) => {
+    const key = e.key;
+    const isBackspace = (key: string): boolean => key === 'Backspace';
+    if (isBackspace(key) && newPlaceHashtag === '') {
+      setNewPlaceHashtagList(
+        newPlaceHashtagList.slice(0, Math.max(newPlaceHashtagList.length - 1, 0)),
+      );
+    }
+
+    const isCommaOrSpace = (key: string): boolean => key === ',' || key === ' ';
+    if (isCommaOrSpace(key)) {
+      if (!newPlaceHashtag) return;
+      setNewPlaceHashtag('');
+      if (newPlaceHashtagList.find((hashtag) => hashtag === newPlaceHashtag)) return;
+      setNewPlaceHashtagList([...newPlaceHashtagList, newPlaceHashtag]);
+    } else {
     }
   };
 
@@ -176,10 +194,6 @@ function CreatePlaceModal(): React.ReactElement {
   const createRequest = (closeAfterRequest: boolean): void => {
     if (!newPlaceName) {
       alert('이름을 입력하세요');
-      return;
-    }
-    if (!newPlaceBrand) {
-      alert("브랜드를 입력하세요 (없다면 '로컬'이라고 입력)");
       return;
     }
     if (!latLng) {
@@ -262,8 +276,27 @@ function CreatePlaceModal(): React.ReactElement {
               type={'text'}
               disableUnderline={true}
               fullWidth={true}
-              onChange={onChange}
+              required={true}
+              onChange={nameOnChange}
               value={newPlaceName}
+            />
+          </div>
+          <div>
+            <span style={inputTypeStyle}>
+              좌표 (지도 클릭){' '}
+              <MdHelp
+                title={'지도에서 실제 위치를 클릭하세요.\n' + '생성할 장소의 위치가 표시됩니다.'}
+              />
+            </span>
+            <Input
+              style={inputStyle}
+              name={'latlng'}
+              placeholder={'지도에서 실제 위치를 클릭하세요.'}
+              required={true}
+              disableUnderline={true}
+              fullWidth={true}
+              disabled={true}
+              value={latLng ? `${latLng.latitude.toFixed(6)}, ${latLng.longitude.toFixed(6)}` : ''}
             />
           </div>
           <div>
@@ -272,9 +305,8 @@ function CreatePlaceModal(): React.ReactElement {
               <MdHelp
                 title={
                   '가맹점이 있는 경우 해당 상호명을 입력해주세요.\n' +
-                  "가맹점이 없는 경우 '로컬'이라고 입력하면 됩니다.\n" +
-                  'ex) 신전떡볶이\n' +
-                  'ex) 로컬'
+                  '가맹점이 없는 경우 생략하면 됩니다.\n' +
+                  'ex) 신전떡볶이'
                 }
               />
             </span>
@@ -316,7 +348,7 @@ function CreatePlaceModal(): React.ReactElement {
               태그{' '}
               <MdHelp
                 title={
-                  '쉼표(,)를 누를때마다 태그가 생성됩니다.\n' +
+                  '공백이나 쉼표(,)를 누를때마다 태그가 생성됩니다.\n' +
                   '생성된 태그는 검색 등에 활용될 예정입니다.\n' +
                   'ex)서울,송파구,풍납동,국물떡볶이,순대,오뎅,송파구,서울'
                 }
@@ -367,20 +399,15 @@ function CreatePlaceModal(): React.ReactElement {
               multiline={true}
               fullWidth={true}
               disableUnderline={true}
-              rowsMax={10}
-              onChange={onChange}
+              maxRows={10}
+              onChange={hashtagOnChange}
               value={newPlaceHashtag}
+              onKeyDown={hashtagOnKeyDown}
             />
           </div>
           <div>
             <span style={inputTypeStyle}>
-              설명{' '}
-              <MdHelp
-                title={
-                  '가게에 대한 설명을 적어주세요.\n' +
-                  '자세하게 적어주시면 서비스 품질 개선에 도움이 됩니다.'
-                }
-              />
+              설명 <MdHelp title={'가게에 대한 설명을 적어주세요.'} />
             </span>
             <Input
               style={{
@@ -388,33 +415,13 @@ function CreatePlaceModal(): React.ReactElement {
                 boxSizing: 'border-box',
               }}
               name={'description'}
-              placeholder={
-                '가게에 대한 설명을 적어주세요.\n' +
-                '자세하게 적어주시면 서비스 품질 개선에 도움이 됩니다.'
-              }
+              placeholder={'가게에 대한 설명을 적어주세요.'}
               multiline={true}
               fullWidth={true}
               disableUnderline={true}
-              rowsMax={10}
-              onChange={onChange}
+              maxRows={10}
+              onChange={descriptionOnChange}
               value={newPlaceDescription}
-            />
-          </div>
-          <div>
-            <span style={inputTypeStyle}>
-              좌표 (지도 클릭){' '}
-              <MdHelp
-                title={'지도에서 실제 위치를 클릭하세요.\n' + '생성할 장소의 위치가 표시됩니다.'}
-              />
-            </span>
-            <Input
-              style={inputStyle}
-              name={'latlng'}
-              placeholder={'지도에서 실제 위치를 클릭하세요.'}
-              disableUnderline={true}
-              fullWidth={true}
-              disabled={true}
-              value={latLng ? `${latLng.latitude.toFixed(6)}, ${latLng.longitude.toFixed(6)}` : ''}
             />
           </div>
         </div>
