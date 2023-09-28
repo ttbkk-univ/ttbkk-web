@@ -1,8 +1,8 @@
-import { Checkbox } from '@material-ui/core';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import { brandFilterCheckedState } from '../../../states/brands/brandFilterChecked';
 import { MarkerService } from '../../../utils/kakaoMap/services/MarkerService';
+import { Checkbox } from '@mui/material';
 
 interface BrandFilterRowProps {
   brand: {

@@ -30,7 +30,7 @@ export class MapService {
     // search param 이 있는 경우
     const centerFromSearchParams = new URLSearchParams(window.location.search).get('center');
     if (centerFromSearchParams?.toString().split(',').length) {
-      const [lat, lng]: string[] = centerFromSearchParams?.toString().split(',', 2);
+      const [lat, lng]: string[] = centerFromSearchParams.toString().split(',', 2);
       if (!isNaN(Number(lat)) && !isNaN(Number(lng))) {
         return { latitude: Number(lat), longitude: Number(lng) };
       }
@@ -78,7 +78,7 @@ export class MapService {
     ];
   }
 
-  static loadKakaoMap(callback?: (...args: any[]) => any): any {
+  static loadKakaoMap(callback?: (...args) => any) {
     const kakaoMapScriptId = 'kakaoMap';
     const isExisting = document.getElementById(kakaoMapScriptId);
 

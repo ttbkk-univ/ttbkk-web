@@ -10,10 +10,10 @@ interface Env {
 
 export const env: Env = {
   kakao: {
-    mapApiKey: process.env.REACT_APP_KAKAO_MAP_API_KEY?.toString() || 'error',
+    mapApiKey: import.meta.env.VITE_APP_KAKAO_MAP_API_KEY?.toString() || 'error',
   },
   api: {
-    host: process.env.REACT_APP_API_HOST?.toString() || 'error',
-    errorHelper: process.env.REACT_APP_API_ERROR_HELPER_HOST?.toString() || 'error',
+    host: import.meta.env.VITE_APP_API_HOST?.toString() || 'error',
+    errorHelper: import.meta.env.VITE_APP_API_ERROR_HELPER_HOST?.toString() || 'error',
   },
 };

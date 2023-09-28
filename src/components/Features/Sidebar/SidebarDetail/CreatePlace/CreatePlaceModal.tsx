@@ -1,7 +1,6 @@
 import React, { KeyboardEventHandler, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../../../states/buttons/createPlaceLatLngState';
-import { Button, CircularProgress, Input, TextField } from '@material-ui/core';
 import { MdCancel, MdHelp, MdSend } from 'react-icons/md';
 import { isMobile } from '../../../../../utils/BrowserUtil';
 import { createPlaceModalDisplayState } from '../../../../../states/buttons/createPlaceModalDisplayState';
@@ -9,10 +8,10 @@ import { AxiosResponse } from 'axios';
 import { env } from '../../../../../env';
 import { IPlace } from '../../../../../states/places/placeMap';
 import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import { get, post } from '../../../../../utils/HttpRequestUtil';
 import { Brand } from '../../../../../states/brands/brand';
 import { MarkerService } from '../../../../../utils/kakaoMap/services/MarkerService';
+import { Autocomplete, Button, CircularProgress, Input, TextField } from '@mui/material';
 
 function CreatePlaceModal(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
@@ -55,22 +54,14 @@ function CreatePlaceModal(): React.ReactElement {
   }, [newPlaceHashtagList]);
 
   useEffect(() => {
-    function dragElement(element: any): void {
+    function dragElement(element): void {
       let pos1 = 0,
         pos2 = 0,
         pos3 = 0,
         pos4 = 0;
       const body = document.getElementById(element.id + '_body');
       if (!isMobile()) {
-        if (body) {
-          // if present, the header is where you move the DIV from:
-          body.onmousedown = dragMouseDown;
-        } else {
-          // otherwise, move the DIV from anywhere inside the DIV:
-          element.onmousedown = dragMouseDown;
-        }
-
-        function dragMouseDown(e: any): void {
+        const dragMouseDown = (e) => {
           e = e || window.event;
           e.preventDefault();
           // get the mouse cursor position at startup:
@@ -79,9 +70,17 @@ function CreatePlaceModal(): React.ReactElement {
           document.onmouseup = closeDragElement;
           // call a function whenever the cursor moves:
           document.onmousemove = elementDrag;
+        };
+
+        if (body) {
+          // if present, the header is where you move the DIV from:
+          body.onmousedown = dragMouseDown;
+        } else {
+          // otherwise, move the DIV from anywhere inside the DIV:
+          element.onmousedown = dragMouseDown;
         }
 
-        function elementDrag(e: any): void {
+        const elementDrag = (e) => {
           e = e || window.event;
           e.preventDefault();
           // calculate the new cursor position:
@@ -92,13 +91,13 @@ function CreatePlaceModal(): React.ReactElement {
           // set the element's new position:
           element.style.top = element.offsetTop - pos2 + 'px';
           element.style.left = element.offsetLeft - pos1 + 'px';
-        }
+        };
 
-        function closeDragElement(): void {
+        const closeDragElement = () => {
           // stop moving when mouse button is released:
           document.onmouseup = null;
           document.onmousemove = null;
-        }
+        };
       }
     }
 
@@ -116,17 +115,17 @@ function CreatePlaceModal(): React.ReactElement {
   const inputStyle = { paddingLeft: 8, paddingRight: 8, backgroundColor: 'white' };
   const inputTypeStyle = { color: 'white' };
 
-  const nameOnChange = (e: any): void => {
+  const nameOnChange = (e): void => {
     const { value } = e.target;
     setNewPlaceName(value);
   };
 
-  const descriptionOnChange = (e: any): void => {
+  const descriptionOnChange = (e): void => {
     const { value } = e.target;
     setNewPlaceDescription(value);
   };
 
-  const hashtagOnChange = (e: any): void => {
+  const hashtagOnChange = (e): void => {
     const { value } = e.target;
     if (value === ',' || value === ' ') return;
     setNewPlaceHashtag(value);
@@ -147,11 +146,10 @@ function CreatePlaceModal(): React.ReactElement {
       setNewPlaceHashtag('');
       if (newPlaceHashtagList.find((hashtag) => hashtag === newPlaceHashtag)) return;
       setNewPlaceHashtagList([...newPlaceHashtagList, newPlaceHashtag]);
-    } else {
     }
   };
 
-  const onBrandSelectOrChange = (e: any): void => {
+  const onBrandSelectOrChange = (e): void => {
     const { value } = e.target;
     setNewPlaceBrand(value);
   };
@@ -169,11 +167,11 @@ function CreatePlaceModal(): React.ReactElement {
     window.newPlace = null;
   };
 
-  const placeToMarker = (place: IPlace): any => {
+  const placeToMarker = (place: IPlace) => {
     class PlaceMarker extends window.kakao.maps.Marker {
       id: string;
 
-      constructor(props: any) {
+      constructor(props) {
         super(props);
         this.id = props.id;
       }
@@ -317,14 +315,14 @@ function CreatePlaceModal(): React.ReactElement {
               onOpen={(): void => setBrandOpen(true)}
               onClose={(): void => setBrandOpen(false)}
               onSelect={onBrandSelectOrChange}
-              getOptionSelected={(option: Brand, value: Brand): boolean =>
-                option.name === value.name
-              }
-              freeSolo={true}
-              getOptionLabel={(option: Brand): string => option?.name || newPlaceBrand}
+              // getOptionSelected={(option: Brand, value: Brand): boolean =>
+              //   option.name === value.name
+              //}
+              freeSolo={false}
+              getOptionLabel={(option: Brand): string => option?.name && newPlaceBrand}
               options={brandOptions || []}
               loading={brandLoading}
-              renderInput={(params): JSX.Element => (
+              renderInput={(params): React.JSX.Element => (
                 <TextField
                   {...params}
                   onChange={onBrandSelectOrChange}

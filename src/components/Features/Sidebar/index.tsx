@@ -2,7 +2,7 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import { sidebarIsOpenState } from '../../../states/sidebar/siteIsOpen';
 import OpenSidebarButton from './OpenSidebarButton';
-import SidebarDetail from './SIdebarDetail';
+import SidebarDetail from './SidebarDetail';
 
 function Sidebar(): React.ReactElement {
   const [isOpened] = useRecoilState(sidebarIsOpenState);
