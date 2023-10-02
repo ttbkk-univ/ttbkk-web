@@ -1,8 +1,8 @@
 import React from 'react';
-import CreatePlace from './CreatePlace';
 import ShareMap from './ShareMap';
 // import Profile from './Profile';
 import PlaceDetail from './PlaceDetail';
+import CreatePlaceButton from './CreatePlace/CreatePlaceButton';
 
 function SidebarDetail(): React.ReactElement {
   return (
@@ -20,7 +20,7 @@ function SidebarDetail(): React.ReactElement {
       {/*<Profile />*/}
       <PlaceDetail />
       <ShareMap />
-      <CreatePlace />
+      <CreatePlaceButton />
     </div>
   );
 }

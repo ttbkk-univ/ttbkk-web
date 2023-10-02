@@ -28,7 +28,7 @@ function BrandFilter(): React.ReactElement {
         }
       });
     })();
-  }, []);
+  }, [setBrandList]);
 
   return (
     <>

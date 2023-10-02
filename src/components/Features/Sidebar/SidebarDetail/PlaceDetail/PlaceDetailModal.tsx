@@ -55,7 +55,7 @@ function PlaceDetailModal(): React.ReactElement {
         />
       </p>
       <div style={{ whiteSpace: 'pre-line' }}>{place.description}</div>
-      {place.brand.description ? (
+      {place.brand?.description ? (
         <>
           <br />
           <div style={{ whiteSpace: 'pre-line' }}>{place.brand.description}</div>
@@ -65,11 +65,11 @@ function PlaceDetailModal(): React.ReactElement {
       )}
       <hr />
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {place.brand.hashtags.map((hashtag: IHashtag) => (
-          <BrandHashtag hashtag={hashtag} />
+        {place.brand?.hashtags.map((hashtag: IHashtag) => (
+          <BrandHashtag key={place!.brand!.name + hashtag.name} hashtag={hashtag} />
         ))}
         {place.hashtags.map((hashtag: IHashtag) => (
-          <PlaceHashtag hashtag={hashtag} />
+          <PlaceHashtag key={hashtag.name} hashtag={hashtag} />
         ))}
       </div>
     </div>

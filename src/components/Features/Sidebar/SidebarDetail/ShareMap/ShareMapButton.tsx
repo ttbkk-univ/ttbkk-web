@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Snackbar } from '@material-ui/core';
+import { Button, Snackbar } from '@mui/material';
 
 function ShareMapButton(): React.ReactElement {
   const [open, setOpen] = useState(false);

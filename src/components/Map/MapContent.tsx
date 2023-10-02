@@ -20,8 +20,8 @@ declare global {
       [p: string]: {
         id: string;
         name: string;
-        markers: any[]; // PlaceMarker
-        nameOverlays: any[]; // CustomOverlay
+        markers: any; // PlaceMarker
+        nameOverlays: any; // CustomOverlay
         visible: boolean;
       };
     };
@@ -40,7 +40,7 @@ function MapContent(): React.ReactElement {
   const setCreatePlaceModalDisplay = useSetRecoilState(createPlaceModalDisplayState);
   const setSidebarIsOpen = useSetRecoilState(sidebarIsOpenState);
 
-  let debounce: any = null;
+  let debounce = null;
   let zoomChanged: boolean = false;
   const debounceTime: number = 500;
 

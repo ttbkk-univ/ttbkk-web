@@ -5,7 +5,7 @@ const timeout: number = 30000;
 const serviceName: string = 'TTBKK';
 const notificationTypes: string[] = ['slack'];
 
-const parseAxiosError = (error: AxiosError): any => {
+const parseAxiosError = (error: AxiosError) => {
   return {
     message: error.message,
     name: error.name,

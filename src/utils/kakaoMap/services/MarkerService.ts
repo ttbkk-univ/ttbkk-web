@@ -11,7 +11,7 @@ export class MarkerService {
     class PlaceMarker extends window.kakao.maps.Marker {
       id: string;
 
-      constructor(props: any) {
+      constructor(props) {
         super(props);
         this.id = props.id;
       }
@@ -42,42 +42,46 @@ export class MarkerService {
     const markers: PlaceMarker[] = [];
     if (!window.placeMap) window.placeMap = {};
     Object.values(newPlaceMap).forEach((place: IPlace) => {
-      if (window.placeMap.hasOwnProperty(place.id)) return;
+      if (window.placeMap[place.id]) return;
       window.placeMap[place.id] = place;
       const marker: PlaceMarker = placeToMarker(place);
+      const brandId = place.brand?.id || 'no_brand';
+      const brandName = place.brand?.name || '로컬';
       if (!window.brands) window.brands = {};
-      if (!window.brands[place.brand.id]) {
-        window.brands[place.brand.id] = {
-          id: place.brand.id,
-          name: place.brand.name,
+      if (!window.brands[brandId]) {
+        window.brands[brandId] = {
+          id: brandId,
+          name: brandName,
           markers: [],
           nameOverlays: [],
           visible: true,
         };
       }
-      window.brands[place.brand.id].markers.push(marker);
-      window.brands[place.brand.id]?.visible && markers.push(marker);
+      window.brands[brandId].markers.push(marker);
+      window.brands[brandId]?.visible && markers.push(marker);
 
       const nameOverlay = MarkerService.createNameOverlay(place);
-      window.brands[place.brand.id].nameOverlays.push(nameOverlay);
+      window.brands[brandId].nameOverlays.push(nameOverlay);
       MapService.minLevel > MapService.getZoom() &&
-        window.brands[place.brand.id]?.visible &&
+        window.brands[brandId]?.visible &&
         nameOverlay.setMap(window.map);
     });
     window.clusterer.addMarkers(markers);
   }
 
-  static createNameOverlay(place: IPlace): any {
+  static createNameOverlay(place: IPlace) {
     return new window.kakao.maps.CustomOverlay({
       position: new window.kakao.maps.LatLng(place.latitude, place.longitude),
-      content: `<div style="user-select: none; pointer-events: none; font-size: 12px; line-height: 12px; padding: 2px; text-align: center; color: white; text-shadow: 0 0 1px #000000, 0 0 1em #000000, 0 0 0.2em #000000"><strong>${place.brand.name}</strong></div>`,
+      content: `<div style="user-select: none; pointer-events: none; font-size: 12px; line-height: 12px; padding: 2px; text-align: center; color: white; text-shadow: 0 0 1px #000000, 0 0 1em #000000, 0 0 0.2em #000000"><strong>${
+        place.brand?.name || place.name
+      }</strong></div>`,
       yAnchor: 0,
       clickable: false,
     });
   }
 
   static applyClusterFilter(brandHashList: string[], status: boolean): void {
-    const markers: any[] = [];
+    const markers = [];
     brandHashList.forEach((brandHash: string) => {
       if (window.brands[brandHash]) markers.push(...window.brands[brandHash].markers);
     });

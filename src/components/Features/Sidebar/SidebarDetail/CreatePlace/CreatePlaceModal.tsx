@@ -1,7 +1,6 @@
 import React, { KeyboardEventHandler, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../../../states/buttons/createPlaceLatLngState';
-import { Button, CircularProgress, Input, TextField } from '@material-ui/core';
 import { MdCancel, MdHelp, MdSend } from 'react-icons/md';
 import { isMobile } from '../../../../../utils/BrowserUtil';
 import { createPlaceModalDisplayState } from '../../../../../states/buttons/createPlaceModalDisplayState';
@@ -9,10 +8,11 @@ import { AxiosResponse } from 'axios';
 import { env } from '../../../../../env';
 import { IPlace } from '../../../../../states/places/placeMap';
 import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import { get, post } from '../../../../../utils/HttpRequestUtil';
 import { Brand } from '../../../../../states/brands/brand';
 import { MarkerService } from '../../../../../utils/kakaoMap/services/MarkerService';
+import { Button, createFilterOptions, Input, useAutocomplete } from '@mui/material';
+import { ListBox } from '../../../../../styles/CreatePlaceModal/AutoComplete';
 
 function CreatePlaceModal(): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
@@ -26,28 +26,57 @@ function CreatePlaceModal(): React.ReactElement {
   const [newPlaceHashtagList, setNewPlaceHashtagList] = useState<string[]>([]);
   const [newPlaceHashtag, setNewPlaceHashtag] = useState('');
 
-  const [brandOpen, setBrandOpen] = useState(false);
   const [brandOptions, setBrandOptions] = useState<Brand[] | undefined>(undefined);
-  const brandLoading: boolean = brandOpen && !brandOptions;
-  const [autoCompleteKey, setAutoCompleteKey] = useState(new Date().getTime());
+
+  const {
+    getRootProps: getBrandRootProps,
+    getInputLabelProps: getBrandInputLabelProps,
+    getInputProps: getBrandInputProps,
+    getListboxProps: getBrandListboxProps,
+    getOptionProps: getBrandOptionProps,
+    groupedOptions: groupedBrandOptions,
+  } = useAutocomplete<Brand>({
+    id: 'brand-autocomplete',
+    options: brandOptions ? brandOptions : [],
+    // TODO 새로운 브랜드 생길때 `"브랜드" 추가` 형태로 보여주기
+    getOptionLabel: (option): string => option.name,
+    onChange: (event, newValue: null | Brand): void => {
+      if (!newValue) return;
+      setNewPlaceBrand(newValue.name);
+    },
+    filterOptions: (options: Brand[], state): Brand[] => {
+      console.log(options);
+      const filtered = createFilterOptions<Brand>()(options, state);
+      const { inputValue } = state;
+      const isExisting = options.some((option) => inputValue === option.name);
+      if (inputValue !== '' && !isExisting) {
+        filtered.push({ name: inputValue, label: `"${inputValue}" 추가` });
+      }
+      return filtered;
+    },
+  });
 
   useEffect(() => {
     let active: boolean = true;
-    if (!brandLoading) return undefined;
 
     (async (): Promise<void> => {
       const response: AxiosResponse<Brand[]> = await get(env.api.host + '/api/brands/?search=');
-      if (active) setBrandOptions(response.data);
+      if (active)
+        setBrandOptions(
+          response.data.map((brand) => ({
+            name: brand.name,
+            label: brand.name,
+            hashtags: brand.hashtags,
+            id: brand.id,
+            description: brand.description,
+          })),
+        );
     })();
 
     return (): void => {
       active = false;
     };
-  }, [brandLoading]);
-
-  useEffect(() => {
-    if (!brandOpen) setBrandOptions(undefined);
-  }, [brandOpen]);
+  }, []);
 
   useEffect(() => {
     const tagContainer: HTMLElement | null = document.getElementById('tag-container');
@@ -55,22 +84,14 @@ function CreatePlaceModal(): React.ReactElement {
   }, [newPlaceHashtagList]);
 
   useEffect(() => {
-    function dragElement(element: any): void {
+    function dragElement(element): void {
       let pos1 = 0,
         pos2 = 0,
         pos3 = 0,
         pos4 = 0;
       const body = document.getElementById(element.id + '_body');
       if (!isMobile()) {
-        if (body) {
-          // if present, the header is where you move the DIV from:
-          body.onmousedown = dragMouseDown;
-        } else {
-          // otherwise, move the DIV from anywhere inside the DIV:
-          element.onmousedown = dragMouseDown;
-        }
-
-        function dragMouseDown(e: any): void {
+        const dragMouseDown = (e) => {
           e = e || window.event;
           e.preventDefault();
           // get the mouse cursor position at startup:
@@ -79,9 +100,17 @@ function CreatePlaceModal(): React.ReactElement {
           document.onmouseup = closeDragElement;
           // call a function whenever the cursor moves:
           document.onmousemove = elementDrag;
+        };
+
+        if (body) {
+          // if present, the header is where you move the DIV from:
+          body.onmousedown = dragMouseDown;
+        } else {
+          // otherwise, move the DIV from anywhere inside the DIV:
+          element.onmousedown = dragMouseDown;
         }
 
-        function elementDrag(e: any): void {
+        const elementDrag = (e) => {
           e = e || window.event;
           e.preventDefault();
           // calculate the new cursor position:
@@ -92,13 +121,13 @@ function CreatePlaceModal(): React.ReactElement {
           // set the element's new position:
           element.style.top = element.offsetTop - pos2 + 'px';
           element.style.left = element.offsetLeft - pos1 + 'px';
-        }
+        };
 
-        function closeDragElement(): void {
+        const closeDragElement = () => {
           // stop moving when mouse button is released:
           document.onmouseup = null;
           document.onmousemove = null;
-        }
+        };
       }
     }
 
@@ -116,19 +145,21 @@ function CreatePlaceModal(): React.ReactElement {
   const inputStyle = { paddingLeft: 8, paddingRight: 8, backgroundColor: 'white' };
   const inputTypeStyle = { color: 'white' };
 
-  const nameOnChange = (e: any): void => {
+  const nameOnChange = (e): void => {
     const { value } = e.target;
     setNewPlaceName(value);
   };
 
-  const descriptionOnChange = (e: any): void => {
+  const descriptionOnChange = (e): void => {
     const { value } = e.target;
     setNewPlaceDescription(value);
   };
 
-  const hashtagOnChange = (e: any): void => {
+  const hashtagOnChange = (e): void => {
     const { value } = e.target;
-    if (value === ',' || value === ' ') return;
+    // check regex
+    const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9]*$/;
+    if (!regex.test(value)) return;
     setNewPlaceHashtag(value);
   };
 
@@ -147,13 +178,7 @@ function CreatePlaceModal(): React.ReactElement {
       setNewPlaceHashtag('');
       if (newPlaceHashtagList.find((hashtag) => hashtag === newPlaceHashtag)) return;
       setNewPlaceHashtagList([...newPlaceHashtagList, newPlaceHashtag]);
-    } else {
     }
-  };
-
-  const onBrandSelectOrChange = (e: any): void => {
-    const { value } = e.target;
-    setNewPlaceBrand(value);
   };
 
   const resetForm = (closeAfterRequest: boolean): void => {
@@ -163,17 +188,16 @@ function CreatePlaceModal(): React.ReactElement {
     setNewPlaceHashtag('');
     setNewPlaceHashtagList([]);
     setNewPlaceDescription('');
-    setAutoCompleteKey(new Date().getTime());
     setCreatePlaceLatLng(undefined);
     window.newPlace.setMap(null);
     window.newPlace = null;
   };
 
-  const placeToMarker = (place: IPlace): any => {
+  const placeToMarker = (place: IPlace) => {
     class PlaceMarker extends window.kakao.maps.Marker {
       id: string;
 
-      constructor(props: any) {
+      constructor(props) {
         super(props);
         this.id = props.id;
       }
@@ -214,17 +238,19 @@ function CreatePlaceModal(): React.ReactElement {
         const newPlace: IPlace = res.data;
         window.placeMap[newPlace.id] = newPlace;
         const marker = placeToMarker(newPlace);
-        if (!window.brands[newPlace.brand.id]) {
-          window.brands[newPlace.brand.id] = {
-            id: newPlace.brand.id,
-            name: newPlace.brand.name,
+        const brandId = newPlace.brand?.id || 'no_brand';
+        const brandName = newPlace.brand?.name || '로컬';
+        if (!window.brands[brandId]) {
+          window.brands[brandId] = {
+            id: brandId,
+            name: brandName,
             markers: [],
             nameOverlays: MarkerService.createNameOverlay(newPlace),
             visible: true,
           };
         }
-        window.brands[newPlace.brand.id].markers.push(marker);
-        window.brands[newPlace.brand.id].visible && window.clusterer.addMarker(marker);
+        window.brands[brandId].markers.push(marker);
+        window.brands[brandId].visible && window.clusterer.addMarker(marker);
       })
       .catch((e) => {
         console.log(e);
@@ -248,7 +274,7 @@ function CreatePlaceModal(): React.ReactElement {
         id={'create_place_modal_body'}
         style={{ display: 'flex', justifyContent: 'space-between', cursor: 'grab' }}
       >
-        <span style={{ color: 'ActiveBorder', fontSize: 20 }}>장소 생성</span>
+        <span style={{ color: 'white', fontSize: 20 }}>장소 생성 (٭: 필수)</span>
         <div style={{ flexDirection: 'row-reverse', display: 'flex' }}>
           <Button
             variant={'contained'}
@@ -267,12 +293,12 @@ function CreatePlaceModal(): React.ReactElement {
         <div style={{ flexDirection: 'row' }}>
           <div>
             <span style={inputTypeStyle}>
-              이름 <MdHelp title={'매장 이름을 입력해주세요.\n' + 'ex)신전떡볶이 풍납점'} />
+              * 이름 <MdHelp title={'매장 이름을 입력해주세요.\n' + 'ex)신전떡볶이 풍납점'} />
             </span>
             <Input
               style={inputStyle}
               name={'name'}
-              placeholder={'신전떡볶이 풍납점'}
+              placeholder={'골목떡볶이'}
               type={'text'}
               disableUnderline={true}
               fullWidth={true}
@@ -283,7 +309,7 @@ function CreatePlaceModal(): React.ReactElement {
           </div>
           <div>
             <span style={inputTypeStyle}>
-              좌표 (지도 클릭){' '}
+              * 좌표 (지도 클릭){' '}
               <MdHelp
                 title={'지도에서 실제 위치를 클릭하세요.\n' + '생성할 장소의 위치가 표시됩니다.'}
               />
@@ -299,8 +325,8 @@ function CreatePlaceModal(): React.ReactElement {
               value={latLng ? `${latLng.latitude.toFixed(6)}, ${latLng.longitude.toFixed(6)}` : ''}
             />
           </div>
-          <div>
-            <span style={inputTypeStyle}>
+          <div {...getBrandRootProps()}>
+            <span {...getBrandInputLabelProps()} style={inputTypeStyle}>
               브랜드{' '}
               <MdHelp
                 title={
@@ -310,38 +336,22 @@ function CreatePlaceModal(): React.ReactElement {
                 }
               />
             </span>
-            <Autocomplete
-              key={autoCompleteKey}
+            <Input
+              {...getBrandInputProps()}
               style={inputStyle}
-              open={brandOpen}
-              onOpen={(): void => setBrandOpen(true)}
-              onClose={(): void => setBrandOpen(false)}
-              onSelect={onBrandSelectOrChange}
-              getOptionSelected={(option: Brand, value: Brand): boolean =>
-                option.name === value.name
-              }
-              freeSolo={true}
-              getOptionLabel={(option: Brand): string => option?.name || newPlaceBrand}
-              options={brandOptions || []}
-              loading={brandLoading}
-              renderInput={(params): JSX.Element => (
-                <TextField
-                  {...params}
-                  onChange={onBrandSelectOrChange}
-                  InputProps={{
-                    ...params.InputProps,
-                    disableUnderline: true,
-                    placeholder: '신전떡볶이',
-                    endAdornment: (
-                      <React.Fragment>
-                        {brandLoading ? <CircularProgress color={'inherit'} size={20} /> : null}
-                        {params.InputProps.endAdornment}
-                      </React.Fragment>
-                    ),
-                  }}
-                />
-              )}
+              name={'brand'}
+              placeholder={'브랜드를 입력하세요 (없다면 공백)'}
+              type={'text'}
+              disableUnderline={true}
+              fullWidth={true}
             />
+            {groupedBrandOptions?.length > 0 ? (
+              <ListBox {...getBrandListboxProps()}>
+                {(groupedBrandOptions as Array<Brand>).map((option, index) => (
+                  <li {...getBrandOptionProps({ option, index })}>{option.label}</li>
+                ))}
+              </ListBox>
+            ) : null}
           </div>
           <div>
             <span style={inputTypeStyle}>

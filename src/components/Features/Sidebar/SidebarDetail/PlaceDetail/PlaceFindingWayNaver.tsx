@@ -1,5 +1,5 @@
-import { Button } from '@material-ui/core';
 import React from 'react';
+import { Button } from '@mui/material';
 
 interface PlaceFindingWayProps {
   latitude: number;
@@ -7,9 +7,10 @@ interface PlaceFindingWayProps {
   name: string;
 }
 
-function PlaceFindingWayKakao(props: PlaceFindingWayProps): React.ReactElement {
+function PlaceFindingWayNaver(props: PlaceFindingWayProps): React.ReactElement {
   const { latitude, longitude, name } = props;
-  const href: string = `kakaomap://route?ep=${latitude},${longitude}&by=PUBLICTRANSIT`;
+  const href: string = `nmap://route/public?dlat=${latitude}&dlng=${longitude}&dname=${name}`;
+
   return (
     <Button
       color={'primary'}
@@ -19,7 +20,11 @@ function PlaceFindingWayKakao(props: PlaceFindingWayProps): React.ReactElement {
         setTimeout(() => {
           navigator.geolocation.getCurrentPosition(
             (position: Position) => {
-              const hrefAlternate: string = `https://map.kakao.com/link/to/${name},${latitude},${longitude}/from/내위치,${position.coords.latitude},${position.coords.longitude}`;
+              const hrefAlternate: string =
+                'http://map.naver.com/index.nhn?' +
+                `elng=${longitude}&elat=${latitude}&etext=${name}` +
+                `&slng=${position.coords.longitude}&slat=${position.coords.latitude}&stext=내위치` +
+                '&menu=route&pathType=1';
               window.open(hrefAlternate, '_blank');
             },
             (err: PositionError) => {
@@ -31,9 +36,9 @@ function PlaceFindingWayKakao(props: PlaceFindingWayProps): React.ReactElement {
         }, 500);
       }}
     >
-      길찾기 (카카오)
+      길찾기 (네이버)
     </Button>
   );
 }
 
-export default PlaceFindingWayKakao;
+export default PlaceFindingWayNaver;
