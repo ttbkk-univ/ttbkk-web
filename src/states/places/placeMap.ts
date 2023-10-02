@@ -22,7 +22,7 @@ export interface IPlace {
   description?: string;
   name: string;
   hashtags: IHashtag[];
-  brand: IBrand;
+  brand?: IBrand;
 }
 
 export async function getPlaceMap(
