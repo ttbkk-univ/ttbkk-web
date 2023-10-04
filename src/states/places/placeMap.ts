@@ -1,6 +1,7 @@
 import { env } from '../../env';
 import { get } from '../../utils/HttpRequestUtil';
 import { LatLng } from '../../components/Map/MapContent';
+import { queryClient } from '../../main';
 
 export interface IHashtag {
   name: string;
@@ -25,6 +26,11 @@ export interface IPlace {
   brand?: IBrand;
 }
 
+type Page<T> = {
+  edges: T[];
+  count: number;
+};
+
 export async function getPlaceMap(
   bottomLeft: LatLng,
   topRight: LatLng,
@@ -37,13 +43,19 @@ export async function getPlaceMap(
   searchParam.append('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
   searchParam.append('top_right', `${topRight.latitude},${topRight.longitude}`);
 
-  const response = await get<{ edges: IPlace[]; count: number }>(
-    env.api.host + '/api/places/grid/?' + searchParam.toString(),
-  ).catch(() => {
-    return { data: { edges: [], count: 0 } };
-  });
+  const data: Page<IPlace> = await queryClient
+    .fetchQuery(
+      'places-' + searchParam.toString(),
+      () => get<Page<IPlace>>(env.api.host + '/api/places/grid/?' + searchParam.toString()),
+      {
+        staleTime: 1000 * 30,
+      },
+    )
+    .catch((): Page<IPlace> => {
+      return { edges: [], count: 0 };
+    });
 
-  Object.values(response.data.edges).forEach((place) => {
+  Object.values(data.edges).forEach((place) => {
     placeMap[place.id] = place;
   });
   return placeMap;

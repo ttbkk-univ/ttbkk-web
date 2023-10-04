@@ -1,7 +1,6 @@
 import React, {
   ChangeEventHandler,
   CSSProperties,
-  InputHTMLAttributes,
   KeyboardEventHandler,
   useEffect,
   useState,
@@ -11,7 +10,6 @@ import { createPlaceLatLngState } from '../../../../../states/buttons/createPlac
 import { MdCancel, MdHelp } from 'react-icons/md';
 import { isMobile } from '../../../../../utils/BrowserUtil';
 import { createPlaceModalDisplayState } from '../../../../../states/buttons/createPlaceModalDisplayState';
-import { AxiosResponse } from 'axios';
 import { env } from '../../../../../env';
 import { IPlace } from '../../../../../states/places/placeMap';
 import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
@@ -20,8 +18,13 @@ import { Brand } from '../../../../../states/brands/brand';
 import { MarkerService } from '../../../../../utils/kakaoMap/services/MarkerService';
 import { Button, createFilterOptions, Input, useAutocomplete } from '@mui/material';
 import { ListBox } from '../../../../../styles/CreatePlaceModal/AutoComplete';
+import { useQuery } from 'react-query';
 
-function CreatePlaceModal(): React.ReactElement {
+type Props = {
+  clusterer: kakao.maps.MarkerClusterer;
+};
+
+function CreatePlaceModal({ clusterer }: Props): React.ReactElement {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
   const [latLng, setCreatePlaceLatLng] = useRecoilState(createPlaceLatLngState);
   const [createPlaceModalDisplay, setCreatePlaceModalDisplay] = useRecoilState(
@@ -33,7 +36,20 @@ function CreatePlaceModal(): React.ReactElement {
   const [newPlaceHashtagList, setNewPlaceHashtagList] = useState<string[]>([]);
   const [newPlaceHashtag, setNewPlaceHashtag] = useState('');
 
-  const [brandOptions, setBrandOptions] = useState<Brand[] | undefined>(undefined);
+  const { isLoading, error, data } = useQuery<Brand[]>('brand-all', () =>
+    get(env.api.host + '/api/brands/?search='),
+  );
+
+  const brandOptions =
+    isLoading || error || !data
+      ? []
+      : data.map((brand) => ({
+          name: brand.name,
+          label: brand.name,
+          hashtags: brand.hashtags,
+          id: brand.id,
+          description: brand.description,
+        }));
 
   const {
     getRootProps: getBrandRootProps,
@@ -44,7 +60,7 @@ function CreatePlaceModal(): React.ReactElement {
     groupedOptions: groupedBrandOptions,
   } = useAutocomplete<Brand>({
     id: 'brand-autocomplete',
-    options: brandOptions ? brandOptions : [],
+    options: brandOptions,
     // TODO 새로운 브랜드 생길때 `"브랜드" 추가` 형태로 보여주기
     getOptionLabel: (option): string => option.name,
     onChange: (_: React.SyntheticEvent, newValue: null | Brand): void => {
@@ -61,28 +77,6 @@ function CreatePlaceModal(): React.ReactElement {
       return filtered;
     },
   });
-
-  useEffect(() => {
-    let active: boolean = true;
-
-    (async (): Promise<void> => {
-      const response: AxiosResponse<Brand[]> = await get(env.api.host + '/api/brands/?search=');
-      if (active)
-        setBrandOptions(
-          response.data.map((brand) => ({
-            name: brand.name,
-            label: brand.name,
-            hashtags: brand.hashtags,
-            id: brand.id,
-            description: brand.description,
-          })),
-        );
-    })();
-
-    return (): void => {
-      active = false;
-    };
-  }, []);
 
   useEffect(() => {
     const tagContainer: HTMLElement | null = document.getElementById('tag-container');
@@ -241,9 +235,8 @@ function CreatePlaceModal(): React.ReactElement {
       brand_name: newPlaceBrand,
       hashtags: newPlaceHashtagList,
     };
-    post(env.api.host + '/api/places/', data)
-      .then((res: AxiosResponse) => {
-        const newPlace: IPlace = res.data;
+    post<IPlace>(env.api.host + '/api/places/', data)
+      .then((newPlace) => {
         window.placeMap[newPlace.id] = newPlace;
         const marker = placeToMarker(newPlace);
         const brandId = newPlace.brand?.id || 'no_brand';
@@ -258,7 +251,7 @@ function CreatePlaceModal(): React.ReactElement {
           };
         }
         window.brands[brandId].markers.push(marker);
-        window.brands[brandId].visible && window.clusterer.addMarker(marker);
+        window.brands[brandId].visible && clusterer.addMarker(marker);
       })
       .catch((e) => {
         console.error(e);
@@ -345,12 +338,7 @@ function CreatePlaceModal(): React.ReactElement {
               />
             </span>
             <Input
-              {...((): Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'color'> => {
-                const brandInputProps = getBrandInputProps();
-                delete brandInputProps.size;
-                delete brandInputProps.color;
-                return brandInputProps;
-              })()}
+              inputProps={getBrandInputProps()}
               style={inputStyle}
               name={'brand'}
               placeholder={'브랜드를 입력하세요 (없다면 공백)'}

@@ -14,6 +14,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.2.0",
     "react-kakao-maps-sdk": "^1.1.21",
+    "react-query": "^3.39.3",
     "recoil": "^0.7.7",
     "typescript": "^5.2.2"
   },

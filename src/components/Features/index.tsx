@@ -6,15 +6,16 @@ import CreatePlaceButton from './Sidebar/SidebarDetail/CreatePlace/CreatePlaceBu
 
 type Props = {
   map: kakao.maps.Map;
+  clusterer: kakao.maps.MarkerClusterer;
 };
-function Features({ map }: Props) {
+function Features({ map, clusterer }: Props) {
   return (
     <div style={{ position: 'fixed', zIndex: 400 }}>
-      <BrandFilter map={map} />
+      <BrandFilter map={map} clusterer={clusterer} />
       <Sidebar map={map} />
       <FindMyLocation map={map} />
       <CreatePlaceButton map={map} />
-      <CreatePlaceModal />
+      <CreatePlaceModal clusterer={clusterer} />
     </div>
   );
 }
