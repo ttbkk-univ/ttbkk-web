@@ -7,11 +7,12 @@ export class MarkerService {
     newPlaceMap: { [p: string]: IPlace },
     setClickedPlace: SetterOrUpdater<string | undefined>,
     setSidebarIsOpen: SetterOrUpdater<boolean>,
+    map: kakao.maps.Map,
   ): void {
-    class PlaceMarker extends window.kakao.maps.Marker {
+    class PlaceMarker extends kakao.maps.Marker {
       id: string;
 
-      constructor(props) {
+      constructor(props: { id: string } & kakao.maps.MarkerOptions) {
         super(props);
         this.id = props.id;
       }
@@ -19,25 +20,17 @@ export class MarkerService {
 
     const placeToMarker = (place: IPlace): PlaceMarker => {
       const marker = new PlaceMarker({
-        position: new window.kakao.maps.LatLng(place.latitude, place.longitude),
+        position: new kakao.maps.LatLng(place.latitude, place.longitude),
         title: place.name,
         clickable: true,
         id: place.id,
       });
-      window.kakao.maps.event.addListener(marker, 'click', () => {
+      kakao.maps.event.addListener(marker, 'click', () => {
         setClickedPlace(marker.id);
         setSidebarIsOpen(true);
       });
       return marker;
     };
-
-    window.clusterer =
-      window.clusterer ||
-      new window.kakao.maps.MarkerClusterer({
-        map: window.map,
-        averageCenter: true,
-        minLevel: MapService.minLevel,
-      });
 
     const markers: PlaceMarker[] = [];
     if (!window.placeMap) window.placeMap = {};
@@ -64,14 +57,14 @@ export class MarkerService {
       window.brands[brandId].nameOverlays.push(nameOverlay);
       MapService.minLevel > MapService.getZoom() &&
         window.brands[brandId]?.visible &&
-        nameOverlay.setMap(window.map);
+        nameOverlay.setMap(map);
     });
     window.clusterer.addMarkers(markers);
   }
 
   static createNameOverlay(place: IPlace) {
-    return new window.kakao.maps.CustomOverlay({
-      position: new window.kakao.maps.LatLng(place.latitude, place.longitude),
+    return new kakao.maps.CustomOverlay({
+      position: new kakao.maps.LatLng(place.latitude, place.longitude),
       content: `<div style="user-select: none; pointer-events: none; font-size: 12px; line-height: 12px; padding: 2px; text-align: center; color: white; text-shadow: 0 0 1px #000000, 0 0 1em #000000, 0 0 0.2em #000000"><strong>${
         place.brand?.name || place.name
       }</strong></div>`,
@@ -80,8 +73,8 @@ export class MarkerService {
     });
   }
 
-  static applyClusterFilter(brandHashList: string[], status: boolean): void {
-    const markers = [];
+  static applyClusterFilter(brandHashList: string[], status: boolean, map: kakao.maps.Map): void {
+    const markers: kakao.maps.Marker[] = [];
     brandHashList.forEach((brandHash: string) => {
       if (window.brands[brandHash]) markers.push(...window.brands[brandHash].markers);
     });
@@ -89,7 +82,7 @@ export class MarkerService {
       (brandHash: string) =>
         MapService.minLevel > MapService.getZoom() &&
         window.brands[brandHash]?.nameOverlays.map((nameOverlay) =>
-          nameOverlay.setMap(status ? window.map : null),
+          nameOverlay.setMap(status ? map : null),
         ),
     );
     if (status) {

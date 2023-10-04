@@ -18,11 +18,11 @@ function PlaceFindingWayKakao(props: PlaceFindingWayProps): React.ReactElement {
       onClick={(): void => {
         setTimeout(() => {
           navigator.geolocation.getCurrentPosition(
-            (position: Position) => {
+            (position: GeolocationPosition) => {
               const hrefAlternate: string = `https://map.kakao.com/link/to/${name},${latitude},${longitude}/from/내위치,${position.coords.latitude},${position.coords.longitude}`;
               window.open(hrefAlternate, '_blank');
             },
-            (err: PositionError) => {
+            (err: GeolocationPositionError) => {
               alert(err.message); // cross origin일때, https로 요청해야함
             },
             { enableHighAccuracy: true, maximumAge: 10000 },

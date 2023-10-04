@@ -7,7 +7,10 @@ import { AxiosResponse } from 'axios';
 import { get } from '../../../utils/HttpRequestUtil';
 import { env } from '../../../env';
 
-function BrandFilter(): React.ReactElement {
+type Props = {
+  map: kakao.maps.Map;
+};
+function BrandFilter({ map }: Props): React.ReactElement {
   const [hover, setHover] = useState(false);
   const setBrandList = useSetRecoilState(brandListState);
 
@@ -17,10 +20,12 @@ function BrandFilter(): React.ReactElement {
       setBrandList(response.data);
       response.data.forEach((brand: Brand) => {
         if (!window.brands) window.brands = {};
-        if (!window.brands[brand.id]) {
-          window.brands[brand.id] = {
-            id: brand.id,
-            name: brand.name,
+        const brandId = brand.id!;
+        const brandName = brand.name;
+        if (!window.brands[brandId]) {
+          window.brands[brandId] = {
+            id: brandId,
+            name: brandName,
             markers: [],
             nameOverlays: [],
             visible: true,
@@ -35,7 +40,11 @@ function BrandFilter(): React.ReactElement {
       <div style={{ position: 'fixed', top: 5, right: 120 }}>
         {<BrandFilterButton onMouseOver={(): void => window.brands && setHover(true)} />}
         {hover && (
-          <BrandFilterExpanded onMouseLeave={(): void => setHover(false)} setHover={setHover} />
+          <BrandFilterExpanded
+            onMouseLeave={(): void => setHover(false)}
+            setHover={setHover}
+            map={map}
+          />
         )}
       </div>
     </>
