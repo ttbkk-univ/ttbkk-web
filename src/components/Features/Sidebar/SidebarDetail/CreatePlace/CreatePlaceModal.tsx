@@ -36,8 +36,8 @@ function CreatePlaceModal({ clusterer }: Props): React.ReactElement {
   const [newPlaceHashtagList, setNewPlaceHashtagList] = useState<string[]>([]);
   const [newPlaceHashtag, setNewPlaceHashtag] = useState('');
 
-  const { isLoading, error, data } = useQuery<Brand[]>('brand-all', () =>
-    get(env.api.host + '/api/brands/?search='),
+  const { isLoading, error, data } = useQuery('brand-all', () =>
+    get<Brand[]>(env.api.host + '/api/brands/?search='),
   );
 
   const brandOptions =

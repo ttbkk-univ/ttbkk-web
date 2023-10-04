@@ -1,4 +1,3 @@
-import React from 'react';
 import { IHashtag, IPlace } from '../../../../../states/places/placeMap';
 import PlaceHashtag from './PlaceHashtag';
 import BrandHashtag from './BrandHashtag';

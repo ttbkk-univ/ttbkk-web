@@ -1,4 +1,3 @@
-import React from 'react';
 import PlaceDetailModal from './PlaceDetailModal';
 import { useRecoilValue } from 'recoil';
 import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
