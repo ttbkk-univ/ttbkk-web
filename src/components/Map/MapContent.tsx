@@ -11,14 +11,6 @@ import Features from '../Features';
 
 declare global {
   interface Window {
-    /**
-     * @deprecated
-     */
-    map: kakao.maps.Map;
-    /**
-     * @deprecated
-     */
-    clusterer: kakao.maps.MarkerClusterer;
     placeMap: { [p: string]: IPlace };
     newPlace: any;
     brands: {
@@ -189,8 +181,9 @@ function MapContent() {
     zoomChanged = false;
   };
 
-  const onCreate = (target: kakao.maps.Map) => {
+  const mapOnCreate = (target: kakao.maps.Map) => {
     if (init || !target) return;
+
     MapService.setMapController(target);
     getAndAddPlace(target);
     document.onkeydown = (e: KeyboardEvent): void => {
@@ -201,7 +194,23 @@ function MapContent() {
       }
     };
     mapRef.current = target;
-    setInit(true);
+
+    if (isAllRefInitialized()) {
+      setInit(true);
+    }
+  };
+
+  const clustererOnCreate = (target: kakao.maps.MarkerClusterer) => {
+    if (init || !target) return;
+
+    clustererRef.current = target;
+    if (isAllRefInitialized()) {
+      setInit(true);
+    }
+  };
+
+  const isAllRefInitialized = (): boolean => {
+    return !!mapRef.current && !!clustererRef.current;
   };
 
   const center = MapService.getCenter();
@@ -218,7 +227,7 @@ function MapContent() {
       onZoomChanged={onZoomChanged}
       onDrag={moveEventHandler}
       draggable={true}
-      onCreate={onCreate}
+      onCreate={mapOnCreate}
       disableDoubleClickZoom={true}
       minLevel={MapService.minLevel}
     >
@@ -226,8 +235,9 @@ function MapContent() {
         averageCenter={true}
         minLevel={MapService.clusterMinLevel}
         ref={clustererRef}
+        onCreate={clustererOnCreate}
       />
-      {init && <Features map={mapRef.current!} />}
+      {init && <Features map={mapRef.current!} clusterer={clustererRef.current!} />}
     </Map>
   );
 }

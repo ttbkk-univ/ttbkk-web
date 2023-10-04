@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
+import React from 'react';
 import { IHashtag, IPlace } from '../../../../../states/places/placeMap';
 import PlaceHashtag from './PlaceHashtag';
 import BrandHashtag from './BrandHashtag';
@@ -8,19 +6,26 @@ import PlaceAddress from './PlaceAddress';
 import PlaceTelephone from './PlaceTelephone';
 import PlaceFindingWayNaver from './PlaceFindingWayNaver';
 import PlaceFindingWayKakao from './PlaceFindingWayKakao';
-import axios from 'axios';
 import { env } from '../../../../../env';
+import { get } from '../../../../../utils/HttpRequestUtil';
+import { useQuery } from 'react-query';
 
-function PlaceDetailModal(): React.ReactElement {
-  const [clickedPlace] = useRecoilState(clickedPlaceState);
-  const [place, setPlace] = useState<IPlace | undefined>(undefined);
+type Props = {
+  clickedPlace: string;
+};
+function PlaceDetailModal({ clickedPlace }: Props) {
+  const {
+    isLoading,
+    error,
+    data: place,
+  } = useQuery(`place-${clickedPlace}`, () =>
+    get<IPlace>(env.api.host + `/api/places/${clickedPlace}/`),
+  );
 
-  useEffect(() => {
-    axios.get(`${env.api.host}/api/places/${clickedPlace}/`).then((res) => {
-      setPlace(res.data);
-    });
-  }, [clickedPlace]);
+  if (isLoading) return null;
+  if (error) return <div>something went wrong</div>;
 
+  console.log('place', place);
   return place ? (
     <div
       style={{
@@ -73,9 +78,7 @@ function PlaceDetailModal(): React.ReactElement {
         ))}
       </div>
     </div>
-  ) : (
-    <></>
-  );
+  ) : null;
 }
 
 export default PlaceDetailModal;

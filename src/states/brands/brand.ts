@@ -1,5 +1,3 @@
-import { atom } from 'recoil';
-
 export interface Brand {
   id?: string;
   hashtags?: string[];
@@ -7,8 +5,3 @@ export interface Brand {
   label: string;
   description?: string;
 }
-
-export const brandListState = atom<Brand[]>({
-  key: 'brandList',
-  default: [],
-});
