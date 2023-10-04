@@ -1,7 +1,14 @@
-import React, { KeyboardEventHandler, useEffect, useState } from 'react';
+import React, {
+  ChangeEventHandler,
+  CSSProperties,
+  InputHTMLAttributes,
+  KeyboardEventHandler,
+  useEffect,
+  useState,
+} from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { createPlaceLatLngState } from '../../../../../states/buttons/createPlaceLatLngState';
-import { MdCancel, MdHelp, MdSend } from 'react-icons/md';
+import { MdCancel, MdHelp } from 'react-icons/md';
 import { isMobile } from '../../../../../utils/BrowserUtil';
 import { createPlaceModalDisplayState } from '../../../../../states/buttons/createPlaceModalDisplayState';
 import { AxiosResponse } from 'axios';
@@ -40,12 +47,11 @@ function CreatePlaceModal(): React.ReactElement {
     options: brandOptions ? brandOptions : [],
     // TODO 새로운 브랜드 생길때 `"브랜드" 추가` 형태로 보여주기
     getOptionLabel: (option): string => option.name,
-    onChange: (event, newValue: null | Brand): void => {
+    onChange: (_: React.SyntheticEvent, newValue: null | Brand): void => {
       if (!newValue) return;
       setNewPlaceBrand(newValue.name);
     },
     filterOptions: (options: Brand[], state): Brand[] => {
-      console.log(options);
       const filtered = createFilterOptions<Brand>()(options, state);
       const { inputValue } = state;
       const isExisting = options.some((option) => inputValue === option.name);
@@ -83,55 +89,57 @@ function CreatePlaceModal(): React.ReactElement {
     if (tagContainer) tagContainer.scrollTop = tagContainer.scrollHeight;
   }, [newPlaceHashtagList]);
 
-  useEffect(() => {
-    function dragElement(element): void {
-      let pos1 = 0,
-        pos2 = 0,
-        pos3 = 0,
-        pos4 = 0;
-      const body = document.getElementById(element.id + '_body');
-      if (!isMobile()) {
-        const dragMouseDown = (e) => {
-          e = e || window.event;
-          e.preventDefault();
-          // get the mouse cursor position at startup:
-          pos3 = e.clientX;
-          pos4 = e.clientY;
-          document.onmouseup = closeDragElement;
-          // call a function whenever the cursor moves:
-          document.onmousemove = elementDrag;
-        };
+  function dragElement(element: HTMLDivElement): void {
+    let pos1 = 0,
+      pos2 = 0,
+      pos3 = 0,
+      pos4 = 0;
+    const body = document.getElementById(element.id + '_body');
+    if (!isMobile()) {
+      const dragMouseDown = (event: MouseEvent) => {
+        // event = event || window.event; TODO 주석처리 문제 없는지 확인
+        event.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = event.clientX;
+        pos4 = event.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      };
 
-        if (body) {
-          // if present, the header is where you move the DIV from:
-          body.onmousedown = dragMouseDown;
-        } else {
-          // otherwise, move the DIV from anywhere inside the DIV:
-          element.onmousedown = dragMouseDown;
-        }
-
-        const elementDrag = (e) => {
-          e = e || window.event;
-          e.preventDefault();
-          // calculate the new cursor position:
-          pos1 = pos3 - e.clientX;
-          pos2 = pos4 - e.clientY;
-          pos3 = e.clientX;
-          pos4 = e.clientY;
-          // set the element's new position:
-          element.style.top = element.offsetTop - pos2 + 'px';
-          element.style.left = element.offsetLeft - pos1 + 'px';
-        };
-
-        const closeDragElement = () => {
-          // stop moving when mouse button is released:
-          document.onmouseup = null;
-          document.onmousemove = null;
-        };
+      if (body) {
+        // if present, the header is where you move the DIV from:
+        body.onmousedown = dragMouseDown;
+      } else {
+        // otherwise, move the DIV from anywhere inside the DIV:
+        element.onmousedown = dragMouseDown;
       }
-    }
 
-    dragElement(document.getElementById('create_place_modal'));
+      const elementDrag = (event: MouseEvent) => {
+        // e = e || window.event; // TODO 주석처리 문제 없는지 확인
+        event.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - event.clientX;
+        pos2 = pos4 - event.clientY;
+        pos3 = event.clientX;
+        pos4 = event.clientY;
+        // set the element's new position:
+        element.style.top = element.offsetTop - pos2 + 'px';
+        element.style.left = element.offsetLeft - pos1 + 'px';
+      };
+
+      const closeDragElement = () => {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+      };
+    }
+  }
+
+  useEffect(() => {
+    const modalElement = document.getElementById('create_place_modal');
+    if (!modalElement) throw new Error('modal element is null');
+    dragElement(modalElement as HTMLDivElement);
   }, []);
 
   const modalStyle = isMobile()
@@ -142,21 +150,21 @@ function CreatePlaceModal(): React.ReactElement {
         width: 400,
       };
 
-  const inputStyle = { paddingLeft: 8, paddingRight: 8, backgroundColor: 'white' };
+  const inputStyle: CSSProperties = { paddingLeft: 8, paddingRight: 8, backgroundColor: 'white' };
   const inputTypeStyle = { color: 'white' };
 
-  const nameOnChange = (e): void => {
-    const { value } = e.target;
+  const nameOnChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
+    const { value } = event.target;
     setNewPlaceName(value);
   };
 
-  const descriptionOnChange = (e): void => {
-    const { value } = e.target;
+  const descriptionOnChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
+    const { value } = event.target;
     setNewPlaceDescription(value);
   };
 
-  const hashtagOnChange = (e): void => {
-    const { value } = e.target;
+  const hashtagOnChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
+    const { value } = event.target;
     // check regex
     const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9]*$/;
     if (!regex.test(value)) return;
@@ -194,22 +202,22 @@ function CreatePlaceModal(): React.ReactElement {
   };
 
   const placeToMarker = (place: IPlace) => {
-    class PlaceMarker extends window.kakao.maps.Marker {
+    class PlaceMarker extends kakao.maps.Marker {
       id: string;
 
-      constructor(props) {
+      constructor(props: { id: string } & kakao.maps.MarkerOptions) {
         super(props);
         this.id = props.id;
       }
     }
 
     const marker = new PlaceMarker({
-      position: new window.kakao.maps.LatLng(place.latitude, place.longitude),
+      position: new kakao.maps.LatLng(place.latitude, place.longitude),
       title: place.name,
       clickable: true,
       id: place.id,
     });
-    window.kakao.maps.event.addListener(marker, 'click', () => {
+    kakao.maps.event.addListener(marker, 'click', () => {
       setClickedPlace(marker.id);
     });
     return marker;
@@ -245,7 +253,7 @@ function CreatePlaceModal(): React.ReactElement {
             id: brandId,
             name: brandName,
             markers: [],
-            nameOverlays: MarkerService.createNameOverlay(newPlace),
+            nameOverlays: [MarkerService.createNameOverlay(newPlace)],
             visible: true,
           };
         }
@@ -253,7 +261,7 @@ function CreatePlaceModal(): React.ReactElement {
         window.brands[brandId].visible && window.clusterer.addMarker(marker);
       })
       .catch((e) => {
-        console.log(e);
+        console.error(e);
         alert('서버 문제로 생성에 요청에 실패했습니다');
       })
       .then(() => resetForm(closeAfterRequest));
@@ -337,7 +345,12 @@ function CreatePlaceModal(): React.ReactElement {
               />
             </span>
             <Input
-              {...getBrandInputProps()}
+              {...((): Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'color'> => {
+                const brandInputProps = getBrandInputProps();
+                delete brandInputProps.size;
+                delete brandInputProps.color;
+                return brandInputProps;
+              })()}
               style={inputStyle}
               name={'brand'}
               placeholder={'브랜드를 입력하세요 (없다면 공백)'}
@@ -435,17 +448,17 @@ function CreatePlaceModal(): React.ReactElement {
             />
           </div>
         </div>
-        <div style={{ marginTop: 8, flexDirection: 'row-reverse', display: 'flex' }}>
-          <Button variant={'contained'} color={'primary'} onClick={(): void => createRequest(true)}>
-            생성 후 닫기 <MdSend />
-          </Button>
+        <div style={{ marginTop: 8, flexDirection: 'row', display: 'flex', float: 'right' }}>
           <Button
             style={{ marginRight: 8 }}
             variant={'contained'}
             color={'primary'}
             onClick={(): void => createRequest(false)}
           >
-            생성 후 계속 작성하기 <MdSend />
+            생성 후 계속 생성하기
+          </Button>
+          <Button variant={'contained'} color={'primary'} onClick={(): void => createRequest(true)}>
+            생성 후 닫기
           </Button>
         </div>
       </div>

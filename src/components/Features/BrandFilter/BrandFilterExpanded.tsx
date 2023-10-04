@@ -10,10 +10,11 @@ import { Button, Checkbox } from '@mui/material';
 interface BrandFilterExpandedProps {
   onMouseLeave: MouseEventHandler;
   setHover: (value: ((prevState: boolean) => boolean) | boolean) => void;
+  map: kakao.maps.Map;
 }
 
 function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElement {
-  const { onMouseLeave, setHover } = props;
+  const { onMouseLeave, setHover, map } = props;
   const [brandFilterChecked, setBrandFilterChecked] = useRecoilState(brandFilterCheckedState);
 
   const filterAllBrand = (e: any): void => {
@@ -25,7 +26,7 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
         ]),
       ),
     );
-    MarkerService.applyClusterFilter(Object.keys(window.brands), e.target.checked);
+    MarkerService.applyClusterFilter(Object.keys(window.brands), e.target.checked, map);
     Object.keys(window.brands).forEach((brandId) => {
       window.brands[brandId].visible = e.target.checked;
     });
@@ -76,7 +77,7 @@ function BrandFilterExpanded(props: BrandFilterExpandedProps): React.ReactElemen
             }}
           >
             {Object.entries(window.brands).map(([key, brand]) => (
-              <BrandFilterRow key={key} brand={brand} />
+              <BrandFilterRow key={key} brand={brand} map={map} />
             ))}
           </div>
         </div>

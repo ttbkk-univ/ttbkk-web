@@ -10,15 +10,16 @@ interface BrandFilterRowProps {
     name: string;
     visible: boolean;
   };
+  map: kakao.maps.Map;
 }
 
 function BrandFilterRow(props: BrandFilterRowProps): React.ReactElement {
-  const { brand } = props;
+  const { brand, map } = props;
   const [brandFilterChecked, setBrandFilterChecked] = useRecoilState(brandFilterCheckedState);
 
   const filterBrand = (e: any, brandName: string): void => {
     setBrandFilterChecked({ ...brandFilterChecked, ...{ [brand.id]: e.target.checked } });
-    MarkerService.applyClusterFilter([brand.id], e.target.checked);
+    MarkerService.applyClusterFilter([brand.id], e.target.checked, map);
     if (!window.brands[brand.id]) {
       window.brands[brand.id] = {
         id: brand.id,

@@ -4,12 +4,15 @@ import { sidebarIsOpenState } from '../../../states/sidebar/siteIsOpen';
 import OpenSidebarButton from './OpenSidebarButton';
 import SidebarDetail from './SidebarDetail';
 
-function Sidebar(): React.ReactElement {
+type Props = {
+  map: kakao.maps.Map;
+};
+function Sidebar({ map }: Props): React.ReactElement {
   const [isOpened] = useRecoilState(sidebarIsOpenState);
   return (
     <div>
       <OpenSidebarButton />
-      {isOpened && <SidebarDetail />}
+      {isOpened && <SidebarDetail map={map} />}
     </div>
   );
 }
