@@ -1,7 +1,7 @@
 import { env } from '../../env';
 import { get } from '../../utils/HttpRequestUtil';
 import { LatLng } from '../../components/Map/MapContent';
-import { queryClient } from '../../main';
+import { queryClient } from '../../utils/ReactQuery';
 
 export interface IHashtag {
   name: string;
