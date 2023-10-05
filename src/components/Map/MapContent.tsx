@@ -51,10 +51,11 @@ function MapContent() {
 
   const getAndAddPlace = (target: kakao.maps.Map): void => {
     const geoBound: [LatLng, LatLng] = MapService.getGeoBound(target);
-    const minLat = Math.floor(geoBound[0].latitude);
-    const minLon = Math.floor(geoBound[0].longitude);
-    const maxLat = Math.ceil(geoBound[1].latitude);
-    const maxLon = Math.ceil(geoBound[1].longitude);
+    const minUnit = 0.25;
+    const minLat = Math.floor(geoBound[0].latitude / minUnit) * minUnit;
+    const minLon = Math.floor(geoBound[0].longitude / minUnit) * minUnit;
+    const maxLat = Math.ceil(geoBound[1].latitude / minUnit) * minUnit;
+    const maxLon = Math.ceil(geoBound[1].longitude / minUnit) * minUnit;
     for (let lat = minLat; lat < maxLat; lat++) {
       for (let lon = minLon; lon < maxLon; lon++) {
         getPlaceMap(
