@@ -4,7 +4,6 @@ import BrandFilter from './BrandFilter';
 import CreatePlaceModal from './Sidebar/SidebarDetail/CreatePlace/CreatePlaceModal';
 import CreatePlaceButton from './Sidebar/SidebarDetail/CreatePlace/CreatePlaceButton';
 import ShareMap from './Sidebar/SidebarDetail/ShareMap';
-import React from 'react';
 
 type Props = {
   map: kakao.maps.Map;
