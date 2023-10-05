@@ -75,8 +75,8 @@ export class MapService {
   }
 
   static isPassMinLevel(map: kakao.maps.Map): boolean {
-    const isPrevLevelLargerThanMinLevel = this.getZoom() >= MapService.minLevel;
-    const isCurrentLevelLargerThanMinLevel = map.getLevel() >= MapService.minLevel;
+    const isPrevLevelLargerThanMinLevel = this.getZoom() >= MapService.clusterMinLevel;
+    const isCurrentLevelLargerThanMinLevel = map.getLevel() >= MapService.clusterMinLevel;
     return isPrevLevelLargerThanMinLevel !== isCurrentLevelLargerThanMinLevel;
   }
 }
