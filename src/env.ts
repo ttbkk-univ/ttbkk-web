@@ -7,7 +7,7 @@ interface Env {
     errorHelper: string;
   };
   google: {
-    login: string;
+    clientId: string;
   };
 }
 
@@ -20,6 +20,6 @@ export const env: Env = {
     errorHelper: import.meta.env.VITE_API_ERROR_HELPER_HOST,
   },
   google: {
-    login: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+    clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
   },
 };
