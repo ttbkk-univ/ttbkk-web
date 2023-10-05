@@ -1,13 +1,31 @@
 import React from 'react';
 import ProfileAvatar from './ProfileAvatar';
+import Login from '../Login';
+import { useAuth } from '../../../../../hooks/useAuth';
 
 function Profile(): React.ReactElement {
+  const { user, logout } = useAuth();
+
+  if (!user || user.isExpired) {
+    return <Login />;
+  }
+
   return (
     <div
-      style={{ position: 'fixed', top: 3, left: 255, cursor: 'pointer' }}
-      onClick={(): void => alert('로그인 기능은 추후 개발 예정입니다')}
+      style={{
+        top: 3,
+        cursor: 'pointer',
+        backgroundColor: 'burlywood',
+        padding: '0.25rem 0.25rem 0.25rem 0',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
     >
-      <ProfileAvatar />
+      <ProfileAvatar user={user} />
+      <div style={{ cursor: 'pointer' }} onClick={logout}>
+        로그아웃
+      </div>
     </div>
   );
 }
