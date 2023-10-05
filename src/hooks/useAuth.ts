@@ -71,8 +71,9 @@ export const useAuth = (key = 'token') => {
   return {
     user,
     setGoogleUser: (credential: string) => {
-      window.localStorage.setItem(key, JSON.stringify(parseGoogleJWT(credential)));
-      setUser(User.fromJSONString(window.localStorage.getItem(key)));
+      const token = JSON.stringify(parseGoogleJWT(credential));
+      window.localStorage.setItem(key, token);
+      setUser(User.fromJSONString(token));
       window.location.reload();
     },
     logout: () => {
