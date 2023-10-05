@@ -6,12 +6,16 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v2
         with:
           ref: develop
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.16.1
 
       - name: Cache node modules
         uses: actions/cache@v1
@@ -27,13 +31,13 @@ jobs:
 
       - name: Build
         env:
-          REACT_APP_KAKAO_MAP_API_KEY: ${{ secrets.REACT_APP_KAKAO_MAP_API_KEY }}
-          REACT_APP_API_HOST: ${{ secrets.DEV_REACT_APP_API_HOST }}
-          REACT_APP_API_ERROR_HELPER_HOST: ${{ secrets.REACT_APP_API_ERROR_HELPER_HOST }}
+          VITE_KAKAO_MAP_API_KEY: ${{ secrets.REACT_APP_KAKAO_MAP_API_KEY }}
+          VITE_API_HOST: ${{ secrets.DEV_REACT_APP_API_HOST }}
+          VITE_API_ERROR_HELPER_HOST: ${{ secrets.REACT_APP_API_ERROR_HELPER_HOST }}
         run: npm run build
 
       - name: Reinstall without Dev Dependencies
-        run: rm -rf node_modules && npm install --production
+        run: rm -rf node_modules && npm ci --only=production --ignore-scripts
 
       - name: Deploy
         env:
@@ -44,12 +48,13 @@ jobs:
           aws s3 cp \
               --recursive \
               --region ap-northeast-2 \
-              build s3://$AWS_BUCKET
+              dist s3://$AWS_BUCKET
 
       - name: Cloudfront Invalidation
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-2
           DISTRIBUTION_ID: ${{ secrets.DEV_CLOUDFRONT_DISTRIBUTION_ID }}
         run: |
           aws cloudfront create-invalidation \

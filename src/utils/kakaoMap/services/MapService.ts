@@ -1,22 +1,12 @@
 import { LatLng } from '../../../components/Map/MapContent';
-import { env } from '../../../env';
 
 export class MapService {
-  public static minLevel: number = 7;
+  public static minLevel: number = 1;
+  public static defaultLevel: number = 8;
+  public static clusterMinLevel: number = 5;
 
-  static setMap(): void {
-    const zoom = this.getZoom();
-    const center = this.getCenter();
-    const container = document.getElementById('map');
-    const options = {
-      center: new window.kakao.maps.LatLng(center.latitude, center.longitude),
-      level: zoom,
-    };
-    window.map = new window.kakao.maps.Map(container, options);
-  }
-
-  static setCenter(): void {
-    const center = window.map.getCenter();
+  static setCenter(map: kakao.maps.Map): void {
+    const center = map.getCenter();
     window.localStorage.setItem(
       'center',
       JSON.stringify({
@@ -30,7 +20,7 @@ export class MapService {
     // search param 이 있는 경우
     const centerFromSearchParams = new URLSearchParams(window.location.search).get('center');
     if (centerFromSearchParams?.toString().split(',').length) {
-      const [lat, lng]: string[] = centerFromSearchParams?.toString().split(',', 2);
+      const [lat, lng]: string[] = centerFromSearchParams.toString().split(',', 2);
       if (!isNaN(Number(lat)) && !isNaN(Number(lng))) {
         return { latitude: Number(lat), longitude: Number(lng) };
       }
@@ -46,9 +36,9 @@ export class MapService {
     return { latitude: 37.53026789291489, longitude: 127.12380358542175 };
   }
 
-  static setZoom(): void {
-    window.localStorage.setItem('zoom', window.map.getLevel().toString());
-    this.setCenter();
+  static setZoom(map: kakao.maps.Map): void {
+    window.localStorage.setItem('zoom', map.getLevel().toString());
+    this.setCenter(map);
   }
 
   static getZoom(): number {
@@ -58,12 +48,11 @@ export class MapService {
     }
 
     const zoomFromLocalStorage = window.localStorage.getItem('zoom');
-    return zoomFromLocalStorage ? Number(zoomFromLocalStorage) : 8;
+    return zoomFromLocalStorage ? Number(zoomFromLocalStorage) : this.defaultLevel;
   }
 
-  static getGeoBound(): [LatLng, LatLng] {
-    if (!window.map) throw Error('map is not initialized');
-    const bounds = window.map.getBounds();
+  static getGeoBound(map: kakao.maps.Map): [LatLng, LatLng] {
+    const bounds = map.getBounds();
     const bottomLeft = bounds.getSouthWest();
     const topRight = bounds.getNorthEast();
     return [
@@ -78,42 +67,16 @@ export class MapService {
     ];
   }
 
-  static loadKakaoMap(callback?: (...args: any[]) => any): any {
-    const kakaoMapScriptId = 'kakaoMap';
-    const isExisting = document.getElementById(kakaoMapScriptId);
-
-    if (!isExisting) {
-      const script = this.addScript(
-        'text/javascript',
-        `//dapi.kakao.com/v2/maps/sdk.js?appkey=${env.kakao.mapApiKey}&libraries=services,clusterer&autoload=false`,
-        kakaoMapScriptId,
-      );
-      script.onload = (): void => {
-        callback?.();
-      };
-    }
+  static setMapController(map: kakao.maps.Map): void {
+    const mapTypeControl = new kakao.maps.MapTypeControl();
+    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+    const zoomControl = new kakao.maps.ZoomControl();
+    map.addControl(zoomControl, kakao.maps.ControlPosition.BOTTOMRIGHT);
   }
 
-  static setMapController(): void {
-    const mapTypeControl = new window.kakao.maps.MapTypeControl();
-    window.map.addControl(mapTypeControl, window.kakao.maps.ControlPosition.TOPRIGHT);
-    const zoomControl = new window.kakao.maps.ZoomControl();
-    window.map.addControl(zoomControl, window.kakao.maps.ControlPosition.BOTTOMRIGHT);
-  }
-
-  static isPassMinLevel(): boolean {
-    const isPrevLevelLargerThanMinLevel = this.getZoom() >= MapService.minLevel;
-    const isCurrentLevelLargerThanMinLevel = window.map.getLevel() >= MapService.minLevel;
+  static isPassMinLevel(map: kakao.maps.Map): boolean {
+    const isPrevLevelLargerThanMinLevel = this.getZoom() >= MapService.clusterMinLevel;
+    const isCurrentLevelLargerThanMinLevel = map.getLevel() >= MapService.clusterMinLevel;
     return isPrevLevelLargerThanMinLevel !== isCurrentLevelLargerThanMinLevel;
-  }
-
-  private static addScript(type: string, src: string, id: string): HTMLScriptElement {
-    const script = document.createElement('script');
-    script.async = true;
-    script.type = type;
-    script.src = src;
-    script.id = id;
-    document.head.appendChild(script);
-    return script;
   }
 }

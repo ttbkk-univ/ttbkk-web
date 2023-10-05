@@ -1,5 +1,5 @@
-import { Button } from '@material-ui/core';
 import React from 'react';
+import { Button } from '@mui/material';
 
 interface PlaceFindingWayProps {
   latitude: number;
@@ -13,13 +13,14 @@ function PlaceFindingWayNaver(props: PlaceFindingWayProps): React.ReactElement {
 
   return (
     <Button
+      size={'small'}
       color={'primary'}
       variant={'contained'}
       href={href}
       onClick={(): void => {
         setTimeout(() => {
           navigator.geolocation.getCurrentPosition(
-            (position: Position) => {
+            (position: GeolocationPosition) => {
               const hrefAlternate: string =
                 'http://map.naver.com/index.nhn?' +
                 `elng=${longitude}&elat=${latitude}&etext=${name}` +
@@ -27,7 +28,7 @@ function PlaceFindingWayNaver(props: PlaceFindingWayProps): React.ReactElement {
                 '&menu=route&pathType=1';
               window.open(hrefAlternate, '_blank');
             },
-            (err: PositionError) => {
+            (err: GeolocationPositionError) => {
               alert(err.message); // cross origin일때, https로 요청해야함
             },
             { enableHighAccuracy: true, maximumAge: 10000 },

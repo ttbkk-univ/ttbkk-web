@@ -1,11 +1,13 @@
 import React from 'react';
-import CreatePlace from './CreatePlace';
 import ShareMap from './ShareMap';
-// import Profile from './Profile';
 import PlaceDetail from './PlaceDetail';
-import Login from './Login';
+import CreatePlaceButton from './CreatePlace/CreatePlaceButton';
+import Profile from './Profile';
 
-function SidebarDetail(): React.ReactElement {
+type Props = {
+  map: kakao.maps.Map;
+};
+function SidebarDetail({ map }: Props): React.ReactElement {
   return (
     <div
       style={{
@@ -18,11 +20,10 @@ function SidebarDetail(): React.ReactElement {
         boxShadow: 'rgb(0 0 0 / 15%) 0px 2px 2px 0px',
       }}
     >
-      {/*<Profile />*/}
-      <Login />
+      <Profile />
       <PlaceDetail />
-      <ShareMap />
-      <CreatePlace />
+      <ShareMap map={map} />
+      <CreatePlaceButton map={map} />
     </div>
   );
 }

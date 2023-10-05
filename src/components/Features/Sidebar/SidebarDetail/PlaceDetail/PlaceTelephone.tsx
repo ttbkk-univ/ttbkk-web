@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 interface TelephoneProps {
   telephone: string;
@@ -8,7 +8,7 @@ interface TelephoneProps {
 function PlaceTelephone(props: TelephoneProps): React.ReactElement {
   const { telephone } = props;
   return (
-    <Button color={'primary'} variant={'contained'} href={`tel:${telephone}`}>
+    <Button size={'small'} color={'primary'} variant={'contained'} href={`tel:${telephone}`}>
       전화걸기
     </Button>
   );

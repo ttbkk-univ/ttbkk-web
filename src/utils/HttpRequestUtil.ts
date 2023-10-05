@@ -1,11 +1,11 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { env } from '../env';
 
 const timeout: number = 30000;
 const serviceName: string = 'TTBKK';
 const notificationTypes: string[] = ['slack'];
 
-const parseAxiosError = (error: AxiosError): any => {
+const parseAxiosError = (error: AxiosError) => {
   return {
     message: error.message,
     name: error.name,
@@ -19,27 +19,34 @@ const parseAxiosError = (error: AxiosError): any => {
   };
 };
 
-export async function get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-  return axios.get<T>(url, { ...config, timeout }).catch((error: AxiosError) => {
-    axios.post(env.api.errorHelper, {
-      serviceName,
-      types: notificationTypes,
-      description: JSON.stringify(parseAxiosError(error)),
+export async function get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+  return axios
+    .get<T>(url, { ...config, timeout })
+    .then((res) => res.data)
+    .catch((error: AxiosError) => {
+      axios.post(env.api.errorHelper, {
+        serviceName,
+        types: notificationTypes,
+        description: JSON.stringify(parseAxiosError(error)),
+      });
+      return Promise.reject(error);
     });
-    throw error;
-  });
 }
 
-export async function post<T>(
+export async function post<T, I = unknown>(
   url: string,
-  data?: T,
+  data?: I,
   config?: AxiosRequestConfig,
-): Promise<AxiosResponse> {
-  return axios.post(url, data, { ...config, timeout }).catch((error: AxiosError) => {
-    return axios.post(env.api.errorHelper, {
-      serviceName,
-      types: notificationTypes,
-      description: JSON.stringify(parseAxiosError(error)),
+): Promise<T> {
+  return axios
+    .post<T>(url, data, { ...config, timeout })
+    .then((res) => res.data)
+    .catch((error: AxiosError) => {
+      axios.post(env.api.errorHelper, {
+        serviceName,
+        types: notificationTypes,
+        description: JSON.stringify(parseAxiosError(error)),
+      });
+      return Promise.reject(error);
     });
-  });
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import { sidebarIsOpenState } from '../../../states/sidebar/siteIsOpen';
-import { MdArrowBack, MdArrowForward } from 'react-icons/all';
+import { MdArrowBack, MdArrowForward } from 'react-icons/md';
 
 function OpenSidebarButton(): React.ReactElement {
   const [isOpened, setIsOpened] = useRecoilState(sidebarIsOpenState);

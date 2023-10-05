@@ -1,20 +1,25 @@
 import React from 'react';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
-import { env } from '../../../../../env'; //env 소스는 '우와'에게 문의 바람.
+import { env } from '../../../../../env';
+import { useAuth } from '../../../../../hooks/useAuth'; //env 소스는 '우와'에게 문의 바람.
 /**
  * 구글 로그인
  * credentialResponse : 로그인 ID 토큰을 받아옴.
  */
 function GoogleLoginButton(): React.ReactElement {
+  const { setGoogleUser } = useAuth();
   return (
     <div id="singleButton">
       <GoogleOAuthProvider clientId={env.google.login}>
         <GoogleLogin
           onSuccess={(credentialResponse) => {
-            console.log('Login');
+            if (!credentialResponse.credential) {
+              throw new Error('No credential error');
+            }
+            setGoogleUser(credentialResponse.credential);
           }}
           onError={() => {
-            console.log('Login Error');
+            console.error('Login Error');
           }}
         />
       </GoogleOAuthProvider>

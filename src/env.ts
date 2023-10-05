@@ -13,13 +13,13 @@ interface Env {
 
 export const env: Env = {
   kakao: {
-    mapApiKey: process.env.REACT_APP_KAKAO_MAP_API_KEY?.toString() || 'error',
+    mapApiKey: import.meta.env.VITE_KAKAO_MAP_API_KEY,
   },
   api: {
-    host: process.env.REACT_APP_API_HOST?.toString() || 'error',
-    errorHelper: process.env.REACT_APP_API_ERROR_HELPER_HOST?.toString() || 'error',
+    host: import.meta.env.VITE_API_HOST,
+    errorHelper: import.meta.env.VITE_API_ERROR_HELPER_HOST,
   },
   google: {
-    login: process.env.REACT_APP_CLIENT_ID?.toString() || 'error',
+    login: import.meta.env.VITE_GOOGLE_CLIENT_ID,
   },
 };
