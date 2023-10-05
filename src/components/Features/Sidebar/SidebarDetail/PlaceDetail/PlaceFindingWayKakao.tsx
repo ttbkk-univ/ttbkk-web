@@ -12,6 +12,7 @@ function PlaceFindingWayKakao(props: PlaceFindingWayProps): React.ReactElement {
   const href: string = `kakaomap://route?ep=${latitude},${longitude}&by=PUBLICTRANSIT`;
   return (
     <Button
+      size={'small'}
       color={'primary'}
       variant={'contained'}
       href={href}

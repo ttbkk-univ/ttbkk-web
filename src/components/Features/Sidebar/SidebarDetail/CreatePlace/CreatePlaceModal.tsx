@@ -61,7 +61,6 @@ function CreatePlaceModal({ clusterer }: Props): React.ReactElement {
   } = useAutocomplete<Brand>({
     id: 'brand-autocomplete',
     options: brandOptions,
-    // TODO 새로운 브랜드 생길때 `"브랜드" 추가` 형태로 보여주기
     getOptionLabel: (option): string => option.name,
     onChange: (_: React.SyntheticEvent, newValue: null | Brand): void => {
       if (!newValue) return;
@@ -91,7 +90,6 @@ function CreatePlaceModal({ clusterer }: Props): React.ReactElement {
     const body = document.getElementById(element.id + '_body');
     if (!isMobile()) {
       const dragMouseDown = (event: MouseEvent) => {
-        // event = event || window.event; TODO 주석처리 문제 없는지 확인
         event.preventDefault();
         // get the mouse cursor position at startup:
         pos3 = event.clientX;
@@ -110,7 +108,6 @@ function CreatePlaceModal({ clusterer }: Props): React.ReactElement {
       }
 
       const elementDrag = (event: MouseEvent) => {
-        // e = e || window.event; // TODO 주석처리 문제 없는지 확인
         event.preventDefault();
         // calculate the new cursor position:
         pos1 = pos3 - event.clientX;
@@ -127,6 +124,40 @@ function CreatePlaceModal({ clusterer }: Props): React.ReactElement {
         document.onmouseup = null;
         document.onmousemove = null;
       };
+    } else {
+      const dragTouchStart = (event: TouchEvent) => {
+        // get the mouse cursor position at startup:
+        pos3 = event.touches[0].clientX;
+        pos4 = event.touches[0].clientY;
+        document.ontouchend = closeTouchElement;
+        // call a function whenever the cursor moves:
+        document.ontouchmove = elementDragByTouch;
+      };
+      const elementDragByTouch = (event: TouchEvent) => {
+        // calculate the new cursor position:
+        pos1 = pos3 - event.touches[0].clientX;
+        pos2 = pos4 - event.touches[0].clientY;
+        pos3 = event.touches[0].clientX;
+        pos4 = event.touches[0].clientY;
+        // set the element's new position:
+        element.style.top = element.offsetTop - pos2 + 'px';
+        element.style.left = element.offsetLeft - pos1 + 'px';
+      };
+
+      const closeTouchElement = () => {
+        document.ontouchend = null;
+        document.ontouchmove = null;
+      };
+
+      if (body) {
+        console.log('body');
+        // if present, the header is where you move the DIV from:
+        body.ontouchstart = dragTouchStart;
+      } else {
+        console.log('element');
+        // otherwise, move the DIV from anywhere inside the DIV:
+        element.ontouchstart = dragTouchStart;
+      }
     }
   }
 
@@ -137,7 +168,7 @@ function CreatePlaceModal({ clusterer }: Props): React.ReactElement {
   }, []);
 
   const modalStyle = isMobile()
-    ? { bottom: 100, left: 30, height: 500, width: 300 }
+    ? { bottom: 100, left: 30, height: 370, width: 300 }
     : {
         top: '30%',
         right: '10%',

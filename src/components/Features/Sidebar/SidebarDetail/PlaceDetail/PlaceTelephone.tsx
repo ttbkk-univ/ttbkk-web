@@ -8,7 +8,7 @@ interface TelephoneProps {
 function PlaceTelephone(props: TelephoneProps): React.ReactElement {
   const { telephone } = props;
   return (
-    <Button color={'primary'} variant={'contained'} href={`tel:${telephone}`}>
+    <Button size={'small'} color={'primary'} variant={'contained'} href={`tel:${telephone}`}>
       전화걸기
     </Button>
   );
