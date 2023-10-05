@@ -13,6 +13,7 @@ function PlaceFindingWayNaver(props: PlaceFindingWayProps): React.ReactElement {
 
   return (
     <Button
+      size={'small'}
       color={'primary'}
       variant={'contained'}
       href={href}

@@ -7,8 +7,9 @@ type Props = {
 function ShareMapButton({ map }: Props): React.ReactElement {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ position: 'fixed', bottom: 160, left: 10 }}>
+    <div style={{ position: 'fixed', bottom: 70, left: 10 }}>
       <Button
+        size={'small'}
         title={'위치 공유'}
         variant={'contained'}
         color={'primary'}

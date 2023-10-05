@@ -8,6 +8,7 @@ import PlaceFindingWayKakao from './PlaceFindingWayKakao';
 import { env } from '../../../../../env';
 import { get } from '../../../../../utils/HttpRequestUtil';
 import { useQuery } from 'react-query';
+import { PathFindingButtonGroup } from '../../../../../styles/PlaceDetail/PathFindingButtonGroup';
 
 type Props = {
   clickedPlace: string;
@@ -24,7 +25,6 @@ function PlaceDetailModal({ clickedPlace }: Props) {
   if (isLoading) return null;
   if (error) return <div>something went wrong</div>;
 
-  console.log('place', place);
   return place ? (
     <div
       style={{
@@ -38,15 +38,10 @@ function PlaceDetailModal({ clickedPlace }: Props) {
         top: 100,
       }}
     >
-      <div style={{ fontSize: '32px', color: '#000000' }}>{place.name}</div>
+      <div style={{ fontSize: '1.5rem', color: '#000000' }}>{place.name}</div>
       <hr />
-      {place.address ? <PlaceAddress address={place.address} /> : <></>}
-      {place.telephone ? <PlaceTelephone telephone={place.telephone} /> : <></>}
-      <p
-        style={{
-          width: '100%',
-        }}
-      >
+      {place.address ? <PlaceAddress address={place.address} /> : null}
+      <PathFindingButtonGroup>
         <PlaceFindingWayNaver
           latitude={place.latitude}
           longitude={place.longitude}
@@ -57,16 +52,17 @@ function PlaceDetailModal({ clickedPlace }: Props) {
           longitude={place.longitude}
           name={place.name}
         />
-      </p>
-      <div style={{ whiteSpace: 'pre-line' }}>{place.description}</div>
-      {place.brand?.description ? (
-        <>
-          <br />
-          <div style={{ whiteSpace: 'pre-line' }}>{place.brand.description}</div>
-        </>
-      ) : (
-        <></>
-      )}
+      </PathFindingButtonGroup>
+      {place.telephone ? <PlaceTelephone telephone={place.telephone} /> : null}
+      <div>
+        <div style={{ whiteSpace: 'pre-line' }}>{place.description}</div>
+        {place.brand?.description ? (
+          <>
+            <br />
+            <div style={{ whiteSpace: 'pre-line' }}>{place.brand.description}</div>
+          </>
+        ) : null}
+      </div>
       <hr />
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {place.brand?.hashtags.map((hashtag: IHashtag) => (

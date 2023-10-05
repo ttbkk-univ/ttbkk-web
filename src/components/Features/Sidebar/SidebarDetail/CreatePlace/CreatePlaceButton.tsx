@@ -53,8 +53,9 @@ function CreatePlaceButton({ map }: Props): React.ReactElement {
   }, [map, clickEvent, createPlaceModalDisplay]);
 
   return (
-    <div style={{ position: 'fixed', bottom: 100, left: 10 }}>
+    <div style={{ position: 'fixed', bottom: 30, left: 10 }}>
       <Button
+        size={'small'}
         title={'새로운 장소 추가'}
         variant={'contained'}
         color={createPlaceModalDisplay ? 'secondary' : 'primary'}

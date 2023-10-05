@@ -6,7 +6,7 @@ interface AddressProps {
 
 function PlaceAddress(props: AddressProps): React.ReactElement {
   const { address } = props;
-  return <p>주소: {address}</p>;
+  return <div style={{ fontSize: '0.8rem', marginBottom: '1rem' }}>{address}</div>;
 }
 
 export default PlaceAddress;
