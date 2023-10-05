@@ -25,7 +25,7 @@ export class MarkerService {
     });
     brandHashList.forEach(
       (brandHash: string) =>
-        MapService.minLevel > MapService.getZoom() &&
+        MapService.clusterMinLevel > MapService.getZoom() &&
         window.brands[brandHash]?.nameOverlays.map((nameOverlay) =>
           nameOverlay.setMap(status ? map : null),
         ),

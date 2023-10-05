@@ -118,7 +118,7 @@ function MapContent() {
 
       const nameOverlay = createNameOverlay(place);
       window.brands[brandId].nameOverlays.push(nameOverlay);
-      MapService.minLevel > MapService.getZoom() &&
+      MapService.clusterMinLevel > MapService.getZoom() &&
         window.brands[brandId]?.visible &&
         nameOverlay.setMap(mapRef.current);
     });
@@ -167,7 +167,7 @@ function MapContent() {
     const currentZoom: number = MapService.getZoom();
     // 추가되어있었다면 없애고, 없었으면 추가해주고
     if (MapService.isPassMinLevel(target)) {
-      const visible: boolean = target.getLevel() < MapService.minLevel;
+      const visible: boolean = target.getLevel() < MapService.clusterMinLevel;
       Object.values(window.brands).map((brand) => {
         const isOverlayVisible = brand.visible && visible === brand.visible;
         brand.nameOverlays.map((nameOverlay) =>
