@@ -10,7 +10,7 @@ function GoogleLoginButton(): React.ReactElement {
   const { setGoogleUser } = useAuth();
   return (
     <div id="singleButton">
-      <GoogleOAuthProvider clientId={env.google.login}>
+      <GoogleOAuthProvider clientId={env.google.clientId}>
         <GoogleLogin
           onSuccess={(credentialResponse) => {
             if (!credentialResponse.credential) {
