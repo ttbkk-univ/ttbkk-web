@@ -31,9 +31,10 @@ jobs:
 
       - name: Build
         env:
-          REACT_APP_KAKAO_MAP_API_KEY: ${{ secrets.REACT_APP_KAKAO_MAP_API_KEY }}
-          REACT_APP_API_HOST: ${{ secrets.DEV_REACT_APP_API_HOST }}
-          REACT_APP_API_ERROR_HELPER_HOST: ${{ secrets.REACT_APP_API_ERROR_HELPER_HOST }}
+          VITE_KAKAO_MAP_API_KEY: ${{ secrets.REACT_APP_KAKAO_MAP_API_KEY }}
+          VITE_API_HOST: ${{ secrets.DEV_REACT_APP_API_HOST }}
+          VITE_API_ERROR_HELPER_HOST: ${{ secrets.REACT_APP_API_ERROR_HELPER_HOST }}
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
         run: npm run build
 
       - name: Reinstall without Dev Dependencies
@@ -48,7 +49,7 @@ jobs:
           aws s3 cp \
               --recursive \
               --region ap-northeast-2 \
-              build s3://$AWS_BUCKET
+              dist s3://$AWS_BUCKET
 
       - name: Cloudfront Invalidation
         env:

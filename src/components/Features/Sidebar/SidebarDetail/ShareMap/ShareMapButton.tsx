@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
-import { Button, Snackbar } from '@material-ui/core';
+import { Button, Snackbar } from '@mui/material';
 
-function ShareMapButton(): React.ReactElement {
+type Props = {
+  map: kakao.maps.Map;
+};
+function ShareMapButton({ map }: Props): React.ReactElement {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ position: 'fixed', bottom: 160, left: 10 }}>
+    <div style={{ position: 'fixed', bottom: 70, left: 10 }}>
       <Button
+        size={'small'}
         title={'위치 공유'}
         variant={'contained'}
         color={'primary'}
         onClick={(): void => {
           const element = document.createElement('input');
-          const center = window.map.getCenter();
+          const center = map.getCenter();
           const searchParam = new URLSearchParams();
           searchParam.append('center', `${center.getLat()},${center.getLng()}`);
-          searchParam.append('zoom', window.map.getLevel());
+          searchParam.append('zoom', map.getLevel().toString());
           element.value =
             window.location.protocol + '//' + window.location.host + '?' + searchParam.toString();
           document.body.appendChild(element);
