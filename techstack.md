@@ -40,7 +40,7 @@ Full tech stack [here](/techstack.md)
 # Tech Stack File
 ![](https://img.stackshare.io/repo.svg "repo") [ttbkk-univ/ttbkk-web](https://github.com/ttbkk-univ/ttbkk-web)![](https://img.stackshare.io/public_badge.svg "public")
 <br/><br/>
-|23<br/>Tools used|12/14/23 <br/>Report generated|
+|24<br/>Tools used|01/05/24 <br/>Report generated|
 |------|------|
 </div>
 
@@ -177,9 +177,9 @@ Full tech stack [here](/techstack.md)
 </table>
 
 
-## <img src='https://img.stackshare.io/group.svg' /> Open source packages (9)</h2>
+## <img src='https://img.stackshare.io/group.svg' /> Open source packages (10)</h2>
 
-## <img width='24' height='24' src='https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png'/> npm (9)
+## <img width='24' height='24' src='https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png'/> npm (10)
 
 |NAME|VERSION|LAST UPDATED|LAST UPDATED BY|LICENSE|VULNERABILITIES|
 |:------|:------|:------|:------|:------|:------|
@@ -189,6 +189,7 @@ Full tech stack [here](/techstack.md)
 |[@typescript-eslint/eslint-plugin](https://www.npmjs.com/@typescript-eslint/eslint-plugin)|v6.7.4|09/28/23|siner308 |MIT|N/A|
 |[@typescript-eslint/parser](https://www.npmjs.com/@typescript-eslint/parser)|v6.7.4|09/28/23|siner308 |BSD-2-Clause|N/A|
 |[eslint-plugin-react-hooks](https://www.npmjs.com/eslint-plugin-react-hooks)|v4.6.0|10/05/23|Uwa |MIT|N/A|
+|[husky](https://www.npmjs.com/husky)|v8.0.3|07/21/22|Jeonghyun An |MIT|N/A|
 |[react-dom](https://www.npmjs.com/react-dom)|v18.2.0|10/05/23|Uwa |MIT|N/A|
 |[react-icons](https://www.npmjs.com/react-icons)|v4.11.0|10/05/23|Uwa |MIT|N/A|
 |[vite](https://www.npmjs.com/vite)|v4.4.10|09/28/23|siner308 |N/A|[CVE-2023-49293](https://github.com/advisories/GHSA-92r3-m2mg-pj97) (Moderate)|
