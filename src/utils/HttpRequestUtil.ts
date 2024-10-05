@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { env } from '../env';
-import { PostgrestError } from '@supabase/postgrest-js/src/types.ts';
+import { PostgrestError } from '@supabase/supabase-js';
 
 const timeout: number = 30000;
 const serviceName: string = 'TTBKK';

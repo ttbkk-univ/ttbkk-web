@@ -15,9 +15,9 @@ function PlaceDetailModal({ clickedPlaceId }: Props) {
   const { isLoading, error, data: place } = usePlaceDetail(clickedPlaceId);
 
   if (isLoading) return null;
-  if (error) return <div>something went wrong</div>;
+  if (!place || error) return <div>something went wrong</div>;
 
-  return place ? (
+  return (
     <div
       style={{
         fontWeight: 'bold',
@@ -58,17 +58,14 @@ function PlaceDetailModal({ clickedPlaceId }: Props) {
       <hr />
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {place.brand?.hashtags.map((hashtag: IHashtag) => (
-          <BrandHashtag
-            key={place!.brand!.name + hashtag.hashtag_id}
-            hashtag={hashtag.hashtag_id}
-          />
+          <BrandHashtag key={place.brand?.name + hashtag.hashtag_id} hashtag={hashtag.hashtag_id} />
         ))}
-        {place.hashtags.map((hashtag: IHashtag) => (
+        {place.hashtags?.map((hashtag: IHashtag) => (
           <PlaceHashtag key={hashtag.hashtag_id} hashtag={hashtag.hashtag_id} />
         ))}
       </div>
     </div>
-  ) : null;
+  );
 }
 
 export default PlaceDetailModal;

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { RecoilRoot } from 'recoil';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import MapContent from './components/Map/MapContent';
 import { queryClient } from './utils/ReactQuery';
 import { SupabaseContext } from './hooks/useSupabase.ts';

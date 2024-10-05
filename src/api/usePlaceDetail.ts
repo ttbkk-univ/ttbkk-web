@@ -1,14 +1,16 @@
 import useSupabase from '../hooks/useSupabase.ts';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { IPlace } from '../states/places/placeMap.ts';
 
 export default function usePlaceDetail(clickedPlaceId: string) {
   const supabaseClient = useSupabase();
-  return useQuery(`place-${clickedPlaceId}`, () =>
-    supabaseClient
-      .from('place')
-      .select(
-        `
+  return useQuery<IPlace, Error, IPlace>({
+    queryKey: [`place-${clickedPlaceId}`],
+    queryFn: async () =>
+      await supabaseClient
+        .from('place')
+        .select(
+          `
         *,
         brand (
           *,
@@ -20,14 +22,14 @@ export default function usePlaceDetail(clickedPlaceId: string) {
           hashtag_id
         )
       `,
-      )
-      .eq('id', clickedPlaceId)
-      .single()
-      .then(({ data, error }) => {
-        if (error) {
-          return Promise.reject(error);
-        }
-        return data as IPlace;
-      }),
-  );
+        )
+        .eq('id', clickedPlaceId)
+        .single()
+        .then(({ data, error }) => {
+          if (error) {
+            throw error;
+          }
+          return data;
+        }),
+  });
 }

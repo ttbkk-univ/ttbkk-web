@@ -1,6 +1,5 @@
 import { postError } from '../../utils/HttpRequestUtil';
 import { LatLng } from '../../components/Map/MapContent';
-import { queryClient } from '../../utils/ReactQuery';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 export interface IHashtag {
@@ -26,11 +25,6 @@ export interface IPlace {
   brand?: IBrand;
 }
 
-type Page<T> = {
-  edges: T[];
-  count: number;
-};
-
 export async function getPlaceMap(
   supabaseClient: SupabaseClient,
   bottomLeft: LatLng,
@@ -44,36 +38,25 @@ export async function getPlaceMap(
   searchParam.set('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
   searchParam.set('top_right', `${topRight.latitude},${topRight.longitude}`);
 
-  const data: Page<IPlace> = await queryClient
-    .fetchQuery(
-      'places-' + searchParam.toString(),
-      () =>
-        supabaseClient
-          .from('place')
-          .select(
-            `
+  const data = await supabaseClient
+    .from('place')
+    .select(
+      `
             *,
             brand (*),
             place_hashtags (*)
           `,
-          )
-          .gte('latitude', bottomLeft.latitude)
-          .lte('latitude', topRight.latitude)
-          .gte('longitude', bottomLeft.longitude)
-          .lte('longitude', topRight.longitude)
-          .then(({ data, error }) => {
-            if (error) {
-              postError(error);
-              throw new Error(error.message);
-            }
-            return data;
-          }),
-      {
-        staleTime: 1000 * 30,
-      },
     )
-    .catch((): Page<IPlace> => {
-      return [];
+    .gte('latitude', bottomLeft.latitude)
+    .lte('latitude', topRight.latitude)
+    .gte('longitude', bottomLeft.longitude)
+    .lte('longitude', topRight.longitude)
+    .then(({ data, error }) => {
+      if (error) {
+        postError(error);
+        throw new Error(error.message);
+      }
+      return data;
     });
 
   Object.values(data).forEach((place) => {

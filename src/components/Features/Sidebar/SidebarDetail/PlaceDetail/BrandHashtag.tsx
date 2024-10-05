@@ -1,11 +1,8 @@
 import React from 'react';
-import { IHashtag } from '../../../../../states/places/placeMap';
 
-function BrandHashtag(props: { hashtag: IHashtag }): React.ReactElement {
+function BrandHashtag(props: { hashtag: string }): React.ReactElement {
   return (
-    <span style={{ margin: 3, backgroundColor: 'rgba(150, 202, 140, 0.5)' }}>
-      {props.hashtag.name}
-    </span>
+    <span style={{ margin: 3, backgroundColor: 'rgba(150, 202, 140, 0.5)' }}>{props.hashtag}</span>
   );
 }
 

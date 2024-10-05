@@ -13,8 +13,7 @@ function BrandFilter({ map, clusterer }: Props): React.ReactElement {
   const { data: brands, isLoading, error } = useBrandList();
 
   if (isLoading) return <div>Loading...</div>;
-  if (brands) return <div>Something went wrong</div>;
-  if (!data) return <div>Empty brand data</div>;
+  if (!brands) return <div>Empty brand data</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   brands.forEach((brand: Brand) => {
