@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import BrandFilterButton from './BrandFilterButton';
 import BrandFilterExpanded from './BrandFilterExpanded';
 import { Brand } from '../../../states/brands/brand';
-import { get } from '../../../utils/HttpRequestUtil';
-import { env } from '../../../env';
-import { useQuery } from 'react-query';
+import useBrandList from '../../../api/useBrandList.ts';
 
 type Props = {
   map: kakao.maps.Map;
@@ -12,15 +10,13 @@ type Props = {
 };
 function BrandFilter({ map, clusterer }: Props): React.ReactElement {
   const [hover, setHover] = useState(false);
-  const { isLoading, error, data } = useQuery<Brand[]>('brand-all', () =>
-    get<Brand[]>(env.api.host + '/api/brands/?search='),
-  );
+  const { data: brands, isLoading, error } = useBrandList();
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Something went wrong</div>;
-  if (!data) return <div>Empty brand data</div>;
+  if (!brands) return <div>Empty brand data</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
-  data.forEach((brand: Brand) => {
+  brands.forEach((brand: Brand) => {
     if (!window.brands) window.brands = {};
     const brandId = brand.id!;
     const brandName = brand.name;

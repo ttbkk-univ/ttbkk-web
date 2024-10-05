@@ -1,10 +1,9 @@
-import { env } from '../../env';
-import { get } from '../../utils/HttpRequestUtil';
+import { postError } from '../../utils/HttpRequestUtil';
 import { LatLng } from '../../components/Map/MapContent';
-import { queryClient } from '../../utils/ReactQuery';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 export interface IHashtag {
-  name: string;
+  hashtag_id: string;
 }
 
 export interface IBrand {
@@ -26,12 +25,8 @@ export interface IPlace {
   brand?: IBrand;
 }
 
-type Page<T> = {
-  edges: T[];
-  count: number;
-};
-
 export async function getPlaceMap(
+  supabaseClient: SupabaseClient,
   bottomLeft: LatLng,
   topRight: LatLng,
 ): Promise<{
@@ -40,22 +35,31 @@ export async function getPlaceMap(
   const placeMap: { [key: string]: IPlace } = {};
 
   const searchParam = new URLSearchParams();
-  searchParam.append('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
-  searchParam.append('top_right', `${topRight.latitude},${topRight.longitude}`);
+  searchParam.set('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
+  searchParam.set('top_right', `${topRight.latitude},${topRight.longitude}`);
 
-  const data: Page<IPlace> = await queryClient
-    .fetchQuery(
-      'places-' + searchParam.toString(),
-      () => get<Page<IPlace>>(env.api.host + '/api/places/grid/?' + searchParam.toString()),
-      {
-        staleTime: 1000 * 30,
-      },
+  const data = await supabaseClient
+    .from('place')
+    .select(
+      `
+            *,
+            brand (*),
+            place_hashtags (*)
+          `,
     )
-    .catch((): Page<IPlace> => {
-      return { edges: [], count: 0 };
+    .gte('latitude', bottomLeft.latitude)
+    .lte('latitude', topRight.latitude)
+    .gte('longitude', bottomLeft.longitude)
+    .lte('longitude', topRight.longitude)
+    .then(({ data, error }) => {
+      if (error) {
+        postError(error);
+        throw new Error(error.message);
+      }
+      return data;
     });
 
-  Object.values(data.edges).forEach((place) => {
+  Object.values(data).forEach((place) => {
     placeMap[place.id] = place;
   });
   return placeMap;

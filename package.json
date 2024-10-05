@@ -6,16 +6,17 @@
   "author": "siner308",
   "license": "MIT",
   "dependencies": {
-    "@react-oauth/google": "^0.11.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.11",
+    "@react-oauth/google": "^0.11.1",
+    "@supabase/supabase-js": "^2.45.4",
+    "@tanstack/react-query": "^5.59.0",
     "axios": "^0.21.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.2.0",
     "react-kakao-maps-sdk": "^1.1.21",
-    "react-query": "^3.39.3",
     "recoil": "^0.7.7",
     "typescript": "^5.2.2"
   },
@@ -38,6 +39,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^4.38.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

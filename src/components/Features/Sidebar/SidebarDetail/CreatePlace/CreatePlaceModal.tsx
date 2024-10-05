@@ -13,12 +13,12 @@ import { createPlaceModalDisplayState } from '../../../../../states/buttons/crea
 import { env } from '../../../../../env';
 import { IPlace } from '../../../../../states/places/placeMap';
 import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
-import { get, post } from '../../../../../utils/HttpRequestUtil';
+import { post } from '../../../../../utils/HttpRequestUtil';
 import { Brand } from '../../../../../states/brands/brand';
 import { MarkerService } from '../../../../../utils/kakaoMap/services/MarkerService';
 import { Button, createFilterOptions, Input, useAutocomplete } from '@mui/material';
 import { ListBox } from '../../../../../styles/CreatePlaceModal/AutoComplete';
-import { useQuery } from 'react-query';
+import useBrandList from '../../../../../api/useBrandList.ts';
 
 type Props = {
   clusterer: kakao.maps.MarkerClusterer;
@@ -36,14 +36,11 @@ function CreatePlaceModal({ clusterer }: Props): React.ReactElement {
   const [newPlaceHashtagList, setNewPlaceHashtagList] = useState<string[]>([]);
   const [newPlaceHashtag, setNewPlaceHashtag] = useState('');
 
-  const { isLoading, error, data } = useQuery('brand-all', () =>
-    get<Brand[]>(env.api.host + '/api/brands/?search='),
-  );
-
+  const { data: brands, isLoading, error } = useBrandList();
   const brandOptions =
-    isLoading || error || !data
+    isLoading || error || !brands
       ? []
-      : data.map((brand) => ({
+      : brands.map((brand) => ({
           name: brand.name,
           label: brand.name,
           hashtags: brand.hashtags,
@@ -150,11 +147,9 @@ function CreatePlaceModal({ clusterer }: Props): React.ReactElement {
       };
 
       if (body) {
-        console.log('body');
         // if present, the header is where you move the DIV from:
         body.ontouchstart = dragTouchStart;
       } else {
-        console.log('element');
         // otherwise, move the DIV from anywhere inside the DIV:
         element.ontouchstart = dragTouchStart;
       }
@@ -258,7 +253,7 @@ function CreatePlaceModal({ clusterer }: Props): React.ReactElement {
       return;
     }
 
-    const data = {
+    const payload = {
       name: newPlaceName,
       description: newPlaceDescription,
       latitude: latLng?.latitude,
@@ -266,7 +261,7 @@ function CreatePlaceModal({ clusterer }: Props): React.ReactElement {
       brand_name: newPlaceBrand,
       hashtags: newPlaceHashtagList,
     };
-    post<IPlace>(env.api.host + '/api/places/', data)
+    post<IPlace>(env.api.host + '/api/places/', payload)
       .then((newPlace) => {
         window.placeMap[newPlace.id] = newPlace;
         const marker = placeToMarker(newPlace);

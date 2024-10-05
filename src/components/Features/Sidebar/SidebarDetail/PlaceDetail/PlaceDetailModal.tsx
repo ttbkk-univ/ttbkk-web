@@ -1,31 +1,23 @@
-import { IHashtag, IPlace } from '../../../../../states/places/placeMap';
+import { IHashtag } from '../../../../../states/places/placeMap';
 import PlaceHashtag from './PlaceHashtag';
 import BrandHashtag from './BrandHashtag';
 import PlaceAddress from './PlaceAddress';
 import PlaceTelephone from './PlaceTelephone';
 import PlaceFindingWayNaver from './PlaceFindingWayNaver';
 import PlaceFindingWayKakao from './PlaceFindingWayKakao';
-import { env } from '../../../../../env';
-import { get } from '../../../../../utils/HttpRequestUtil';
-import { useQuery } from 'react-query';
 import { PathFindingButtonGroup } from '../../../../../styles/PlaceDetail/PathFindingButtonGroup';
+import usePlaceDetail from '../../../../../api/usePlaceDetail.ts';
 
 type Props = {
-  clickedPlace: string;
+  clickedPlaceId: string;
 };
-function PlaceDetailModal({ clickedPlace }: Props) {
-  const {
-    isLoading,
-    error,
-    data: place,
-  } = useQuery(`place-${clickedPlace}`, () =>
-    get<IPlace>(env.api.host + `/api/places/${clickedPlace}/`),
-  );
+function PlaceDetailModal({ clickedPlaceId }: Props) {
+  const { isLoading, error, data: place } = usePlaceDetail(clickedPlaceId);
 
   if (isLoading) return null;
-  if (error) return <div>something went wrong</div>;
+  if (!place || error) return <div>something went wrong</div>;
 
-  return place ? (
+  return (
     <div
       style={{
         fontWeight: 'bold',
@@ -66,14 +58,14 @@ function PlaceDetailModal({ clickedPlace }: Props) {
       <hr />
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {place.brand?.hashtags.map((hashtag: IHashtag) => (
-          <BrandHashtag key={place!.brand!.name + hashtag.name} hashtag={hashtag} />
+          <BrandHashtag key={place.brand?.name + hashtag.hashtag_id} hashtag={hashtag.hashtag_id} />
         ))}
-        {place.hashtags.map((hashtag: IHashtag) => (
-          <PlaceHashtag key={hashtag.name} hashtag={hashtag} />
+        {place.hashtags?.map((hashtag: IHashtag) => (
+          <PlaceHashtag key={hashtag.hashtag_id} hashtag={hashtag.hashtag_id} />
         ))}
       </div>
     </div>
-  ) : null;
+  );
 }
 
 export default PlaceDetailModal;

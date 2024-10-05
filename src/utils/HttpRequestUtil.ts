@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { env } from '../env';
+import { PostgrestError } from '@supabase/supabase-js';
 
 const timeout: number = 30000;
 const serviceName: string = 'TTBKK';
@@ -49,4 +50,14 @@ export async function post<T, I = unknown>(
       });
       return Promise.reject(error);
     });
+}
+
+export async function postError(error: Error | PostgrestError) {
+  axios
+    .post(env.api.errorHelper, {
+      serviceName,
+      types: notificationTypes,
+      description: JSON.stringify(error),
+    })
+    .catch(console.error);
 }
