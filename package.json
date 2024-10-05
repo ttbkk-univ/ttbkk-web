@@ -6,10 +6,11 @@
   "author": "siner308",
   "license": "MIT",
   "dependencies": {
-    "@react-oauth/google": "^0.11.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.11",
+    "@react-oauth/google": "^0.11.1",
+    "@supabase/supabase-js": "^2.45.4",
     "axios": "^0.21.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

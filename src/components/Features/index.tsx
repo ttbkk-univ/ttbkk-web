@@ -1,8 +1,8 @@
 import FindMyLocation from './FindMyLocation';
 import Sidebar from './Sidebar';
 import BrandFilter from './BrandFilter';
-import CreatePlaceModal from './Sidebar/SidebarDetail/CreatePlace/CreatePlaceModal';
-import CreatePlaceButton from './Sidebar/SidebarDetail/CreatePlace/CreatePlaceButton';
+// import CreatePlaceModal from './Sidebar/SidebarDetail/CreatePlace/CreatePlaceModal';
+// import CreatePlaceButton from './Sidebar/SidebarDetail/CreatePlace/CreatePlaceButton';
 import ShareMap from './Sidebar/SidebarDetail/ShareMap';
 
 type Props = {
@@ -16,8 +16,8 @@ function Features({ map, clusterer }: Props) {
       <Sidebar map={map} />
       <FindMyLocation map={map} />
       <ShareMap map={map} />
-      <CreatePlaceButton map={map} />
-      <CreatePlaceModal clusterer={clusterer} />
+      {/*<CreatePlaceButton map={map} />*/}
+      {/*<CreatePlaceModal clusterer={clusterer} />*/}
     </div>
   );
 }

@@ -3,8 +3,8 @@ import { useRecoilValue } from 'recoil';
 import { clickedPlaceState } from '../../../../../states/places/clickedPlace';
 
 function PlaceDetail() {
-  const clickedPlace = useRecoilValue(clickedPlaceState);
-  return clickedPlace ? <PlaceDetailModal clickedPlace={clickedPlace} /> : null;
+  const clickedPlaceId = useRecoilValue(clickedPlaceState);
+  return clickedPlaceId ? <PlaceDetailModal clickedPlaceId={clickedPlaceId} /> : null;
 }
 
 export default PlaceDetail;

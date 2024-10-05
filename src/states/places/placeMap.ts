@@ -1,10 +1,10 @@
-import { env } from '../../env';
-import { get } from '../../utils/HttpRequestUtil';
+import { postError } from '../../utils/HttpRequestUtil';
 import { LatLng } from '../../components/Map/MapContent';
 import { queryClient } from '../../utils/ReactQuery';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 export interface IHashtag {
-  name: string;
+  hashtag_id: string;
 }
 
 export interface IBrand {
@@ -32,6 +32,7 @@ type Page<T> = {
 };
 
 export async function getPlaceMap(
+  supabaseClient: SupabaseClient,
   bottomLeft: LatLng,
   topRight: LatLng,
 ): Promise<{
@@ -46,16 +47,36 @@ export async function getPlaceMap(
   const data: Page<IPlace> = await queryClient
     .fetchQuery(
       'places-' + searchParam.toString(),
-      () => get<Page<IPlace>>(env.api.host + '/api/places/grid/?' + searchParam.toString()),
+      () =>
+        supabaseClient
+          .from('place')
+          .select(
+            `
+            *,
+            brand (*),
+            place_hashtags (*)
+          `,
+          )
+          .gte('latitude', bottomLeft.latitude)
+          .lte('latitude', topRight.latitude)
+          .gte('longitude', bottomLeft.longitude)
+          .lte('longitude', topRight.longitude)
+          .then(({ data, error }) => {
+            if (error) {
+              postError(error);
+              throw new Error(error.message);
+            }
+            return data;
+          }),
       {
         staleTime: 1000 * 30,
       },
     )
     .catch((): Page<IPlace> => {
-      return { edges: [], count: 0 };
+      return [];
     });
 
-  Object.values(data.edges).forEach((place) => {
+  Object.values(data).forEach((place) => {
     placeMap[place.id] = place;
   });
   return placeMap;

@@ -8,6 +8,7 @@ import { MapService } from '../../utils/kakaoMap/services/MapService';
 import { LoaderOptions, Map, MarkerClusterer, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { env } from '../../env';
 import Features from '../Features';
+import useSupabase from '../../hooks/useSupabase.ts';
 
 declare global {
   interface Window {
@@ -37,6 +38,7 @@ function MapContent() {
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
   const setCreatePlaceModalDisplay = useSetRecoilState(createPlaceModalDisplayState);
   const setSidebarIsOpen = useSetRecoilState(sidebarIsOpenState);
+  const supabaseClient = useSupabase();
 
   useKakaoLoader({
     appkey: env.kakao.mapApiKey,
@@ -60,6 +62,7 @@ function MapContent() {
     for (let lat = minLat; lat < maxLat; lat++) {
       for (let lon = minLon; lon < maxLon; lon++) {
         getPlaceMap(
+          supabaseClient,
           { latitude: lat, longitude: lon },
           { latitude: lat + 1, longitude: lon + 1 },
         ).then((newPlaceMap) => {

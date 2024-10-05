@@ -32,7 +32,8 @@ jobs:
       - name: Build
         env:
           VITE_KAKAO_MAP_API_KEY: ${{ secrets.REACT_APP_KAKAO_MAP_API_KEY }}
-          VITE_API_HOST: ${{ secrets.REACT_APP_API_HOST }}
+          VITE_SUPABASE_URL: https://izhutepzzveasglrlbcx.supabase.co
+          VITE_SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6aHV0ZXB6enZlYXNnbHJsYmN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc5NTkyMzgsImV4cCI6MjA0MzUzNTIzOH0.kxdrs6OI-fD2QXsdmqZJx_Knm_gwDEXFYqgte46akEw
           VITE_API_ERROR_HELPER_HOST: ${{ secrets.REACT_APP_API_ERROR_HELPER_HOST }}
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
         run: npm run build
