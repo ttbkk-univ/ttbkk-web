@@ -40,8 +40,8 @@ export async function getPlaceMap(
   const placeMap: { [key: string]: IPlace } = {};
 
   const searchParam = new URLSearchParams();
-  searchParam.append('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
-  searchParam.append('top_right', `${topRight.latitude},${topRight.longitude}`);
+  searchParam.set('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
+  searchParam.set('top_right', `${topRight.latitude},${topRight.longitude}`);
 
   const data: Page<IPlace> = await queryClient
     .fetchQuery(

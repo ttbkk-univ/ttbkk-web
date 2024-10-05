@@ -14,17 +14,13 @@ function ShareMapButton({ map }: Props): React.ReactElement {
         variant={'contained'}
         color={'primary'}
         onClick={(): void => {
-          const element = document.createElement('input');
-          const center = map.getCenter();
           const searchParam = new URLSearchParams();
-          searchParam.append('center', `${center.getLat()},${center.getLng()}`);
-          searchParam.append('zoom', map.getLevel().toString());
-          element.value =
+          const center = map.getCenter();
+          searchParam.set('center', `${center.getLat()},${center.getLng()}`);
+          searchParam.set('zoom', map.getLevel().toString());
+          const value =
             window.location.protocol + '//' + window.location.host + '?' + searchParam.toString();
-          document.body.appendChild(element);
-          element.select();
-          document.execCommand('copy');
-          document.body.removeChild(element);
+          navigator.clipboard.writeText(value).catch(console.error);
           setOpen(true);
         }}
       >
