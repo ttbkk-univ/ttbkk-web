@@ -45,7 +45,8 @@ function MapContent() {
     retries: 3,
   } as LoaderOptions);
 
-  let debounce: number | null = null;
+  let debounce: NodeJS.Timeout;
+  let isDebounced = false;
   let zoomChanged: boolean = false;
   const debounceTime: number = 500;
 
@@ -141,13 +142,14 @@ function MapContent() {
   }
 
   const moveEventHandler = (target: kakao.maps.Map): void => {
-    if (!debounce) {
+    if (!isDebounced) {
       getAndAddPlace(target);
     } else {
       clearTimeout(debounce);
     }
+    isDebounced = true;
     debounce = setTimeout(() => {
-      debounce = null;
+      isDebounced = false;
     }, debounceTime);
   };
 
