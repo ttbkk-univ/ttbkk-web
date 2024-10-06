@@ -25,7 +25,6 @@ export default function PlaceController() {
     const maxLat = Math.ceil(geoBound[1].latitude / minUnit) * minUnit;
     const maxLon = Math.ceil(geoBound[1].longitude / minUnit) * minUnit;
 
-    console.log({ minLat, minLon, maxLat, maxLon });
     const newPlaceGridList = [];
     for (let lat = minLat; lat < maxLat; lat++) {
       for (let lon = minLon; lon < maxLon; lon++) {

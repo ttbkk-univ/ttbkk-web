@@ -13,7 +13,6 @@ type Props = {
 };
 
 export default function PlaceGrid(props: Props) {
-  console.log({ props });
   const map = useMap();
   const mapClusterer = useMapClusterer();
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
