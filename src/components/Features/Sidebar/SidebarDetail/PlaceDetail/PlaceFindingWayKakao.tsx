@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button } from '@mui/material';
+import React from "react";
+import { Button } from "@mui/material";
 
 interface PlaceFindingWayProps {
   latitude: number;
@@ -12,16 +12,16 @@ function PlaceFindingWayKakao(props: PlaceFindingWayProps): React.ReactElement {
   const href: string = `kakaomap://route?ep=${latitude},${longitude}&by=PUBLICTRANSIT`;
   return (
     <Button
-      size={'small'}
-      color={'primary'}
-      variant={'contained'}
+      size={"small"}
+      color={"primary"}
+      variant={"contained"}
       href={href}
       onClick={(): void => {
         setTimeout(() => {
           navigator.geolocation.getCurrentPosition(
             (position: GeolocationPosition) => {
               const hrefAlternate: string = `https://map.kakao.com/link/to/${name},${latitude},${longitude}/from/내위치,${position.coords.latitude},${position.coords.longitude}`;
-              window.open(hrefAlternate, '_blank');
+              window.open(hrefAlternate, "_blank");
             },
             (err: GeolocationPositionError) => {
               alert(err.message); // cross origin일때, https로 요청해야함

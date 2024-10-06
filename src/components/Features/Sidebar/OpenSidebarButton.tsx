@@ -1,7 +1,7 @@
-import React from 'react';
-import { useRecoilState } from 'recoil';
-import { sidebarIsOpenState } from '../../../states/sidebar/siteIsOpen';
-import { MdArrowBack, MdArrowForward } from 'react-icons/md';
+import React from "react";
+import { useRecoilState } from "recoil";
+import { sidebarIsOpenState } from "../../../states/sidebar/siteIsOpen";
+import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
 function OpenSidebarButton(): React.ReactElement {
   const [isOpened, setIsOpened] = useRecoilState(sidebarIsOpenState);
@@ -10,14 +10,14 @@ function OpenSidebarButton(): React.ReactElement {
       style={{
         height: 64,
         width: 24,
-        top: '25%',
+        top: "25%",
         left: isOpened ? 300 : 0,
-        position: 'fixed',
-        borderRadius: '0px 10px 10px 0px',
-        backgroundColor: 'white',
-        border: 'none',
-        boxShadow: 'rgb(0 0 0 / 15%) 2px 2px 2px 2px',
-        cursor: 'pointer',
+        position: "fixed",
+        borderRadius: "0px 10px 10px 0px",
+        backgroundColor: "white",
+        border: "none",
+        boxShadow: "rgb(0 0 0 / 15%) 2px 2px 2px 2px",
+        cursor: "pointer",
       }}
       onClick={(): void => setIsOpened(!isOpened)}
     >

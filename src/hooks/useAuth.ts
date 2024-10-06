@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 type GoogleUser = {
   iss: string;
@@ -53,7 +53,7 @@ export class User {
 }
 
 const parseGoogleJWT = (jwt: string) => {
-  const payload: GoogleUser = JSON.parse(atob(jwt.split('.')[1]));
+  const payload: GoogleUser = JSON.parse(atob(jwt.split(".")[1]));
   return {
     name: payload.given_name,
     email: payload.email,
@@ -63,7 +63,7 @@ const parseGoogleJWT = (jwt: string) => {
   };
 };
 
-export const useAuth = (key = 'token') => {
+export const useAuth = (key = "token") => {
   const jwtPayload = window.localStorage.getItem(key);
   const [user, setUser] = useState<User | null>(
     jwtPayload ? User.fromJSONString(jwtPayload) : null,

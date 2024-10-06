@@ -1,15 +1,15 @@
-import useSupabase from '../hooks/useSupabase.ts';
-import { useQuery } from '@tanstack/react-query';
-import { postError } from '../utils/HttpRequestUtil.ts';
-import { Brand } from '../states/brands/brand.ts';
+import useSupabase from "../hooks/useSupabase.ts";
+import { useQuery } from "@tanstack/react-query";
+import { postError } from "../utils/HttpRequestUtil.ts";
+import { Brand } from "../states/brands/brand.ts";
 
 export default function useBrandList() {
   const supabaseClient = useSupabase();
   return useQuery<Brand[], Error, Brand[]>({
-    queryKey: ['brand-all'],
+    queryKey: ["brand-all"],
     queryFn: async () =>
       await supabaseClient
-        .from('brand')
+        .from("brand")
         .select(
           `
           *,
@@ -23,6 +23,10 @@ export default function useBrandList() {
           }
           return data;
         })
-        .then((brands) => brands.sort((a, b) => b.place_count[0].count - a.place_count[0].count)),
+        .then((brands) =>
+          brands.sort(
+            (a, b) => b.place_count[0].count - a.place_count[0].count,
+          ),
+        ),
   });
 }

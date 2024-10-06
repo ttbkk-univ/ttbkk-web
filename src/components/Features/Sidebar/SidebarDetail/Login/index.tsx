@@ -1,5 +1,5 @@
-import React from 'react';
-import GoogleLoginButton from './GoogleLoginButton';
+import React from "react";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 function Login(): React.ReactElement {
   return (

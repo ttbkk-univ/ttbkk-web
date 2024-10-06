@@ -1,6 +1,6 @@
-import { postError } from '../../utils/HttpRequestUtil';
-import { LatLng } from '../../components/Map/MapContent';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { postError } from "../../utils/HttpRequestUtil";
+import { LatLng } from "../../components/Map/MapContent";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 export interface IHashtag {
   hashtag_id: string;
@@ -35,11 +35,14 @@ export async function getPlaceMap(
   const placeMap: { [key: string]: IPlace } = {};
 
   const searchParam = new URLSearchParams();
-  searchParam.set('bottom_left', `${bottomLeft.latitude},${bottomLeft.longitude}`);
-  searchParam.set('top_right', `${topRight.latitude},${topRight.longitude}`);
+  searchParam.set(
+    "bottom_left",
+    `${bottomLeft.latitude},${bottomLeft.longitude}`,
+  );
+  searchParam.set("top_right", `${topRight.latitude},${topRight.longitude}`);
 
   const data = await supabaseClient
-    .from('place')
+    .from("place")
     .select(
       `
             *,
@@ -47,10 +50,10 @@ export async function getPlaceMap(
             place_hashtags (*)
           `,
     )
-    .gte('latitude', bottomLeft.latitude)
-    .lte('latitude', topRight.latitude)
-    .gte('longitude', bottomLeft.longitude)
-    .lte('longitude', topRight.longitude)
+    .gte("latitude", bottomLeft.latitude)
+    .lte("latitude", topRight.latitude)
+    .gte("longitude", bottomLeft.longitude)
+    .lte("longitude", topRight.longitude)
     .then(({ data, error }) => {
       if (error) {
         postError(error);

@@ -1,8 +1,8 @@
-import React from 'react';
-import { useRecoilState } from 'recoil';
-import { sidebarIsOpenState } from '../../../states/sidebar/siteIsOpen';
-import OpenSidebarButton from './OpenSidebarButton';
-import SidebarDetail from './SidebarDetail';
+import React from "react";
+import { useRecoilState } from "recoil";
+import { sidebarIsOpenState } from "../../../states/sidebar/siteIsOpen";
+import OpenSidebarButton from "./OpenSidebarButton";
+import SidebarDetail from "./SidebarDetail";
 
 type Props = {
   map: kakao.maps.Map;

@@ -1,6 +1,6 @@
-import { atom } from 'recoil';
+import { atom } from "recoil";
 
 export const clickedPlaceState = atom<string | undefined>({
-  key: 'clickedPlace',
+  key: "clickedPlace",
   default: undefined,
 });

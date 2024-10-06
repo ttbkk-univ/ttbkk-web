@@ -1,19 +1,24 @@
-import React from 'react';
-import { SetterOrUpdater, useSetRecoilState } from 'recoil';
-import { getPlaceMap, IPlace } from '../../states/places/placeMap';
-import { clickedPlaceState } from '../../states/places/clickedPlace';
-import { createPlaceModalDisplayState } from '../../states/buttons/createPlaceModalDisplayState';
-import { sidebarIsOpenState } from '../../states/sidebar/siteIsOpen';
-import { MapService } from '../../utils/kakaoMap/services/MapService';
-import { LoaderOptions, Map, MarkerClusterer, useKakaoLoader } from 'react-kakao-maps-sdk';
-import { env } from '../../env';
-import Features from '../Features';
-import useSupabase from '../../hooks/useSupabase.ts';
+import React from "react";
+import { SetterOrUpdater, useSetRecoilState } from "recoil";
+import { getPlaceMap, IPlace } from "../../states/places/placeMap";
+import { clickedPlaceState } from "../../states/places/clickedPlace";
+import { createPlaceModalDisplayState } from "../../states/buttons/createPlaceModalDisplayState";
+import { sidebarIsOpenState } from "../../states/sidebar/siteIsOpen";
+import { MapService } from "../../utils/kakaoMap/services/MapService";
+import {
+  LoaderOptions,
+  Map,
+  MarkerClusterer,
+  useKakaoLoader,
+} from "react-kakao-maps-sdk";
+import { env } from "../../env";
+import Features from "../Features";
+import useSupabase from "../../hooks/useSupabase.ts";
 
 declare global {
   interface Window {
     placeMap: { [p: string]: IPlace };
-    newPlace: any;
+    newPlace: kakao.maps.Marker | undefined;
     brands: {
       [p: string]: {
         id: string;
@@ -36,14 +41,16 @@ function MapContent() {
   const mapRef = React.useRef<kakao.maps.Map | null>(null);
   const clustererRef = React.useRef<kakao.maps.MarkerClusterer | null>(null);
   const setClickedPlace = useSetRecoilState(clickedPlaceState);
-  const setCreatePlaceModalDisplay = useSetRecoilState(createPlaceModalDisplayState);
+  const setCreatePlaceModalDisplay = useSetRecoilState(
+    createPlaceModalDisplayState,
+  );
   const setSidebarIsOpen = useSetRecoilState(sidebarIsOpenState);
   const supabaseClient = useSupabase();
 
   useKakaoLoader({
     appkey: env.kakao.mapApiKey,
-    libraries: ['services', 'clusterer'],
-    nonce: 'ttbkkmap',
+    libraries: ["services", "clusterer"],
+    nonce: "ttbkkmap",
     retries: 3,
   } as LoaderOptions);
 
@@ -93,7 +100,7 @@ function MapContent() {
         clickable: true,
         id: place.id,
       });
-      kakao.maps.event.addListener(marker, 'click', () => {
+      kakao.maps.event.addListener(marker, "click", () => {
         setClickedPlace(marker.id);
         setSidebarIsOpen(true);
       });
@@ -106,8 +113,8 @@ function MapContent() {
       if (window.placeMap[place.id]) return;
       window.placeMap[place.id] = place;
       const marker: PlaceMarker = placeToMarker(place);
-      const brandId = place.brand?.id || 'no_brand';
-      const brandName = place.brand?.name || '로컬';
+      const brandId = place.brand?.id || "no_brand";
+      const brandName = place.brand?.name || "로컬";
       if (!window.brands) window.brands = {};
       if (!window.brands[brandId]) {
         window.brands[brandId] = {
@@ -119,17 +126,22 @@ function MapContent() {
         };
       }
       window.brands[brandId].markers.push(marker);
-      window.brands[brandId]?.visible && markers.push(marker);
+      if (window.brands[brandId]?.visible) {
+        markers.push(marker);
+      }
 
       const nameOverlay = createNameOverlay(place);
       window.brands[brandId].nameOverlays.push(nameOverlay);
-      MapService.clusterMinLevel > MapService.getZoom() &&
-        window.brands[brandId]?.visible &&
+      if (
+        MapService.clusterMinLevel > MapService.getZoom() &&
+        window.brands[brandId]?.visible
+      ) {
         nameOverlay.setMap(mapRef.current);
+      }
     });
 
     const clusterer = clustererRef.current;
-    if (!clusterer) throw new Error('clusterer is not initialized');
+    if (!clusterer) throw new Error("clusterer is not initialized");
     clusterer.addMarkers(markers);
   }
 
@@ -159,7 +171,7 @@ function MapContent() {
   const onCenterChanged = (target: kakao.maps.Map) => {
     const center = target.getCenter();
     window.localStorage.setItem(
-      'center',
+      "center",
       JSON.stringify({
         latitude: center.getLat(),
         longitude: center.getLng(),
@@ -193,7 +205,7 @@ function MapContent() {
     MapService.setMapController(target);
     getAndAddPlace(target);
     document.onkeydown = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         window.newPlace?.setMap(null);
         setClickedPlace(undefined);
         setCreatePlaceModalDisplay(false);
@@ -222,8 +234,8 @@ function MapContent() {
   const center = MapService.getCenter();
   return (
     <Map
-      id={'map'}
-      style={{ width: '100%', height: '100%' }}
+      id={"map"}
+      style={{ width: "100%", height: "100%" }}
       center={{
         lat: center.latitude,
         lng: center.longitude,
@@ -243,7 +255,9 @@ function MapContent() {
         ref={clustererRef}
         onCreate={clustererOnCreate}
       />
-      {init && <Features map={mapRef.current!} clusterer={clustererRef.current!} />}
+      {init && (
+        <Features map={mapRef.current!} clusterer={clustererRef.current!} />
+      )}
     </Map>
   );
 }
