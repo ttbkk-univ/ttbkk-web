@@ -1,5 +1,5 @@
-import { IPlace } from '../../../states/places/placeMap';
-import { MapService } from './MapService';
+import { IPlace } from "../../../states/places/placeMap";
+import { MapService } from "./MapService";
 
 export class MarkerService {
   static createNameOverlay(place: IPlace) {
@@ -21,7 +21,8 @@ export class MarkerService {
   ): void {
     const markers: kakao.maps.Marker[] = [];
     brandHashList.forEach((brandHash: string) => {
-      if (window.brands[brandHash]) markers.push(...window.brands[brandHash].markers);
+      if (window.brands[brandHash])
+        markers.push(...window.brands[brandHash].markers);
     });
     brandHashList.forEach(
       (brandHash: string) =>

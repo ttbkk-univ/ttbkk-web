@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button } from '@mui/material';
+import React from "react";
+import { Button } from "@mui/material";
 
 interface PlaceFindingWayProps {
   latitude: number;
@@ -13,20 +13,20 @@ function PlaceFindingWayNaver(props: PlaceFindingWayProps): React.ReactElement {
 
   return (
     <Button
-      size={'small'}
-      color={'primary'}
-      variant={'contained'}
+      size={"small"}
+      color={"primary"}
+      variant={"contained"}
       href={href}
       onClick={(): void => {
         setTimeout(() => {
           navigator.geolocation.getCurrentPosition(
             (position: GeolocationPosition) => {
               const hrefAlternate: string =
-                'http://map.naver.com/index.nhn?' +
+                "http://map.naver.com/index.nhn?" +
                 `elng=${longitude}&elat=${latitude}&etext=${name}` +
                 `&slng=${position.coords.longitude}&slat=${position.coords.latitude}&stext=내위치` +
-                '&menu=route&pathType=1';
-              window.open(hrefAlternate, '_blank');
+                "&menu=route&pathType=1";
+              window.open(hrefAlternate, "_blank");
             },
             (err: GeolocationPositionError) => {
               alert(err.message); // cross origin일때, https로 요청해야함

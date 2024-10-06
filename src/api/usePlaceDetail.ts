@@ -1,6 +1,6 @@
-import useSupabase from '../hooks/useSupabase.ts';
-import { useQuery } from '@tanstack/react-query';
-import { IPlace } from '../states/places/placeMap.ts';
+import useSupabase from "../hooks/useSupabase.ts";
+import { useQuery } from "@tanstack/react-query";
+import { IPlace } from "../states/places/placeMap.ts";
 
 export default function usePlaceDetail(clickedPlaceId: string) {
   const supabaseClient = useSupabase();
@@ -8,7 +8,7 @@ export default function usePlaceDetail(clickedPlaceId: string) {
     queryKey: [`place-${clickedPlaceId}`],
     queryFn: async () =>
       await supabaseClient
-        .from('place')
+        .from("place")
         .select(
           `
         *,
@@ -23,7 +23,7 @@ export default function usePlaceDetail(clickedPlaceId: string) {
         )
       `,
         )
-        .eq('id', clickedPlaceId)
+        .eq("id", clickedPlaceId)
         .single()
         .then(({ data, error }) => {
           if (error) {

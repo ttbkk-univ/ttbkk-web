@@ -9,21 +9,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+        name: Checkout
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
 
-      - name: Cache node modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
-
-      - name: Install Dependencies
-        run: npm install
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Build
         env:
@@ -32,10 +33,10 @@ jobs:
           VITE_SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6aHV0ZXB6enZlYXNnbHJsYmN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc5NTkyMzgsImV4cCI6MjA0MzUzNTIzOH0.kxdrs6OI-fD2QXsdmqZJx_Knm_gwDEXFYqgte46akEw
           VITE_API_ERROR_HELPER_HOST: ${{ secrets.REACT_APP_API_ERROR_HELPER_HOST }}
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
-        run: npm run build
+        run: pnpm run build
 
       - name: Reinstall without Dev Dependencies
-        run: rm -rf node_modules && npm ci --only=production --ignore-scripts
+        run: rm -rf node_modules && pnpm install --prod --ignore-scripts
 
       - name: Deploy
         env:

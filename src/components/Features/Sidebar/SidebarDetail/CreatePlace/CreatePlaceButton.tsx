@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { createPlaceLatLngState } from '../../../../../states/buttons/createPlaceLatLngState';
-import { createPlaceModalDisplayState } from '../../../../../states/buttons/createPlaceModalDisplayState';
-import { Button } from '@mui/material';
+import React, { useCallback, useEffect } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { createPlaceLatLngState } from "../../../../../states/buttons/createPlaceLatLngState";
+import { createPlaceModalDisplayState } from "../../../../../states/buttons/createPlaceModalDisplayState";
+import { Button } from "@mui/material";
 
 type Props = {
   map: kakao.maps.Map;
@@ -15,7 +15,7 @@ function CreatePlaceButton({ map }: Props): React.ReactElement {
   );
 
   const getMarkerImage = () => {
-    const imageSrc = '/img/fork.png';
+    const imageSrc = "/img/fork.png";
     const imageSize = new kakao.maps.Size(20, 60);
     const imageOption = { offset: new kakao.maps.Point(10, 60) };
     return new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -44,21 +44,21 @@ function CreatePlaceButton({ map }: Props): React.ReactElement {
   useEffect(() => {
     if (!kakao || !map) return;
     if (createPlaceModalDisplay) {
-      map.setCursor('crosshair');
-      kakao.maps.event.addListener(map, 'click', clickEvent);
+      map.setCursor("crosshair");
+      kakao.maps.event.addListener(map, "click", clickEvent);
     } else {
-      map.setCursor('grab');
-      kakao.maps.event.removeListener(map, 'click', clickEvent);
+      map.setCursor("grab");
+      kakao.maps.event.removeListener(map, "click", clickEvent);
     }
   }, [map, clickEvent, createPlaceModalDisplay]);
 
   return (
-    <div style={{ position: 'fixed', bottom: 30, left: 10 }}>
+    <div style={{ position: "fixed", bottom: 30, left: 10 }}>
       <Button
-        size={'small'}
-        title={'새로운 장소 추가'}
-        variant={'contained'}
-        color={createPlaceModalDisplay ? 'secondary' : 'primary'}
+        size={"small"}
+        title={"새로운 장소 추가"}
+        variant={"contained"}
+        color={createPlaceModalDisplay ? "secondary" : "primary"}
         onClick={(): void => {
           // 생성모달 열거나 닫을때, 지도에 선택한 마커 아이콘도 같이 생성하거나 없애준다
           if (window.newPlace) {

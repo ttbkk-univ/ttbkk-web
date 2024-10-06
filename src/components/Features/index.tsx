@@ -1,9 +1,9 @@
-import FindMyLocation from './FindMyLocation';
-import Sidebar from './Sidebar';
-import BrandFilter from './BrandFilter';
+import FindMyLocation from "./FindMyLocation";
+import Sidebar from "./Sidebar";
+import BrandFilter from "./BrandFilter";
 // import CreatePlaceModal from './Sidebar/SidebarDetail/CreatePlace/CreatePlaceModal';
 // import CreatePlaceButton from './Sidebar/SidebarDetail/CreatePlace/CreatePlaceButton';
-import ShareMap from './Sidebar/SidebarDetail/ShareMap';
+import ShareMap from "./Sidebar/SidebarDetail/ShareMap";
 
 type Props = {
   map: kakao.maps.Map;
@@ -11,7 +11,7 @@ type Props = {
 };
 function Features({ map, clusterer }: Props) {
   return (
-    <div style={{ position: 'fixed', zIndex: 400 }}>
+    <div style={{ position: "fixed", zIndex: 400 }}>
       <BrandFilter map={map} clusterer={clusterer} />
       <Sidebar map={map} />
       <FindMyLocation map={map} />

@@ -1,5 +1,5 @@
-import React from 'react';
-import ShareMapButton from './ShareMapButton';
+import React from "react";
+import ShareMapButton from "./ShareMapButton";
 
 type Props = {
   map: kakao.maps.Map;

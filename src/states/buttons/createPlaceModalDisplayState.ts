@@ -1,6 +1,6 @@
-import { atom } from 'recoil';
+import { atom } from "recoil";
 
 export const createPlaceModalDisplayState = atom<boolean>({
-  key: 'createPlaceModalDisplayState',
+  key: "createPlaceModalDisplayState",
   default: false,
 });

@@ -1,5 +1,5 @@
-import React from 'react';
-import FindMyLocationButton from './FindMyLocationButton';
+import React from "react";
+import FindMyLocationButton from "./FindMyLocationButton";
 
 type Props = {
   map: kakao.maps.Map;

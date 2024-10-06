@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import BrandFilterButton from './BrandFilterButton';
-import BrandFilterExpanded from './BrandFilterExpanded';
-import { Brand } from '../../../states/brands/brand';
-import useBrandList from '../../../api/useBrandList.ts';
+import React, { useState } from "react";
+import BrandFilterButton from "./BrandFilterButton";
+import BrandFilterExpanded from "./BrandFilterExpanded";
+import { Brand } from "../../../states/brands/brand";
+import useBrandList from "../../../api/useBrandList.ts";
 
 type Props = {
   map: kakao.maps.Map;
@@ -32,8 +32,12 @@ function BrandFilter({ map, clusterer }: Props): React.ReactElement {
   });
 
   return (
-    <div style={{ position: 'fixed', top: 5, right: 120 }}>
-      {<BrandFilterButton onMouseOver={(): void => window.brands && setHover(true)} />}
+    <div style={{ position: "fixed", top: 5, right: 120 }}>
+      {
+        <BrandFilterButton
+          onMouseOver={(): void => window.brands && setHover(true)}
+        />
+      }
       {hover && (
         <BrandFilterExpanded
           onMouseLeave={(): void => setHover(false)}

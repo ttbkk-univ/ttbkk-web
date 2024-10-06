@@ -1,7 +1,7 @@
-import { atom } from 'recoil';
+import { atom } from "recoil";
 
 export const brandFilterCheckedState = atom<{ [brandName: string]: boolean }>({
-  key: 'brandFilterCheckedState',
+  key: "brandFilterCheckedState",
   default: {
     all: true,
   },

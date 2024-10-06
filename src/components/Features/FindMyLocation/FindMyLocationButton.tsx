@@ -1,5 +1,5 @@
-import React from 'react';
-import { MdMyLocation } from 'react-icons/md';
+import React from "react";
+import { MdMyLocation } from "react-icons/md";
 
 type Props = {
   map: kakao.maps.Map;
@@ -8,19 +8,19 @@ type Props = {
 function FindMyLocationButton({ map }: Props): React.ReactElement {
   return (
     <button
-      title={'내 위치'}
+      title={"내 위치"}
       style={{
-        border: 'none',
+        border: "none",
         height: 32,
         width: 32,
         padding: 0,
-        backgroundColor: 'white',
-        position: 'fixed',
+        backgroundColor: "white",
+        position: "fixed",
         bottom: 215,
         right: 3,
         borderRadius: 3,
-        cursor: 'pointer',
-        boxShadow: 'rgb(0 0 0 / 15%) 0px 2px 2px 0px',
+        cursor: "pointer",
+        boxShadow: "rgb(0 0 0 / 15%) 0px 2px 2px 0px",
       }}
       onClick={(): void =>
         navigator?.geolocation?.getCurrentPosition(
