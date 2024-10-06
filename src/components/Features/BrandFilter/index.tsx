@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 import BrandFilterButton from "./BrandFilterButton";
 import BrandFilterExpanded from "./BrandFilterExpanded";
-import { Brand } from "../../../states/brands/brand";
+import { Brand } from "@/states/brands/brand.ts";
 import useBrandList from "../../../api/useBrandList.ts";
 
-type Props = {
-  map: kakao.maps.Map;
-  clusterer: kakao.maps.MarkerClusterer;
-};
-function BrandFilter({ map, clusterer }: Props): React.ReactElement {
+function BrandFilter(): React.ReactElement {
   const [hover, setHover] = useState(false);
   const { data: brands, isLoading, error } = useBrandList();
 
@@ -42,8 +38,6 @@ function BrandFilter({ map, clusterer }: Props): React.ReactElement {
         <BrandFilterExpanded
           onMouseLeave={(): void => setHover(false)}
           setHover={setHover}
-          map={map}
-          clusterer={clusterer}
         />
       )}
     </div>

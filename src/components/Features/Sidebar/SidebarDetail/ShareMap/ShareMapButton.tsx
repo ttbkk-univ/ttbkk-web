@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Button, Snackbar } from "@mui/material";
+import useMap from "@/hooks/useMap.ts";
 
-type Props = {
-  map: kakao.maps.Map;
-};
-function ShareMapButton({ map }: Props): React.ReactElement {
+function ShareMapButton(): React.ReactElement {
+  const map = useMap();
   const [open, setOpen] = useState(false);
   return (
     <div style={{ position: "fixed", bottom: 70, left: 10 }}>

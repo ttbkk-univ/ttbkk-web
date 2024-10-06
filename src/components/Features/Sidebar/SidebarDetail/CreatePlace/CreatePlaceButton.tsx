@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { createPlaceLatLngState } from "../../../../../states/buttons/createPlaceLatLngState";
-import { createPlaceModalDisplayState } from "../../../../../states/buttons/createPlaceModalDisplayState";
+import { createPlaceLatLngState } from "@/states/buttons/createPlaceLatLngState.ts";
+import { createPlaceModalDisplayState } from "@/states/buttons/createPlaceModalDisplayState.ts";
 import { Button } from "@mui/material";
+import useMap from "@/hooks/useMap.ts";
 
-type Props = {
-  map: kakao.maps.Map;
-};
-
-function CreatePlaceButton({ map }: Props): React.ReactElement {
+function CreatePlaceButton(): React.ReactElement {
+  const map = useMap();
   const setCreatePlaceLatLng = useSetRecoilState(createPlaceLatLngState);
   const [createPlaceModalDisplay, setCreatePlaceModalDisplay] = useRecoilState(
     createPlaceModalDisplayState,

@@ -4,10 +4,7 @@ import PlaceDetail from "./PlaceDetail";
 import CreatePlaceButton from "./CreatePlace/CreatePlaceButton";
 import Profile from "./Profile";
 
-type Props = {
-  map: kakao.maps.Map;
-};
-function SidebarDetail({ map }: Props): React.ReactElement {
+function SidebarDetail(): React.ReactElement {
   return (
     <div
       style={{
@@ -22,8 +19,8 @@ function SidebarDetail({ map }: Props): React.ReactElement {
     >
       <Profile />
       <PlaceDetail />
-      <ShareMap map={map} />
-      <CreatePlaceButton map={map} />
+      <ShareMap />
+      <CreatePlaceButton />
     </div>
   );
 }

@@ -1,12 +1,8 @@
 import React from "react";
 import FindMyLocationButton from "./FindMyLocationButton";
 
-type Props = {
-  map: kakao.maps.Map;
-};
-
-function FindMyLocation({ map }: Props): React.ReactElement {
-  return <FindMyLocationButton map={map} />;
+function FindMyLocation(): React.ReactElement {
+  return <FindMyLocationButton />;
 }
 
 export default FindMyLocation;

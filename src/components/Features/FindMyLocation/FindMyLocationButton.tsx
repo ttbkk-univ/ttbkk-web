@@ -1,11 +1,9 @@
 import React from "react";
 import { MdMyLocation } from "react-icons/md";
+import useMap from "@/hooks/useMap.ts";
 
-type Props = {
-  map: kakao.maps.Map;
-};
-
-function FindMyLocationButton({ map }: Props): React.ReactElement {
+function FindMyLocationButton(): React.ReactElement {
+  const map = useMap();
   return (
     <button
       title={"내 위치"}

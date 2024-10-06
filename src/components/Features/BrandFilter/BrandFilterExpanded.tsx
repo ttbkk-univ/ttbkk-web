@@ -1,23 +1,47 @@
 import React, { ChangeEvent, MouseEventHandler } from "react";
-import { isMobile } from "../../../utils/BrowserUtil";
+import { isMobile } from "@/utils/BrowserUtil.ts";
 import BrandFilterRow from "./BrandFilterRow";
 import { MdClose } from "react-icons/md";
-import { brandFilterCheckedState } from "../../../states/brands/brandFilterChecked";
+import { brandFilterCheckedState } from "@/states/brands/brandFilterChecked.ts";
 import { useRecoilState } from "recoil";
-import { MarkerService } from "../../../utils/kakaoMap/services/MarkerService";
 import { Button, Checkbox } from "@mui/material";
+import useMap from "@/hooks/useMap.ts";
+import useMapClusterer from "@/hooks/useMapClusterer.ts";
+import useZoomLevel from "@/hooks/useZoomLevel.ts";
 
 interface BrandFilterExpandedProps {
   onMouseLeave: MouseEventHandler;
   setHover: (value: ((prevState: boolean) => boolean) | boolean) => void;
-  map: kakao.maps.Map;
-  clusterer: kakao.maps.MarkerClusterer;
 }
 
 function BrandFilterExpanded(
   props: BrandFilterExpandedProps,
 ): React.ReactElement {
-  const { onMouseLeave, setHover, map, clusterer } = props;
+  const map = useMap();
+  const mapClusterer = useMapClusterer();
+  const { level, clusterMinLevel } = useZoomLevel();
+
+  function applyClusterFilter(brandHashList: string[], status: boolean): void {
+    const markers: kakao.maps.Marker[] = [];
+    brandHashList.forEach((brandHash: string) => {
+      if (window.brands[brandHash])
+        markers.push(...window.brands[brandHash].markers);
+    });
+    brandHashList.forEach(
+      (brandHash: string) =>
+        clusterMinLevel > level &&
+        window.brands[brandHash]?.nameOverlays.map((nameOverlay) =>
+          nameOverlay.setMap(status ? map : null),
+        ),
+    );
+    if (status) {
+      mapClusterer.addMarkers(markers);
+    } else {
+      mapClusterer.removeMarkers(markers);
+    }
+  }
+
+  const { onMouseLeave, setHover } = props;
   const [brandFilterChecked, setBrandFilterChecked] = useRecoilState(
     brandFilterCheckedState,
   );
@@ -33,12 +57,7 @@ function BrandFilterExpanded(
         ),
       ),
     );
-    MarkerService.applyClusterFilter(
-      Object.keys(window.brands),
-      event.currentTarget.checked,
-      map,
-      clusterer,
-    );
+    applyClusterFilter(Object.keys(window.brands), event.currentTarget.checked);
     Object.keys(window.brands).forEach((brandId) => {
       window.brands[brandId].visible = event.currentTarget.checked;
     });
@@ -94,8 +113,7 @@ function BrandFilterExpanded(
               <BrandFilterRow
                 key={key}
                 brand={brand}
-                map={map}
-                clusterer={clusterer}
+                applyClusterFilter={applyClusterFilter}
               />
             ))}
           </div>
