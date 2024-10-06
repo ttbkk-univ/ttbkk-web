@@ -36,7 +36,7 @@ jobs:
         run: pnpm run build
 
       - name: Reinstall without Dev Dependencies
-        run: rm -rf node_modules && pnpm install --prod
+        run: rm -rf node_modules && pnpm install --prod --ignore-scripts
 
       - name: Deploy
         env:
