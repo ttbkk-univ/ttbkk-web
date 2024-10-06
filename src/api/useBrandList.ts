@@ -10,13 +10,19 @@ export default function useBrandList() {
     queryFn: async () =>
       await supabaseClient
         .from('brand')
-        .select('*')
+        .select(
+          `
+          *,
+          place_count:place(count)
+        `,
+        )
         .then(({ data, error }) => {
           if (error) {
             postError(error).catch(console.error);
             return Promise.reject(error);
           }
           return data;
-        }),
+        })
+        .then((brands) => brands.sort((a, b) => b.place_count[0].count - a.place_count[0].count)),
   });
 }
