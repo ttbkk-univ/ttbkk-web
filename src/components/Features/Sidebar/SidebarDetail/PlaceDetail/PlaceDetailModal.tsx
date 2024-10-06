@@ -1,4 +1,3 @@
-import { IHashtag } from "../../../../../states/places/placeMap";
 import PlaceHashtag from "./PlaceHashtag";
 import BrandHashtag from "./BrandHashtag";
 import PlaceAddress from "./PlaceAddress";
@@ -7,6 +6,7 @@ import PlaceFindingWayNaver from "./PlaceFindingWayNaver";
 import PlaceFindingWayKakao from "./PlaceFindingWayKakao";
 import { PathFindingButtonGroup } from "../../../../../styles/PlaceDetail/PathFindingButtonGroup";
 import usePlaceDetail from "../../../../../api/usePlaceDetail.ts";
+import { IHashtag } from "@/hooks/usePlaceMap.ts";
 
 type Props = {
   clickedPlaceId: string;

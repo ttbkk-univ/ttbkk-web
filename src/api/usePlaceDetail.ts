@@ -1,6 +1,6 @@
 import useSupabase from "../hooks/useSupabase.ts";
 import { useQuery } from "@tanstack/react-query";
-import { IPlace } from "../states/places/placeMap.ts";
+import { IPlace } from "@/hooks/usePlaceMap.ts";
 
 export default function usePlaceDetail(clickedPlaceId: string) {
   const supabaseClient = useSupabase();

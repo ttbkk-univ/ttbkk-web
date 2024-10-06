@@ -1,5 +1,4 @@
-import { IPlace } from "../../../states/places/placeMap";
-import { MapService } from "./MapService";
+import { IPlace } from "@/hooks/usePlaceMap.ts";
 
 export class MarkerService {
   static createNameOverlay(place: IPlace) {
@@ -11,30 +10,5 @@ export class MarkerService {
       yAnchor: 0,
       clickable: false,
     });
-  }
-
-  static applyClusterFilter(
-    brandHashList: string[],
-    status: boolean,
-    map: kakao.maps.Map,
-    clusterer: kakao.maps.MarkerClusterer,
-  ): void {
-    const markers: kakao.maps.Marker[] = [];
-    brandHashList.forEach((brandHash: string) => {
-      if (window.brands[brandHash])
-        markers.push(...window.brands[brandHash].markers);
-    });
-    brandHashList.forEach(
-      (brandHash: string) =>
-        MapService.clusterMinLevel > MapService.getZoom() &&
-        window.brands[brandHash]?.nameOverlays.map((nameOverlay) =>
-          nameOverlay.setMap(status ? map : null),
-        ),
-    );
-    if (status) {
-      clusterer.addMarkers(markers);
-    } else {
-      clusterer.removeMarkers(markers);
-    }
   }
 }

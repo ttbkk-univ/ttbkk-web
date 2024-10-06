@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { useRecoilState } from "recoil";
-import { brandFilterCheckedState } from "../../../states/brands/brandFilterChecked";
-import { MarkerService } from "../../../utils/kakaoMap/services/MarkerService";
+import { brandFilterCheckedState } from "@/states/brands/brandFilterChecked.ts";
 import { Checkbox } from "@mui/material";
 
 interface BrandFilterRowProps {
@@ -10,12 +9,11 @@ interface BrandFilterRowProps {
     name: string;
     visible: boolean;
   };
-  map: kakao.maps.Map;
-  clusterer: kakao.maps.MarkerClusterer;
+  applyClusterFilter: (brandHashList: string[], status: boolean) => void;
 }
 
 function BrandFilterRow(props: BrandFilterRowProps): React.ReactElement {
-  const { brand, map, clusterer } = props;
+  const { brand, applyClusterFilter } = props;
   const [brandFilterChecked, setBrandFilterChecked] = useRecoilState(
     brandFilterCheckedState,
   );
@@ -28,12 +26,7 @@ function BrandFilterRow(props: BrandFilterRowProps): React.ReactElement {
       ...brandFilterChecked,
       ...{ [brand.id]: event.currentTarget.checked },
     });
-    MarkerService.applyClusterFilter(
-      [brand.id],
-      event.currentTarget.checked,
-      map,
-      clusterer,
-    );
+    applyClusterFilter([brand.id], event.currentTarget.checked);
     if (!window.brands[brand.id]) {
       window.brands[brand.id] = {
         id: brand.id,

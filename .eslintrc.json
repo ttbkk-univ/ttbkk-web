@@ -1,0 +1,34 @@
+{
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": [
+    "@stylistic/ts",
+    "@stylistic/jsx"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "eol-last": "error",
+    "brace-style": [
+      "error",
+      "1tbs"
+    ],
+    "@stylistic/jsx/jsx-tag-spacing": [
+      "error",
+      {
+        "beforeSelfClosing": "always"
+      }
+    ],
+    "no-unused-vars": "off",
+    "react/prop-types": "off"
+  }
+}

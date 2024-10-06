@@ -11,7 +11,6 @@ import { MdCancel, MdHelp } from "react-icons/md";
 import { isMobile } from "../../../../../utils/BrowserUtil";
 import { createPlaceModalDisplayState } from "../../../../../states/buttons/createPlaceModalDisplayState";
 import { env } from "../../../../../env";
-import { IPlace } from "../../../../../states/places/placeMap";
 import { clickedPlaceState } from "../../../../../states/places/clickedPlace";
 import { post } from "../../../../../utils/HttpRequestUtil";
 import { Brand } from "../../../../../states/brands/brand";
@@ -24,6 +23,7 @@ import {
 } from "@mui/material";
 import { ListBox } from "../../../../../styles/CreatePlaceModal/AutoComplete";
 import useBrandList from "../../../../../api/useBrandList.ts";
+import { IPlace } from "@/hooks/usePlaceMap.ts";
 
 type Props = {
   clusterer: kakao.maps.MarkerClusterer;
